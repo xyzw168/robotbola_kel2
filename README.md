@@ -1,2 +1,2 @@
-# robotbola_kel2
+# Robot Bola Kelompok 2 Intern
 Internship Bandha Kelompok 2
