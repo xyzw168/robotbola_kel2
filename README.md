@@ -5,4 +5,4 @@ Internship Bandha Kelompok 2
 - Fairuz Yazid Nadian: ROS2 (Open cv dan Kontrol)
 - Muhammad Ulil Albab: ROS2 (Kominikasi)
 - Feriz Dwi Fahreza: ROS2(Kontrol)
-- Widya Astuti: Aplikasi
+- Widiya Astuti: Aplikasi
