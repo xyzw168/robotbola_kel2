@@ -1,0 +1,20 @@
+[0.275s] Invoking command in '/home/ulil/bandha_ws/src/komunikasi_robot': PYTHONPATH=/home/ulil/bandha_ws/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/komunikasi_robot build --build-base /home/ulil/bandha_ws/build/komunikasi_robot/build install --record /home/ulil/bandha_ws/build/komunikasi_robot/install.log --install-scripts $base/lib/komunikasi_robot --single-version-externally-managed install_data
+[0.364s] running egg_info
+[0.365s] writing ../../build/komunikasi_robot/komunikasi_robot.egg-info/PKG-INFO
+[0.365s] writing dependency_links to ../../build/komunikasi_robot/komunikasi_robot.egg-info/dependency_links.txt
+[0.365s] writing entry points to ../../build/komunikasi_robot/komunikasi_robot.egg-info/entry_points.txt
+[0.365s] writing requirements to ../../build/komunikasi_robot/komunikasi_robot.egg-info/requires.txt
+[0.365s] writing top-level names to ../../build/komunikasi_robot/komunikasi_robot.egg-info/top_level.txt
+[0.366s] reading manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+[0.366s] writing manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+[0.366s] running build
+[0.366s] running build_py
+[0.366s] running install
+[0.366s] running install_lib
+[0.367s] running install_data
+[0.367s] running install_egg_info
+[0.367s] removing '/home/ulil/bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot-0.0.0-py3.10.egg-info' (and everything under it)
+[0.368s] Copying ../../build/komunikasi_robot/komunikasi_robot.egg-info to /home/ulil/bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot-0.0.0-py3.10.egg-info
+[0.368s] running install_scripts
+[0.375s] writing list of installed files to '/home/ulil/bandha_ws/build/komunikasi_robot/install.log'
+[0.386s] Invoked command in '/home/ulil/bandha_ws/src/komunikasi_robot' returned '0': PYTHONPATH=/home/ulil/bandha_ws/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/komunikasi_robot build --build-base /home/ulil/bandha_ws/build/komunikasi_robot/build install --record /home/ulil/bandha_ws/build/komunikasi_robot/install.log --install-scripts $base/lib/komunikasi_robot --single-version-externally-managed install_data
