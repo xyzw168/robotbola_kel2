@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F2F2"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/modeSelectionPage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="#000000"
+                android:contentDescription="Logo Bandhayudha"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logobandha" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="ROBOT CONTROLLER"
+                android:textColor="#000000"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:strokeColor="#000000"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:id="@+id/statusText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingStart="12dp"
+                    android:paddingTop="7dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="7dp"
+                    android:text="Disconnected"
+                    android:textColor="#E53935"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="#F2F2F2"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#000000"
+            app:strokeWidth="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="9dp">
+
+                <EditText
+                    android:id="@+id/ipAddressInput"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#000000"
+                    android:hint="IP ADDRESS"
+                    android:inputType="textUri"
+                    android:paddingStart="10dp"
+                    android:singleLine="true"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/portInput"
+                    android:layout_width="78dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="6dp"
+                    android:backgroundTint="#000000"
+                    android:gravity="center"
+                    android:hint="PORT"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:text="@string/port_zmq_default"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/protocolButton"
+                    android:layout_width="88dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="6dp"
+                    android:minHeight="48dp"
+                    android:minWidth="0dp"
+                    android:text="ZMQ  ▼"
+                    android:textAllCaps="false"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:insetBottom="0dp"
+                    android:insetTop="0dp"
+                    app:backgroundTint="#F2F2F2"
+                    app:cornerRadius="24dp"
+                    app:strokeColor="#000000"
+                    app:strokeWidth="2dp" />
+
+                <Button
+                    android:id="@+id/connectButton"
+                    android:layout_width="120dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="6dp"
+                    android:backgroundTint="#000000"
+                    android:minHeight="48dp"
+                    android:text="CONNECT"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="14dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/physicalModeButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="0dp"
+                app:strokeColor="#000000"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="01"
+                        android:textColor="#777777"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_marginTop="5dp"
+                        android:contentDescription="Ikon gamepad"
+                        android:src="@drawable/ic_gamepad_mode" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="GAMEPAD"
+                        android:textColor="#000000"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/virtualModeButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="0dp"
+                app:strokeColor="#000000"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="02"
+                        android:textColor="#999999"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_marginTop="5dp"
+                        android:contentDescription="Ikon dua joystick"
+                        android:src="@drawable/ic_dual_joystick_mode"
+                        android:tint="#000000" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="JOYSTICK"
+                        android:textColor="#000000"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/dashboardPage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#000000"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/physicalCameraPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#101010"
+            android:contentDescription="Tampilan kamera FPV"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/physicalCameraPlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="MENUNGGU KAMERA"
+            android:textColor="#BFFFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <Button
+                android:id="@+id/backToModesButton"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:backgroundTint="#99000000"
+                android:contentDescription="Kembali ke pilihan mode"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="‹"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/gamepadConnectionStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Belum terhubung"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/physicalCameraSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:checked="true"
+                android:text="Kamera"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/physicalStopButton"
+                android:layout_width="88dp"
+                android:layout_height="44dp"
+                android:text="STOP"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:backgroundTint="#D32F2F"
+                app:cornerRadius="14dp" />
+        </LinearLayout>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            layout="@layout/telemetry_strip_home" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/gamepadPage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#000000"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/virtualCameraPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#101010"
+            android:contentDescription="Tampilan kamera FPV"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/virtualCameraPlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="MENUNGGU KAMERA"
+            android:textColor="#BFFFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:id="@+id/virtualGamepadPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.example.robotcontrollerbola.Gamepad
+                android:id="@+id/movementJoystick"
+                android:layout_width="190dp"
+                android:layout_height="190dp"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="20dp"
+                android:contentDescription="Joystick maju, mundur, dan geser"
+                android:enabled="true" />
+
+            <com.example.robotcontrollerbola.Gamepad
+                android:id="@+id/rotationJoystick"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="160dp"
+                android:contentDescription="Joystick rotasi"
+                android:enabled="true" />
+
+            <LinearLayout
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/gripButton"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:text="AMBIL"
+                    android:textColor="#000000"
+                    android:textSize="8sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#E6FFFFFF"
+                    app:cornerRadius="34dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="14dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/speed30Button"
+                    android:layout_width="52dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="4dp"
+                    android:minHeight="40dp"
+                    android:minWidth="0dp"
+                    android:text="30%"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:insetBottom="0dp"
+                    android:insetTop="0dp"
+                    app:backgroundTint="#BFFFFFFF"
+                    app:cornerRadius="12dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/speed70Button"
+                    android:layout_width="52dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="4dp"
+                    android:minHeight="40dp"
+                    android:minWidth="0dp"
+                    android:text="70%"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:insetBottom="0dp"
+                    android:insetTop="0dp"
+                    app:backgroundTint="#BFFFFFFF"
+                    app:cornerRadius="12dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/speed100Button"
+                    android:layout_width="58dp"
+                    android:layout_height="40dp"
+                    android:minHeight="40dp"
+                    android:minWidth="0dp"
+                    android:text="100%"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:insetBottom="0dp"
+                    android:insetTop="0dp"
+                    app:backgroundTint="#000000"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <Button
+                android:id="@+id/backButton"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:backgroundTint="#99FFFEFE"
+                android:contentDescription="Kembali ke pilihan mode"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="‹"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/virtualConnectionStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Belum terhubung"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/virtualCameraSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:checked="true"
+                android:text="Kamera"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/virtualStopButton"
+                android:layout_width="88dp"
+                android:layout_height="44dp"
+                android:text="STOP"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:backgroundTint="#D32F2F"
+                app:cornerRadius="14dp" />
+        </LinearLayout>
+
+        <include
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="10dp"
+            layout="@layout/telemetry_strip_gamepad" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
