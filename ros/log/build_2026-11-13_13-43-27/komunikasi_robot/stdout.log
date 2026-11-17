@@ -1,0 +1,31 @@
+running egg_info
+creating ../../build/komunikasi_robot/komunikasi_robot.egg-info
+writing ../../build/komunikasi_robot/komunikasi_robot.egg-info/PKG-INFO
+writing dependency_links to ../../build/komunikasi_robot/komunikasi_robot.egg-info/dependency_links.txt
+writing entry points to ../../build/komunikasi_robot/komunikasi_robot.egg-info/entry_points.txt
+writing requirements to ../../build/komunikasi_robot/komunikasi_robot.egg-info/requires.txt
+writing top-level names to ../../build/komunikasi_robot/komunikasi_robot.egg-info/top_level.txt
+writing manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+reading manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+writing manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/ulil/bandha_ws/build/komunikasi_robot/build
+creating /home/ulil/bandha_ws/build/komunikasi_robot/build/lib
+creating /home/ulil/bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot
+copying komunikasi_robot/__init__.py -> /home/ulil/bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot
+running install
+running install_lib
+creating /home/ulil/bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+copying /home/ulil/bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot/__init__.py -> /home/ulil/bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+byte-compiling /home/ulil/bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot/__init__.py to __init__.cpython-310.pyc
+running install_data
+creating /home/ulil/bandha_ws/install/komunikasi_robot/share/ament_index
+creating /home/ulil/bandha_ws/install/komunikasi_robot/share/ament_index/resource_index
+creating /home/ulil/bandha_ws/install/komunikasi_robot/share/ament_index/resource_index/packages
+copying resource/komunikasi_robot -> /home/ulil/bandha_ws/install/komunikasi_robot/share/ament_index/resource_index/packages
+copying package.xml -> /home/ulil/bandha_ws/install/komunikasi_robot/share/komunikasi_robot
+running install_egg_info
+Copying ../../build/komunikasi_robot/komunikasi_robot.egg-info to /home/ulil/bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot-0.0.0-py3.10.egg-info
+running install_scripts
+writing list of installed files to '/home/ulil/bandha_ws/build/komunikasi_robot/install.log'
