@@ -1,0 +1,24 @@
+[0.588s] Invoking command in '/home/fairuz/robotbola_kel2/ros/src/kontrol_robot': PYTHONPATH=/home/fairuz/robotbola_kel2/ros/build/kontrol_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/kontrol_robot build --build-base /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build install --record /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/install.log --install-scripts $base/lib/kontrol_robot --single-version-externally-managed install_data
+[0.740s] running egg_info
+[0.740s] writing ../../build/kontrol_robot/kontrol_robot.egg-info/PKG-INFO
+[0.740s] writing dependency_links to ../../build/kontrol_robot/kontrol_robot.egg-info/dependency_links.txt
+[0.741s] writing entry points to ../../build/kontrol_robot/kontrol_robot.egg-info/entry_points.txt
+[0.741s] writing requirements to ../../build/kontrol_robot/kontrol_robot.egg-info/requires.txt
+[0.741s] writing top-level names to ../../build/kontrol_robot/kontrol_robot.egg-info/top_level.txt
+[0.742s] reading manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+[0.742s] writing manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+[0.742s] running build
+[0.742s] running build_py
+[0.743s] copying kontrol_robot/transform_node.py -> /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build/lib/kontrol_robot
+[0.743s] running install
+[0.743s] running install_lib
+[0.743s] copying /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build/lib/kontrol_robot/transform_node.py -> /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot
+[0.743s] byte-compiling /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/transform_node.py to transform_node.cpython-310.pyc
+[0.744s] running install_data
+[0.744s] running install_egg_info
+[0.745s] removing '/home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info' (and everything under it)
+[0.746s] Copying ../../build/kontrol_robot/kontrol_robot.egg-info to /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info
+[0.746s] running install_scripts
+[0.759s] Installing transform_node script to /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/kontrol_robot
+[0.759s] writing list of installed files to '/home/fairuz/robotbola_kel2/ros/build/kontrol_robot/install.log'
+[0.776s] Invoked command in '/home/fairuz/robotbola_kel2/ros/src/kontrol_robot' returned '0': PYTHONPATH=/home/fairuz/robotbola_kel2/ros/build/kontrol_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/kontrol_robot build --build-base /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build install --record /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/install.log --install-scripts $base/lib/kontrol_robot --single-version-externally-managed install_data
