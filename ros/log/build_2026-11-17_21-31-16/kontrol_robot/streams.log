@@ -1,0 +1,37 @@
+[0.444s] Invoking command in '/home/fairuz/robotbola_kel2/ros/src/kontrol_robot': PYTHONPATH=/home/fairuz/robotbola_kel2/ros/build/kontrol_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/kontrol_robot build --build-base /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build install --record /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/install.log --install-scripts $base/lib/kontrol_robot --single-version-externally-managed install_data
+[0.603s] running egg_info
+[0.603s] creating ../../build/kontrol_robot/kontrol_robot.egg-info
+[0.603s] writing ../../build/kontrol_robot/kontrol_robot.egg-info/PKG-INFO
+[0.603s] writing dependency_links to ../../build/kontrol_robot/kontrol_robot.egg-info/dependency_links.txt
+[0.603s] writing entry points to ../../build/kontrol_robot/kontrol_robot.egg-info/entry_points.txt
+[0.604s] writing requirements to ../../build/kontrol_robot/kontrol_robot.egg-info/requires.txt
+[0.604s] writing top-level names to ../../build/kontrol_robot/kontrol_robot.egg-info/top_level.txt
+[0.604s] writing manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+[0.604s] reading manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+[0.605s] writing manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+[0.605s] running build
+[0.605s] running build_py
+[0.605s] creating /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build
+[0.605s] creating /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build/lib
+[0.605s] creating /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build/lib/kontrol_robot
+[0.606s] copying kontrol_robot/__init__.py -> /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build/lib/kontrol_robot
+[0.606s] copying kontrol_robot/transform_node.py -> /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build/lib/kontrol_robot
+[0.606s] running install
+[0.606s] running install_lib
+[0.606s] creating /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot
+[0.606s] copying /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build/lib/kontrol_robot/__init__.py -> /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot
+[0.606s] copying /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build/lib/kontrol_robot/transform_node.py -> /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot
+[0.606s] byte-compiling /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/__init__.py to __init__.cpython-310.pyc
+[0.606s] byte-compiling /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/transform_node.py to transform_node.cpython-310.pyc
+[0.606s] running install_data
+[0.606s] creating /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/share/ament_index
+[0.607s] creating /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/share/ament_index/resource_index
+[0.607s] creating /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/share/ament_index/resource_index/packages
+[0.607s] copying resource/kontrol_robot -> /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/share/ament_index/resource_index/packages
+[0.607s] copying package.xml -> /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/share/kontrol_robot
+[0.607s] running install_egg_info
+[0.607s] Copying ../../build/kontrol_robot/kontrol_robot.egg-info to /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info
+[0.608s] running install_scripts
+[0.621s] Installing transform_node script to /home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/kontrol_robot
+[0.621s] writing list of installed files to '/home/fairuz/robotbola_kel2/ros/build/kontrol_robot/install.log'
+[0.636s] Invoked command in '/home/fairuz/robotbola_kel2/ros/src/kontrol_robot' returned '0': PYTHONPATH=/home/fairuz/robotbola_kel2/ros/build/kontrol_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fairuz/robotbola_kel2/ros/install/kontrol_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/kontrol_robot build --build-base /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/build install --record /home/fairuz/robotbola_kel2/ros/build/kontrol_robot/install.log --install-scripts $base/lib/kontrol_robot --single-version-externally-managed install_data

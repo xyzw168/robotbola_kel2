@@ -1,0 +1,45 @@
+[0.403s] Invoking command in '/home/fairuz/robotbola_kel2/ros/src/komunikasi_robot': PYTHONPATH=/home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/komunikasi_robot build --build-base /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build install --record /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/install.log --install-scripts $base/lib/komunikasi_robot --single-version-externally-managed install_data
+[0.556s] running egg_info
+[0.556s] creating ../../build/komunikasi_robot/komunikasi_robot.egg-info
+[0.556s] writing ../../build/komunikasi_robot/komunikasi_robot.egg-info/PKG-INFO
+[0.556s] writing dependency_links to ../../build/komunikasi_robot/komunikasi_robot.egg-info/dependency_links.txt
+[0.556s] writing entry points to ../../build/komunikasi_robot/komunikasi_robot.egg-info/entry_points.txt
+[0.557s] writing requirements to ../../build/komunikasi_robot/komunikasi_robot.egg-info/requires.txt
+[0.557s] writing top-level names to ../../build/komunikasi_robot/komunikasi_robot.egg-info/top_level.txt
+[0.557s] writing manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+[0.557s] reading manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+[0.558s] writing manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+[0.558s] running build
+[0.558s] running build_py
+[0.558s] creating /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build
+[0.558s] creating /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build/lib
+[0.558s] creating /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.558s] copying komunikasi_robot/serial_node.py -> /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.558s] copying komunikasi_robot/wifi_node.py -> /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.558s] copying komunikasi_robot/__init__.py -> /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.558s] copying komunikasi_robot/udp_node.py -> /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.558s] running install
+[0.558s] running install_lib
+[0.559s] creating /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.559s] copying /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build/lib/komunikasi_robot/serial_node.py -> /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.559s] copying /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build/lib/komunikasi_robot/wifi_node.py -> /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.559s] copying /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build/lib/komunikasi_robot/__init__.py -> /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.559s] copying /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build/lib/komunikasi_robot/udp_node.py -> /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.559s] byte-compiling /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot/serial_node.py to serial_node.cpython-310.pyc
+[0.559s] byte-compiling /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot/wifi_node.py to wifi_node.cpython-310.pyc
+[0.560s] byte-compiling /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot/__init__.py to __init__.cpython-310.pyc
+[0.560s] byte-compiling /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot/udp_node.py to udp_node.cpython-310.pyc
+[0.560s] running install_data
+[0.560s] creating /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/share/ament_index
+[0.560s] creating /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/share/ament_index/resource_index
+[0.560s] creating /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/share/ament_index/resource_index/packages
+[0.560s] copying resource/komunikasi_robot -> /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/share/ament_index/resource_index/packages
+[0.560s] copying package.xml -> /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/share/komunikasi_robot
+[0.560s] running install_egg_info
+[0.561s] Copying ../../build/komunikasi_robot/komunikasi_robot.egg-info to /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot-0.0.0-py3.10.egg-info
+[0.562s] running install_scripts
+[0.575s] Installing serial_node script to /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/komunikasi_robot
+[0.575s] Installing udp_node script to /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/komunikasi_robot
+[0.575s] Installing wifi_node script to /home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/komunikasi_robot
+[0.575s] writing list of installed files to '/home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/install.log'
+[0.591s] Invoked command in '/home/fairuz/robotbola_kel2/ros/src/komunikasi_robot' returned '0': PYTHONPATH=/home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fairuz/robotbola_kel2/ros/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/komunikasi_robot build --build-base /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/build install --record /home/fairuz/robotbola_kel2/ros/build/komunikasi_robot/install.log --install-scripts $base/lib/komunikasi_robot --single-version-externally-managed install_data
