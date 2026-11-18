@@ -1,4 +1,0 @@
-<resources>
-    <string name="app_name">Robot Controller Bola</string>
-    <string name="port_zmq_default">5555</string>
-</resources>

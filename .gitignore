@@ -1,15 +1,52 @@
+# ============
+# ROS2 build artifacts
+# ============
+ros/build/
+ros/install/
+ros/log/
+ros/src/*/build/
+ros/src/*/install/
+ros/src/*/log/
+ros/src/*/__pycache__/
+*.pyc
+*.egg-info/
+build/
+
+# ============
+# Python
+# ============
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+
+# ============
+# IDE
+# ============
+.idea/
+.vscode/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.gradle/
 local.properties
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# ============
+# Android app artifacts
+# ============
+app/build/
+*.apk
+*.aab
+.externalNativeBuild/
+.cxx/
+
+# ============
+# OS
+# ============
+.DS_Store
+Thumbs.db
