@@ -1,6 +1,8 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String 
+from geometry_msgs.msg import Twist
+from std_msgs.msg import Float32
 
 RENTANG_IN = 100
 TANDA = (1,1,1,1)
@@ -19,7 +21,7 @@ def parse_pesan_android(pesan):
 
         return nilai_x, nilai_y, nilai_z, nilai_w
     except ValueError as e:
-        None
+        return None
 def ambang_nilai(nilai, ambang):
     if abs(nilai) < ambang:
         return 0
@@ -34,6 +36,8 @@ class TransformNode(Node):
         self.pose_subscriber_ = self.create_subscription(
             String, '/perintah_android', self.cek_pesan_android, 10
         )
+        self.cmd_vel_publisher_ = self.create_publisher(Twist, '/cmd_vel', 10)
+        self.grip_publisher_ = self.create_publisher(Float32, '/grip/command', 10)
         self.get_logger().info("get data dari HP...")
 
     def cek_pesan_android(self, msg):
@@ -41,10 +45,24 @@ class TransformNode(Node):
         if not pesan:
             self.get_logger().warning("Pesan Android kosong, diabaikan.")
             return
+        x, y, z, w = parse_pesan_android(pesan)
+        if x is None or y is None or z is None or w is None:
+            return None
+
+        cmd = Twist()
+        cmd.linear.x = skala(ambang_nilai(x, 10), RENTANG_IN, 0.5)
+        cmd.linear.y = skala(ambang_nilai(y, 10), RENTANG_IN, 0.5)
+        cmd.angular.z = skala(ambang_nilai(z, 10), RENTANG_IN, 0.5)
+        self.cmd_vel_publisher_.publish(cmd)
+
+        grip = Float32()
+        grip.data =  float(w)
 
         perintah = String()
         perintah.data = pesan
-        self.get_logger().info(f"diterima: {pesan}")
+        self.get_logger().info(f"diterima: {pesan} -> x: {cmd.linear.x}, y: {cmd.linear.y}, z: {cmd.angular.z}, grip: {grip.data}")
+        self.cmd_vel_publisher_.publish(cmd)
+        self.grip_publisher_.publish(grip)
 
 def main(args=None):
         rclpy.init(args=args)
