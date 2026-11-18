@@ -1,3 +1,0 @@
-[console_scripts]
-transform_node = kontrol_robot.transform_node:main
-

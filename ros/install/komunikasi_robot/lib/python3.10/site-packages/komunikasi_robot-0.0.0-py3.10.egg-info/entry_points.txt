@@ -1,5 +1,0 @@
-[console_scripts]
-serial_node = komunikasi_robot.serial_node:main
-udp_node = komunikasi_robot.udp_node:main
-wifi_node = komunikasi_robot.wifi_node:main
-
