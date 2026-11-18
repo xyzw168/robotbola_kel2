@@ -2,7 +2,31 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String 
 
+RENTANG_IN = 100
+TANDA = (1,1,1,1)
 
+
+def parse_pesan_android(pesan):
+    try:
+        parts = pesan.split(',')
+        if len(parts) != 4:
+            raise ValueError("Pesan harus memiliki 4 nilai yang dipisahkan oleh koma.")
+        
+        nilai_x = int(parts[0].strip())
+        nilai_y = int(parts[1].strip())
+        nilai_z = int(parts[2].strip())
+        nilai_w = int(parts[3].strip())
+
+        return nilai_x, nilai_y, nilai_z, nilai_w
+    except ValueError as e:
+        None
+def ambang_nilai(nilai, ambang):
+    if abs(nilai) < ambang:
+        return 0
+    return nilai
+def skala(nilai, rentang_in, maks):
+    return float((nilai / rentang_in) * maks)
+    
 
 class TransformNode(Node):
     def __init__(self):
