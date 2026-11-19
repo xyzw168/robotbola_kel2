@@ -1,6 +1,5 @@
 package com.example.robotcontrollerbola;
 
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -62,9 +61,6 @@ public class MainActivity extends AppCompatActivity {
     private Button tombolProtokol;
     private Button tombolStopFisik;
     private Button tombolStopVirtual;
-    private Button tombolKecepatan30;
-    private Button tombolKecepatan70;
-    private Button tombolKecepatan100;
     private Button tombolJepitBola;
     private SwitchMaterial sakelarKameraFisik;
     private SwitchMaterial sakelarKameraVirtual;
@@ -109,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean memakaiGamepadVirtual;
     private boolean kameraDiaktifkan = true;
     private boolean memperbaruiSakelarKamera;
-    private int batasKecepatan = 100;
     private boolean tombolPutarKiriDitekan;
     private boolean tombolPutarKananDitekan;
     private int nomorPercobaanSambungan;
@@ -140,9 +135,6 @@ public class MainActivity extends AppCompatActivity {
         tombolProtokol = findViewById(R.id.protocolButton);
         tombolStopFisik = findViewById(R.id.physicalStopButton);
         tombolStopVirtual = findViewById(R.id.virtualStopButton);
-        tombolKecepatan30 = findViewById(R.id.speed30Button);
-        tombolKecepatan70 = findViewById(R.id.speed70Button);
-        tombolKecepatan100 = findViewById(R.id.speed100Button);
         tombolJepitBola = findViewById(R.id.gripButton);
         sakelarKameraFisik = findViewById(R.id.physicalCameraSwitch);
         sakelarKameraVirtual = findViewById(R.id.virtualCameraSwitch);
@@ -205,9 +197,6 @@ public class MainActivity extends AppCompatActivity {
         tombolKembaliKeMode.setOnClickListener(tampilan -> kembaliKePilihanMode());
         tombolStopFisik.setOnClickListener(tampilan -> hentikanRobotDarurat());
         tombolStopVirtual.setOnClickListener(tampilan -> hentikanRobotDarurat());
-        tombolKecepatan30.setOnClickListener(tampilan -> aturBatasKecepatan(30));
-        tombolKecepatan70.setOnClickListener(tampilan -> aturBatasKecepatan(70));
-        tombolKecepatan100.setOnClickListener(tampilan -> aturBatasKecepatan(100));
         tombolJepitBola.setOnClickListener(
                 tampilan -> aturPenjepitBola(penjepitBola == 0)
         );
@@ -222,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
 
         aturKendaliGamepad();
         perbaruiTampilanNilai();
-        tampilkanPilihanKecepatan();
         aturFormSambungan();
         antreanLayar.post(pengirimBerkala);
 
@@ -241,20 +229,19 @@ public class MainActivity extends AppCompatActivity {
     private void pasangGamepadVirtual() {
         stikPutaran.setHorizontalOnly(true);
         stikGerak.setOnPositionChangedListener((x, y) -> {
-            majuMundur = ubahKePersenKecepatan(-y);
-            kiriKanan = ubahKePersenKecepatan(x);
+            majuMundur = ubahKePersen(-y);
+            kiriKanan = ubahKePersen(x);
             perbaruiTampilanNilai();
             kirimPerintahRobot();
         });
         stikPutaran.setOnPositionChangedListener((x, y) -> {
-            putaran = ubahKePersenKecepatan(x);
+            putaran = ubahKePersen(x);
             perbaruiTampilanNilai();
             kirimPerintahRobot();
         });
     }
 
     private void bukaHalamanFisik() {
-        aturBatasKecepatan(100);
         memakaiModeFisik = true;
         memakaiGamepadVirtual = false;
         berhenti();
@@ -357,32 +344,6 @@ public class MainActivity extends AppCompatActivity {
         tombolJepitBola.setEnabled(halamanVirtualTerbuka);
     }
 
-    private void aturBatasKecepatan(int batasBaru) {
-        int batasLama = batasKecepatan;
-        if (batasLama != 0 && batasBaru != batasLama) {
-            majuMundur = Math.round(majuMundur * batasBaru / (float) batasLama);
-            kiriKanan = Math.round(kiriKanan * batasBaru / (float) batasLama);
-            putaran = Math.round(putaran * batasBaru / (float) batasLama);
-        }
-        batasKecepatan = batasBaru;
-        tampilkanPilihanKecepatan();
-        perbaruiTampilanNilai();
-        kirimPerintahRobot();
-    }
-
-    private void tampilkanPilihanKecepatan() {
-        aturTampilanTombolKecepatan(tombolKecepatan30, batasKecepatan == 30);
-        aturTampilanTombolKecepatan(tombolKecepatan70, batasKecepatan == 70);
-        aturTampilanTombolKecepatan(tombolKecepatan100, batasKecepatan == 100);
-    }
-
-    private static void aturTampilanTombolKecepatan(Button tombol, boolean aktif) {
-        tombol.setBackgroundTintList(ColorStateList.valueOf(
-                aktif ? 0xFF000000 : 0xBFFFFFFF
-        ));
-        tombol.setTextColor(aktif ? 0xFFFFFFFF : 0xFF000000);
-    }
-
     private void hentikanRobotDarurat() {
         majuMundur = 0;
         kiriKanan = 0;
@@ -394,10 +355,6 @@ public class MainActivity extends AppCompatActivity {
         stikPutaran.setPosition(0, 0);
         perbaruiTampilanNilai();
         kirimPerintahRobot();
-    }
-
-    private int ubahKePersenKecepatan(float arah) {
-        return Math.round(ubahKePersen(arah) * batasKecepatan / 100f);
     }
 
     private void aturBilahSistemTampil(boolean tampil) {
@@ -430,9 +387,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (gerakan.getAction() == MotionEvent.ACTION_MOVE) {
-            majuMundur = ubahKePersenKecepatan(-gerakan.getAxisValue(MotionEvent.AXIS_Y));
-            kiriKanan = ubahKePersenKecepatan(gerakan.getAxisValue(MotionEvent.AXIS_X));
-            putaran = ubahKePersenKecepatan(bacaPutaranGamepad(gerakan));
+            majuMundur = ubahKePersen(-gerakan.getAxisValue(MotionEvent.AXIS_Y));
+            kiriKanan = ubahKePersen(gerakan.getAxisValue(MotionEvent.AXIS_X));
+            putaran = ubahKePersen(bacaPutaranGamepad(gerakan));
             perbaruiTampilanNilai();
             kirimPerintahRobot();
             return true;
@@ -477,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
 
         putaran = tombolPutarKiriDitekan == tombolPutarKananDitekan
                 ? 0
-                : tombolPutarKiriDitekan ? -batasKecepatan : batasKecepatan;
+                : tombolPutarKiriDitekan ? -100 : 100;
         perbaruiTampilanNilai();
         kirimPerintahRobot();
     }
@@ -569,11 +526,11 @@ public class MainActivity extends AppCompatActivity {
         try {
             port = Integer.parseInt(portRobotInput.getText().toString().trim());
         } catch (NumberFormatException kesalahan) {
-            tampilkanStatus("Port belum diisi dengan benar.");
+            tampilkanStatus("Port belum diisi dengan benar");
             return;
         }
         if (alamat.isEmpty() || port < 1 || port > 65535) {
-            tampilkanStatus("Periksa kembali alamat robot dan port.");
+            tampilkanStatus("Periksa kembali IP address dan port");
             return;
         }
 
@@ -634,9 +591,9 @@ public class MainActivity extends AppCompatActivity {
         ++nomorPercobaanSambungan;
         sedangMenghubungkan = false;
         sudahTerhubung = false;
-        tombolConnect.setText("Hubungkan");
+        tombolConnect.setText("Connect");
         aturFormSambungan();
-        tampilkanStatus(sambunganSedangDicoba ? "Sambungan dibatalkan." : "koneksi terputus.");
+        tampilkanStatus(sambunganSedangDicoba ? "sambungan dibatalkan" : "koneksi terputus");
         jalurKomunikasi.execute(this::tutupJalurKomunikasi);
     }
 
@@ -696,12 +653,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                         boolean terkirim = pengirimPerintah.send(isiPerintah);
                         if (!terkirim) {
-                            throw new IllegalStateException("Permintaan tidak terkirim.");
+                            throw new IllegalStateException("tidak terkirim");
                         }
 
                         String balasan = pengirimPerintah.recvStr();
                         if (balasan == null) {
-                            throw new IllegalStateException("Tidak ada balasan dari robot.");
+                            throw new IllegalStateException("tidak ada balasan");
                         }
                     }
 
@@ -724,7 +681,7 @@ public class MainActivity extends AppCompatActivity {
                 antreanLayar.post(() -> {
                     if (percobaan == nomorPercobaanSambungan) {
                         sedangMenghubungkan = false;
-                        tombolConnect.setText("Hubungkan");
+                        tombolConnect.setText("connect");
                         aturFormSambungan();
                         tampilkanStatus("Komunikasi gagal: " + kesalahan.getMessage());
                     }
@@ -781,7 +738,7 @@ public class MainActivity extends AppCompatActivity {
                 if (sesi == sesiKamera) {
                     antreanLayar.post(() -> {
                         if (sesi == sesiKamera) {
-                            aturPlaceholderKamera("KAMERA UDP ERROR", View.VISIBLE);
+                            aturPlaceholderKamera("KAMERA ERROR", View.VISIBLE);
                         }
                     });
                 }
