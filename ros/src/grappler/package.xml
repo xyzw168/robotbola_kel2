@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>stm32_ros2_control_hardware</name>
+  <version>0.1.0</version>
+  <description>ROS 2 Humble ros2_control SystemInterface communicating directly with an STM32 over USB serial.</description>
+  <maintainer email="feriz@example.com">Feriz</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>xacro</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+
+  <exec_depend>joint_state_broadcaster</exec_depend>
+  <exec_depend>mecanum_drive_controller</exec_depend>
+  <exec_depend>position_controllers</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+    <hardware_interface plugin="stm32_ros2_control_hardware.xml"/>
+  </export>
+</package>
