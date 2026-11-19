@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private static final long JEDA_KIRIM_PERINTAH_MS = 30L;
     private static final int PORT_ZMQ = 5555;
     private static final int PORT_UDP_PERINTAH = 5005;
-    private static final int PORT_KAMERA_UDP = 5005;
+    private static final int PORT_KAMERA_UDP = 5006;
     private static final int BATAS_UDP_BYTES = 65507;
     private static final int BATAS_DIMENSI_KAMERA = 1920;
     private final Handler antreanLayar = new Handler(Looper.getMainLooper());
