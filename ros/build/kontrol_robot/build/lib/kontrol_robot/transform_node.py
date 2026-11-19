@@ -4,7 +4,7 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float32
 
-RENTANG_IN = 100
+RENTANG_IN = 100  #ini berapa ya harusnya 100 apa 180 jir
 TANDA = (1,1,1,1)
 
 
@@ -14,7 +14,7 @@ def parse_pesan_android(pesan):
         if len(parts) != 4:
             raise ValueError("Pesan harus memiliki 4 nilai yang dipisahkan oleh koma.")
         
-        nilai_x = int(parts[0].strip())
+        nilai_x = int(parts[0].strip()) #kan kata evan 123 = xyz trus 4 = grip
         nilai_y = int(parts[1].strip())
         nilai_z = int(parts[2].strip())
         nilai_w = int(parts[3].strip())
@@ -36,15 +36,16 @@ class TransformNode(Node):
         self.pose_subscriber_ = self.create_subscription(
             String, '/perintah_android', self.cek_pesan_android, 10
         )
-        self.cmd_vel_publisher_ = self.create_publisher(Twist, '/cmd_vel', 10)
-        self.grip_publisher_ = self.create_publisher(Float32, '/grip/command', 10)
+        self.cmd_vel_publisher_ = self.create_publisher(Twist, '/cmd_vel', 10) #publish buat ngirim ke cmd_vel 
+        self.grip_publisher_ = self.create_publisher(Float32, '/grip/command', 10) #publish buat ngirim ke grip/command
         self.get_logger().info("get data dari HP...")
 
     def cek_pesan_android(self, msg):
         pesan = msg.data.strip()
         if not pesan:
-            self.get_logger().warning("Pesan Android kosong, diabaikan.")
+            self.get_logger().warning("kosong")
             return
+        
         x, y, z, w = parse_pesan_android(pesan)
         if x is None or y is None or z is None or w is None:
             return None
@@ -53,8 +54,7 @@ class TransformNode(Node):
         cmd.linear.x = skala(ambang_nilai(x, 10), RENTANG_IN, 0.5)
         cmd.linear.y = skala(ambang_nilai(y, 10), RENTANG_IN, 0.5)
         cmd.angular.z = skala(ambang_nilai(z, 10), RENTANG_IN, 0.5)
-        self.cmd_vel_publisher_.publish(cmd)
-
+    
         grip = Float32()
         grip.data =  float(w)
 
