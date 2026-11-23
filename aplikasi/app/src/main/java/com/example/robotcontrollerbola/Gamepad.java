@@ -15,185 +15,171 @@ public class Gamepad extends View {
         void onPositionChanged(float x, float y);
     }
 
-    private final Paint bidangPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint garisPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint stikPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint titikPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint basePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint stickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint dotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private float posisiX;
-    private float posisiY;
-    private boolean hanyaMendatar;
-    private float opasitas = 1f;
-    private int pointerAktif = NO_POINTER;
-    private OnPositionChangedListener pendengarGerak;
+    private float posX;
+    private float posY;
+    private boolean horizontalOnly;
+    private float opacity = 1f;
+    private int activePointer = NO_POINTER;
+    private OnPositionChangedListener listener;
 
-    public Gamepad(Context context, AttributeSet attributes) {
-        super(context, attributes);
+    public Gamepad(Context context, AttributeSet attrs) {
+        super(context, attrs);
         setFocusable(true);
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
     }
 
-    public void setOnPositionChangedListener(OnPositionChangedListener pendengar) {
-        pendengarGerak = pendengar;
+    public void setOnPositionChangedListener(OnPositionChangedListener l) {
+        this.listener = l;
     }
 
-    public void setHorizontalOnly(boolean aktif) {
-        hanyaMendatar = aktif;
-        if (aktif) {
-            posisiY = 0;
+    public void setHorizontalOnly(boolean enabled) {
+        this.horizontalOnly = enabled;
+        if (enabled) {
+            this.posY = 0;
             invalidate();
         }
     }
 
-    public void setOpacity(float nilai) {
-        opasitas = Math.max(0, Math.min(1, nilai));
+    public void setOpacity(float val) {
+        this.opacity = Math.max(0, Math.min(1, val));
         invalidate();
     }
 
     public void setPosition(float x, float y) {
-        posisiX = batasi(x);
-        posisiY = hanyaMendatar ? 0 : batasi(y);
+        this.posX = clamp(x);
+        this.posY = horizontalOnly ? 0 : clamp(y);
         invalidate();
     }
 
     public float getPositionX() {
-        return posisiX;
+        return posX;
     }
 
     public float getPositionY() {
-        return posisiY;
+        return posY;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        float tengahX = getWidth() / 2f;
-        float tengahY = getHeight() / 2f;
-        float jariBidang = Math.min(getWidth(), getHeight()) / 2f - dp(10);
-        float jariStik = jariBidang * 0.26f;
-        float jarakStik = jariBidang - jariStik - dp(3);
+        float centerX = getWidth() / 2f;
+        float centerY = getHeight() / 2f;
+        float baseRadius = Math.min(getWidth(), getHeight()) / 2f - dp(10);
+        float stickRadius = baseRadius * 0.26f;
+        float stickDist = baseRadius - stickRadius - dp(3);
 
-        bidangPaint.setColor(Color.argb(Math.round(112 * opasitas), 64, 64, 64));
-        bidangPaint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(tengahX, tengahY, jariBidang, bidangPaint);
+        basePaint.setColor(Color.argb(Math.round(112 * opacity), 64, 64, 64));
+        basePaint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(centerX, centerY, baseRadius, basePaint);
 
-        garisPaint.setColor(Color.argb(Math.round(190 * opasitas), 180, 180, 180));
-        garisPaint.setStyle(Paint.Style.STROKE);
-        garisPaint.setStrokeWidth(dp(2));
-        canvas.drawCircle(tengahX, tengahY, jariBidang, garisPaint);
-        garisPaint.setStrokeWidth(dp(1));
-        canvas.drawCircle(tengahX, tengahY, jarakStik * 0.55f, garisPaint);
-        canvas.drawLine(
-                tengahX - jarakStik,
-                tengahY,
-                tengahX + jarakStik,
-                tengahY,
-                garisPaint
-        );
-        if (!hanyaMendatar) {
-            canvas.drawLine(
-                    tengahX,
-                    tengahY - jarakStik,
-                    tengahX,
-                    tengahY + jarakStik,
-                    garisPaint
-            );
+        linePaint.setColor(Color.argb(Math.round(190 * opacity), 180, 180, 180));
+        linePaint.setStyle(Paint.Style.STROKE);
+        linePaint.setStrokeWidth(dp(2));
+        canvas.drawCircle(centerX, centerY, baseRadius, linePaint);
+        linePaint.setStrokeWidth(dp(1));
+        canvas.drawCircle(centerX, centerY, stickDist * 0.55f, linePaint);
+        canvas.drawLine(centerX - stickDist, centerY, centerX + stickDist, centerY, linePaint);
+        if (!horizontalOnly) {
+            canvas.drawLine(centerX, centerY - stickDist, centerX, centerY + stickDist, linePaint);
         }
 
-        float letakStikX = tengahX + posisiX * jarakStik;
-        float letakStikY = tengahY + posisiY * jarakStik;
-        stikPaint.setColor(Color.argb(Math.round(230 * opasitas), 255, 255, 255));
-        stikPaint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(letakStikX, letakStikY, jariStik, stikPaint);
-        titikPaint.setColor(Color.argb(Math.round(230 * opasitas), 0, 0, 0));
-        titikPaint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(letakStikX, letakStikY, jariStik * 0.22f, titikPaint);
+        float stickX = centerX + posX * stickDist;
+        float stickY = centerY + posY * stickDist;
+        stickPaint.setColor(Color.argb(Math.round(230 * opacity), 255, 255, 255));
+        stickPaint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(stickX, stickY, stickRadius, stickPaint);
+        dotPaint.setColor(Color.argb(Math.round(230 * opacity), 0, 0, 0));
+        dotPaint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(stickX, stickY, stickRadius * 0.22f, dotPaint);
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent sentuhan) {
+    public boolean onTouchEvent(MotionEvent event) {
         if (!isEnabled()) {
             return false;
         }
 
-        switch (sentuhan.getAction()) {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                pointerAktif = sentuhan.getPointerId(0);
-                perbaruiPosisiDariSentuhan(sentuhan, 0);
+                activePointer = event.getPointerId(0);
+                updatePositionFromTouch(event, 0);
                 return true;
             case MotionEvent.ACTION_POINTER_DOWN:
-                if (pointerAktif == NO_POINTER) {
-                    int pointerBaru = sentuhan.getActionIndex();
-                    pointerAktif = sentuhan.getPointerId(pointerBaru);
-                    perbaruiPosisiDariSentuhan(sentuhan, pointerBaru);
+                if (activePointer == NO_POINTER) {
+                    int newPointer = event.getActionIndex();
+                    activePointer = event.getPointerId(newPointer);
+                    updatePositionFromTouch(event, newPointer);
                 }
                 return true;
             case MotionEvent.ACTION_MOVE:
-                if (pointerAktif == NO_POINTER) {
-                    pointerAktif = sentuhan.getPointerId(0);
+                if (activePointer == NO_POINTER) {
+                    activePointer = event.getPointerId(0);
                 }
-                int indeksPointer = sentuhan.findPointerIndex(pointerAktif);
-                if (indeksPointer >= 0) {
-                    perbaruiPosisiDariSentuhan(sentuhan, indeksPointer);
+                int pointerIdx = event.findPointerIndex(activePointer);
+                if (pointerIdx >= 0) {
+                    updatePositionFromTouch(event, pointerIdx);
                 }
                 return true;
             case MotionEvent.ACTION_POINTER_UP:
-                int indeksTerangkat = sentuhan.getActionIndex();
-                if (sentuhan.getPointerId(indeksTerangkat) == pointerAktif) {
-                    if (sentuhan.getPointerCount() > 1) {
-                        int indeksPengganti = indeksTerangkat == 0 ? 1 : 0;
-                        pointerAktif = sentuhan.getPointerId(indeksPengganti);
-                        perbaruiPosisiDariSentuhan(sentuhan, indeksPengganti);
+                int upIdx = event.getActionIndex();
+                if (event.getPointerId(upIdx) == activePointer) {
+                    if (event.getPointerCount() > 1) {
+                        int replacementIdx = upIdx == 0 ? 1 : 0;
+                        activePointer = event.getPointerId(replacementIdx);
+                        updatePositionFromTouch(event, replacementIdx);
                     } else {
-                        lepaskanStik();
+                        releaseStick();
                     }
                 }
                 return true;
             case MotionEvent.ACTION_UP:
-                lepaskanStik();
+                releaseStick();
                 performClick();
                 return true;
             case MotionEvent.ACTION_CANCEL:
-                lepaskanStik();
+                releaseStick();
                 return true;
             default:
                 return true;
         }
     }
 
-    private void perbaruiPosisiDariSentuhan(MotionEvent sentuhan, int indeksPointer) {
-        float jariBidang = Math.min(getWidth(), getHeight()) / 2f - dp(10);
-        float jariStik = jariBidang * 0.26f;
-        float jarakStik = jariBidang - jariStik - dp(3);
-        float tengahX = getWidth() / 2f;
-        float tengahY = getHeight() / 2f;
+    private void updatePositionFromTouch(MotionEvent event, int pointerIdx) {
+        float baseRadius = Math.min(getWidth(), getHeight()) / 2f - dp(10);
+        float stickRadius = baseRadius * 0.26f;
+        float stickDist = baseRadius - stickRadius - dp(3);
+        float centerX = getWidth() / 2f;
+        float centerY = getHeight() / 2f;
 
-        float x = batasi((sentuhan.getX(indeksPointer) - tengahX) / jarakStik);
-        float y = hanyaMendatar
-                ? 0
-                : batasi((sentuhan.getY(indeksPointer) - tengahY) / jarakStik);
-        float panjang = (float) Math.sqrt(x * x + y * y);
-        if (panjang > 1) {
-            x /= panjang;
-            y /= panjang;
+        float x = clamp((event.getX(pointerIdx) - centerX) / stickDist);
+        float y = horizontalOnly ? 0 : clamp((event.getY(pointerIdx) - centerY) / stickDist);
+        float len = (float) Math.sqrt(x * x + y * y);
+        if (len > 1) {
+            x /= len;
+            y /= len;
         }
 
-        posisiX = x;
-        posisiY = y;
+        this.posX = x;
+        this.posY = y;
         invalidate();
-        kirimPosisiKePendengar();
+        notifyListener();
     }
 
-    private void lepaskanStik() {
-        pointerAktif = NO_POINTER;
+    private void releaseStick() {
+        activePointer = NO_POINTER;
         setPosition(0, 0);
-        kirimPosisiKePendengar();
+        notifyListener();
     }
 
-    private void kirimPosisiKePendengar() {
-        if (pendengarGerak != null) {
-            pendengarGerak.onPositionChanged(posisiX, posisiY);
+    private void notifyListener() {
+        if (listener != null) {
+            listener.onPositionChanged(posX, posY);
         }
     }
 
@@ -203,11 +189,11 @@ public class Gamepad extends View {
         return true;
     }
 
-    private float dp(float nilai) {
-        return nilai * getResources().getDisplayMetrics().density;
+    private float dp(float val) {
+        return val * getResources().getDisplayMetrics().density;
     }
 
-    private static float batasi(float nilai) {
-        return Math.max(-1, Math.min(1, nilai));
+    private static float clamp(float val) {
+        return Math.max(-1, Math.min(1, val));
     }
 }

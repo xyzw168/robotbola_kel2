@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
     private View dashboardPage;
     private View gamepadPage;
     private LinearLayout modeSelectionPage;
-    private View virtualGamepadPanel;
     private ImageView physicalCamPreview;
     private ImageView virtualCamPreview;
     private Gamepad moveJoystick;
@@ -131,10 +130,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean isTurnLeftPressed;
     private boolean isTurnRightPressed;
 
-    private volatile float moveY = 0.0f;
-    private volatile float moveX = 0.0f;
-    private volatile float turn = 0.0f;
-    private volatile int grip = 0;
+    private volatile float x = 0.0f;
+    private volatile float y = 0.0f;
+    private volatile float z = 0.0f;
+    private volatile int w = 0;
 
     private final Runnable periodicSender = new Runnable() {
         @Override
@@ -189,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
         dashboardPage = findViewById(R.id.dashboardPage);
         gamepadPage = findViewById(R.id.gamepadPage);
         modeSelectionPage = findViewById(R.id.modeSelectionPage);
-        virtualGamepadPanel = findViewById(R.id.virtualGamepadPanel);
         physicalCamPreview = findViewById(R.id.physicalCameraPreview);
         virtualCamPreview = findViewById(R.id.virtualCameraPreview);
         moveJoystick = findViewById(R.id.movementJoystick);
@@ -293,16 +291,16 @@ public class MainActivity extends AppCompatActivity {
     private void setupVirtualGamepad() {
         if (turnJoystick != null) turnJoystick.setHorizontalOnly(true);
         if (moveJoystick != null) {
-            moveJoystick.setOnPositionChangedListener((x, y) -> {
-                moveY = scaleToFloat(-y);
-                moveX = scaleToFloat(x);
+            moveJoystick.setOnPositionChangedListener((joyX, joyY) -> {
+                x = scaleToFloat(-joyY);
+                y = scaleToFloat(joyX);
                 updateDisplayValues();
                 sendCommand();
             });
         }
         if (turnJoystick != null) {
-            turnJoystick.setOnPositionChangedListener((x, y) -> {
-                turn = scaleToFloat(x);
+            turnJoystick.setOnPositionChangedListener((joyX, joyY) -> {
+                z = scaleToFloat(joyX);
                 updateDisplayValues();
                 sendCommand();
             });
@@ -406,9 +404,9 @@ public class MainActivity extends AppCompatActivity {
         speedLimit = limit;
         updateSpeedButtons();
         if (isVirtualGamepadMode && moveJoystick != null && turnJoystick != null) {
-            moveY = scaleToFloat(moveJoystick.getPositionX() == 0 ? 0 : -moveJoystick.getPositionY());
-            moveX = scaleToFloat(moveJoystick.getPositionX());
-            turn = scaleToFloat(turnJoystick.getPositionX());
+            x = scaleToFloat(moveJoystick.getPositionX() == 0 ? 0 : -moveJoystick.getPositionY());
+            y = scaleToFloat(moveJoystick.getPositionX());
+            z = scaleToFloat(turnJoystick.getPositionX());
         }
         updateDisplayValues();
         sendCommand();
@@ -435,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void toggleGrip() {
-        grip = (grip == 0) ? 1 : 0;
+        w = (w == 0) ? 1 : 0;
         updateDisplayValues();
         sendCommand();
     }
@@ -447,9 +445,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetControlValues() {
-        moveY = 0.0f;
-        moveX = 0.0f;
-        turn = 0.0f;
+        x = 0.0f;
+        y = 0.0f;
+        z = 0.0f;
         isTurnLeftPressed = false;
         isTurnRightPressed = false;
         if (moveJoystick != null) moveJoystick.setPosition(0, 0);
@@ -457,20 +455,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateDisplayValues() {
-        String xStr = String.format(Locale.US, "%.2f", moveY);
-        String yStr = String.format(Locale.US, "%.2f", moveX);
-        String wzStr = String.format(Locale.US, "%.2f", turn);
-        String gripStr = String.valueOf(grip);
+        String xStr = String.format(Locale.US, "%.2f", x);
+        String yStr = String.format(Locale.US, "%.2f", y);
+        String zStr = String.format(Locale.US, "%.2f", z);
+        String wStr = String.valueOf(w);
 
         xValText.setText(xStr);
         yValText.setText(yStr);
-        wzValText.setText(wzStr);
-        gripValText.setText(gripStr);
+        wzValText.setText(zStr);
+        gripValText.setText(wStr);
 
         gamepadXValText.setText(xStr);
         gamepadYValText.setText(yStr);
-        gamepadWzValText.setText(wzStr);
-        gamepadGripValText.setText(gripStr);
+        gamepadWzValText.setText(zStr);
+        gamepadGripValText.setText(wStr);
     }
 
     private void updateStatusText(String statusStr, int colorHex) {
@@ -639,7 +637,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void disconnect() {
-        boolean wasConnecting = isConnecting;
         ++connSession;
         isConnecting = false;
         isConnected = false;
@@ -673,7 +670,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 while (isConnected && session == connSession) {
                     isCommandPending.set(false);
-                    String cmdStr = String.format(Locale.US, "%.2f,%.2f,%.2f,%d", moveY, moveX, turn, grip);
+                    String cmdStr = String.format(Locale.US, "%.2f,%.2f,%.2f,%d", x, y, z, w);
 
                     if (isUdpConn) {
                         if (udpSocket == null || udpAddress == null) break;
@@ -838,14 +835,14 @@ public class MainActivity extends AppCompatActivity {
             if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK
                     && event.getAction() == MotionEvent.ACTION_MOVE
                     && isPhysicalMode) {
-                float y = getCenteredAxis(event, MotionEvent.AXIS_Y);
-                float x = getCenteredAxis(event, MotionEvent.AXIS_X);
-                float rx = getCenteredAxis(event, MotionEvent.AXIS_Z);
-                if (rx == 0.0f) rx = getCenteredAxis(event, MotionEvent.AXIS_RZ);
+                float rawY = getCenteredAxis(event, MotionEvent.AXIS_Y);
+                float rawX = getCenteredAxis(event, MotionEvent.AXIS_X);
+                float rawZ = getCenteredAxis(event, MotionEvent.AXIS_Z);
+                if (rawZ == 0.0f) rawZ = getCenteredAxis(event, MotionEvent.AXIS_RZ);
 
-                moveY = scaleToFloat(-y);
-                moveX = scaleToFloat(x);
-                turn = scaleToFloat(rx);
+                x = scaleToFloat(-rawY);
+                y = scaleToFloat(rawX);
+                z = scaleToFloat(rawZ);
                 updateDisplayValues();
                 sendCommand();
                 return true;
@@ -862,14 +859,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                         isTurnLeftPressed = true;
-                        turn = scaleToFloat(-1.0f);
+                        z = scaleToFloat(-1.0f);
                         updateDisplayValues();
                         sendCommand();
                         return true;
                     }
                     if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                         isTurnRightPressed = true;
-                        turn = scaleToFloat(1.0f);
+                        z = scaleToFloat(1.0f);
                         updateDisplayValues();
                         sendCommand();
                         return true;
@@ -877,14 +874,14 @@ public class MainActivity extends AppCompatActivity {
                 } else if (event.getAction() == KeyEvent.ACTION_UP) {
                     if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                         isTurnLeftPressed = false;
-                        if (!isTurnRightPressed) turn = 0.0f;
+                        if (!isTurnRightPressed) z = 0.0f;
                         updateDisplayValues();
                         sendCommand();
                         return true;
                     }
                     if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                         isTurnRightPressed = false;
-                        if (!isTurnLeftPressed) turn = 0.0f;
+                        if (!isTurnLeftPressed) z = 0.0f;
                         updateDisplayValues();
                         sendCommand();
                         return true;
