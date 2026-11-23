@@ -56,6 +56,14 @@ public class Gamepad extends View {
         invalidate();
     }
 
+    public float getPositionX() {
+        return posisiX;
+    }
+
+    public float getPositionY() {
+        return posisiY;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);

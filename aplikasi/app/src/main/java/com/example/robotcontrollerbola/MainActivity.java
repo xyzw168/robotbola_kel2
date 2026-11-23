@@ -30,6 +30,7 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.zeromq.ZMQ;
@@ -47,93 +48,101 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
-    private static final float BATAS_STIK = 0.1f;
-    private static final long JEDA_KIRIM_PERINTAH_MS = 30L;
+    private static final float STICK_THRESHOLD = 0.1f;
+    private static final long SEND_INTERVAL_MS = 30L;
     private static final int PORT_ZMQ = 5555;
-    private static final int PORT_UDP_PERINTAH = 5556;
-    private static final int PORT_KAMERA_UDP = 5005;
+    private static final int PORT_UDP_CMD = 5556;
+    private static final int PORT_UDP_CAM = 5005;
     private static final int TIMEOUT_HANDSHAKE_ZMQ_MS = 4000;
     private static final int TIMEOUT_ZMQ_MS = 2500;
-    private static final int BATAS_UDP_BYTES = 65507;
-    private static final int BATAS_DIMENSI_KAMERA = 1920;
+    private static final int MAX_UDP_BYTES = 65507;
+    private static final int MAX_CAM_DIMEN = 1920;
 
-    private final Handler antreanLayar = new Handler(Looper.getMainLooper());
-    private final ExecutorService jalurKomunikasi = Executors.newSingleThreadExecutor();
-    private final ExecutorService jalurKamera = Executors.newSingleThreadExecutor();
-    private final AtomicBoolean pengirimanSedangBerjalan = new AtomicBoolean();
-    private final AtomicBoolean adaPerintahMenunggu = new AtomicBoolean();
-    private final AtomicBoolean renderFrameTerjadwal = new AtomicBoolean();
-    private final AtomicReference<Bitmap> frameMenunggu = new AtomicReference<>();
+    private final Handler uiHandler = new Handler(Looper.getMainLooper());
+    private final ExecutorService commExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService cameraExecutor = Executors.newSingleThreadExecutor();
+    private final AtomicBoolean isSending = new AtomicBoolean();
+    private final AtomicBoolean isCommandPending = new AtomicBoolean();
+    private final AtomicBoolean isFrameRenderScheduled = new AtomicBoolean();
+    private final AtomicReference<Bitmap> pendingFrame = new AtomicReference<>();
 
-    private EditText alamatRobotInput;
-    private EditText portRobotInput;
-    private Button tombolConnect;
-    private Button tombolProtokol;
-    private Button tombolStopFisik;
-    private Button tombolStopVirtual;
-    private Button tombolKecepatan30;
-    private Button tombolKecepatan70;
-    private Button tombolKecepatan100;
-    private Button tombolJepitBola;
-    private SwitchMaterial sakelarKameraFisik;
-    private SwitchMaterial sakelarKameraVirtual;
-    private Button tombolKembali;
-    private Button tombolKembaliKeMode;
-    private TextView teksStatus;
-    private TextView statusGamepad;
-    private TextView statusGamepadVirtual;
-    private TextView placeholderKameraFisik;
-    private TextView placeholderKameraVirtual;
-    private TextView nilaiX;
-    private TextView nilaiY;
-    private TextView nilaiWz;
-    private TextView nilaiGrip;
-    private TextView nilaiXGamepad;
-    private TextView nilaiYGamepad;
-    private TextView nilaiWzGamepad;
-    private TextView nilaiGripGamepad;
-    private View halamanDashboard;
-    private View halamanGamepad;
-    private LinearLayout halamanPilihanMode;
-    private View panelGamepadVirtual;
-    private ImageView kameraFisik;
-    private ImageView kameraVirtual;
-    private Gamepad stikGerak;
-    private Gamepad stikPutaran;
-    private OnBackPressedCallback penangananTombolKembali;
+    private EditText ipInput;
+    private EditText portInput;
+    private Button connectBtn;
+    private Button protocolBtn;
+    private Button stopBtnPhysical;
+    private Button stopBtnVirtual;
 
-    private ZMQ.Context jalurRobot;
-    private ZMQ.Socket pengirimPerintah;
-    private DatagramSocket soketUdp;
-    private InetAddress alamatUdp;
-    private volatile DatagramSocket penerimaKameraUdp;
-    private int portUdp;
+    private MaterialButton speed30Btn;
+    private MaterialButton speed70Btn;
+    private MaterialButton speed100Btn;
+    private MaterialButton physSpeed30Btn;
+    private MaterialButton physSpeed70Btn;
+    private MaterialButton physSpeed100Btn;
+    private MaterialButton gripBtn;
 
-    private volatile boolean sedangMenghubungkan;
-    private volatile boolean sudahTerhubung;
-    private volatile boolean memakaiUdp;
-    private volatile boolean koneksiUdp;
-    private volatile int sesiKamera;
-    private volatile int nomorPercobaanSambungan;
-    private boolean memakaiModeFisik;
-    private boolean memakaiGamepadVirtual;
-    private boolean kameraDiaktifkan = true;
-    private boolean memperbaruiSakelarKamera;
-    private int batasKecepatan = 100;
-    private boolean tombolPutarKiriDitekan;
-    private boolean tombolPutarKananDitekan;
-    private volatile int majuMundur;
-    private volatile int kiriKanan;
-    private volatile int putaran;
-    private volatile int penjepitBola;
+    private SwitchMaterial cameraSwitchPhysical;
+    private SwitchMaterial cameraSwitchVirtual;
+    private Button backBtn;
+    private Button backToModesBtn;
+    private TextView statusText;
+    private TextView gamepadStatus;
+    private TextView virtualGamepadStatus;
+    private TextView physicalCamPlaceholder;
+    private TextView virtualCamPlaceholder;
 
-    private final Runnable pengirimBerkala = new Runnable() {
+    private TextView xValText;
+    private TextView yValText;
+    private TextView wzValText;
+    private TextView gripValText;
+    private TextView gamepadXValText;
+    private TextView gamepadYValText;
+    private TextView gamepadWzValText;
+    private TextView gamepadGripValText;
+
+    private View dashboardPage;
+    private View gamepadPage;
+    private LinearLayout modeSelectionPage;
+    private View virtualGamepadPanel;
+    private ImageView physicalCamPreview;
+    private ImageView virtualCamPreview;
+    private Gamepad moveJoystick;
+    private Gamepad turnJoystick;
+    private OnBackPressedCallback backPressedCallback;
+
+    private ZMQ.Context zmqContext;
+    private ZMQ.Socket zmqSocket;
+    private DatagramSocket udpSocket;
+    private InetAddress udpAddress;
+    private volatile DatagramSocket cameraUdpReceiver;
+    private int udpPort;
+
+    private volatile boolean isConnecting;
+    private volatile boolean isConnected;
+    private volatile boolean useUdp;
+    private volatile boolean isUdpConn;
+    private volatile int cameraSession;
+    private volatile int connSession;
+    private boolean isPhysicalMode;
+    private boolean isVirtualGamepadMode;
+    private boolean isCameraEnabled = true;
+    private boolean isUpdatingCamSwitch;
+    private int speedLimit = 100;
+    private boolean isTurnLeftPressed;
+    private boolean isTurnRightPressed;
+
+    private volatile float moveY = 0.0f;
+    private volatile float moveX = 0.0f;
+    private volatile float turn = 0.0f;
+    private volatile int grip = 0;
+
+    private final Runnable periodicSender = new Runnable() {
         @Override
         public void run() {
-            if (sudahTerhubung) {
-                kirimPerintahRobot();
+            if (isConnected) {
+                sendCommand();
             }
-            antreanLayar.postDelayed(this, JEDA_KIRIM_PERINTAH_MS);
+            uiHandler.postDelayed(this, SEND_INTERVAL_MS);
         }
     };
 
@@ -143,631 +152,485 @@ public class MainActivity extends AppCompatActivity {
         WindowCompat.enableEdgeToEdge(getWindow());
         setContentView(R.layout.activity_main);
 
-        alamatRobotInput = findViewById(R.id.ipAddressInput);
-        portRobotInput = findViewById(R.id.portInput);
-        tombolConnect = findViewById(R.id.connectButton);
-        tombolProtokol = findViewById(R.id.protocolButton);
-        tombolStopFisik = findViewById(R.id.physicalStopButton);
-        tombolStopVirtual = findViewById(R.id.virtualStopButton);
-        tombolKecepatan30 = findViewById(R.id.speed30Button);
-        tombolKecepatan70 = findViewById(R.id.speed70Button);
-        tombolKecepatan100 = findViewById(R.id.speed100Button);
-        tombolJepitBola = findViewById(R.id.gripButton);
-        sakelarKameraFisik = findViewById(R.id.physicalCameraSwitch);
-        sakelarKameraVirtual = findViewById(R.id.virtualCameraSwitch);
-        tombolKembali = findViewById(R.id.backButton);
-        tombolKembaliKeMode = findViewById(R.id.backToModesButton);
-        teksStatus = findViewById(R.id.statusText);
-        statusGamepad = findViewById(R.id.gamepadConnectionStatus);
-        statusGamepadVirtual = findViewById(R.id.virtualConnectionStatus);
-        placeholderKameraFisik = findViewById(R.id.physicalCameraPlaceholder);
-        placeholderKameraVirtual = findViewById(R.id.virtualCameraPlaceholder);
-        nilaiX = findViewById(R.id.xValueText);
-        nilaiY = findViewById(R.id.yValueText);
-        nilaiWz = findViewById(R.id.wzValueText);
-        nilaiGrip = findViewById(R.id.gripValueText);
-        nilaiXGamepad = findViewById(R.id.gamepadXValueText);
-        nilaiYGamepad = findViewById(R.id.gamepadYValueText);
-        nilaiWzGamepad = findViewById(R.id.gamepadWzValueText);
-        nilaiGripGamepad = findViewById(R.id.gamepadGripValueText);
-        halamanDashboard = findViewById(R.id.dashboardPage);
-        halamanGamepad = findViewById(R.id.gamepadPage);
-        halamanPilihanMode = findViewById(R.id.modeSelectionPage);
-        panelGamepadVirtual = findViewById(R.id.virtualGamepadPanel);
-        kameraFisik = findViewById(R.id.physicalCameraPreview);
-        kameraVirtual = findViewById(R.id.virtualCameraPreview);
-        stikGerak = findViewById(R.id.movementJoystick);
-        stikPutaran = findViewById(R.id.rotationJoystick);
+        ipInput = findViewById(R.id.ipAddressInput);
+        portInput = findViewById(R.id.portInput);
+        connectBtn = findViewById(R.id.connectButton);
+        protocolBtn = findViewById(R.id.protocolButton);
+        stopBtnPhysical = findViewById(R.id.physicalStopButton);
+        stopBtnVirtual = findViewById(R.id.virtualStopButton);
 
-        // Sinkronkan tampilan protokol & port default saat pertama dibuka
-        String portAwal = portRobotInput.getText().toString().trim();
-        if (portAwal.equals(Integer.toString(PORT_UDP_PERINTAH))) {
-            memakaiUdp = true;
+        speed30Btn = findViewById(R.id.speed30Button);
+        speed70Btn = findViewById(R.id.speed70Button);
+        speed100Btn = findViewById(R.id.speed100Button);
+        physSpeed30Btn = findViewById(R.id.physicalSpeed30Button);
+        physSpeed70Btn = findViewById(R.id.physicalSpeed70Button);
+        physSpeed100Btn = findViewById(R.id.physicalSpeed100Button);
+        gripBtn = findViewById(R.id.gripButton);
+
+        cameraSwitchPhysical = findViewById(R.id.physicalCameraSwitch);
+        cameraSwitchVirtual = findViewById(R.id.virtualCameraSwitch);
+        backBtn = findViewById(R.id.backButton);
+        backToModesBtn = findViewById(R.id.backToModesButton);
+        statusText = findViewById(R.id.statusText);
+        gamepadStatus = findViewById(R.id.gamepadConnectionStatus);
+        virtualGamepadStatus = findViewById(R.id.virtualConnectionStatus);
+        physicalCamPlaceholder = findViewById(R.id.physicalCameraPlaceholder);
+        virtualCamPlaceholder = findViewById(R.id.virtualCameraPlaceholder);
+
+        xValText = findViewById(R.id.xValueText);
+        yValText = findViewById(R.id.yValueText);
+        wzValText = findViewById(R.id.wzValueText);
+        gripValText = findViewById(R.id.gripValueText);
+        gamepadXValText = findViewById(R.id.gamepadXValueText);
+        gamepadYValText = findViewById(R.id.gamepadYValueText);
+        gamepadWzValText = findViewById(R.id.gamepadWzValueText);
+        gamepadGripValText = findViewById(R.id.gamepadGripValueText);
+
+        dashboardPage = findViewById(R.id.dashboardPage);
+        gamepadPage = findViewById(R.id.gamepadPage);
+        modeSelectionPage = findViewById(R.id.modeSelectionPage);
+        virtualGamepadPanel = findViewById(R.id.virtualGamepadPanel);
+        physicalCamPreview = findViewById(R.id.physicalCameraPreview);
+        virtualCamPreview = findViewById(R.id.virtualCameraPreview);
+        moveJoystick = findViewById(R.id.movementJoystick);
+        turnJoystick = findViewById(R.id.rotationJoystick);
+
+        String initialPort = portInput.getText().toString().trim();
+        if (initialPort.equals(Integer.toString(PORT_UDP_CMD))) {
+            useUdp = true;
         } else {
-            memakaiUdp = false;
-            if (portAwal.isEmpty()) {
-                portRobotInput.setText(Integer.toString(PORT_ZMQ));
+            useUdp = false;
+            if (initialPort.isEmpty()) {
+                portInput.setText(Integer.toString(PORT_ZMQ));
             }
         }
-        tombolProtokol.setText(memakaiUdp ? "UDP  ▼" : "ZMQ  ▼");
+        protocolBtn.setText(useUdp ? "UDP  ▼" : "ZMQ  ▼");
 
-        pasangGamepadVirtual();
-        stikGerak.setOpacity(0.5f);
-        stikPutaran.setOpacity(0.5f);
-        tombolConnect.setOnClickListener(tampilan -> {
-            if (sedangMenghubungkan || sudahTerhubung) {
-                putuskanDariRobot();
+        setupVirtualGamepad();
+        if (moveJoystick != null) moveJoystick.setOpacity(0.5f);
+        if (turnJoystick != null) turnJoystick.setOpacity(0.5f);
+
+        connectBtn.setOnClickListener(v -> {
+            if (isConnecting || isConnected) {
+                disconnect();
             } else {
-                hubungkanKeRobot();
+                connect();
             }
         });
-        tombolProtokol.setOnClickListener(tampilan -> tampilkanPilihanProtokol());
-        sakelarKameraFisik.setOnCheckedChangeListener(
-                (tampilan, aktif) -> {
-                    if (!memperbaruiSakelarKamera) {
-                        aturKameraDiaktifkan(aktif);
-                    }
-                }
-        );
-        sakelarKameraVirtual.setOnCheckedChangeListener(
-                (tampilan, aktif) -> {
-                    if (!memperbaruiSakelarKamera) {
-                        aturKameraDiaktifkan(aktif);
-                    }
-                }
-        );
-        findViewById(R.id.physicalModeButton).setOnClickListener(
-                tampilan -> bukaHalamanFisik()
-        );
-        findViewById(R.id.virtualModeButton).setOnClickListener(
-                tampilan -> bukaHalamanGamepad()
-        );
-        tombolKembali.setOnClickListener(tampilan -> kembaliKePilihanMode());
-        tombolKembaliKeMode.setOnClickListener(tampilan -> kembaliKePilihanMode());
-        tombolStopFisik.setOnClickListener(tampilan -> hentikanRobotDarurat());
-        tombolStopVirtual.setOnClickListener(tampilan -> hentikanRobotDarurat());
-        tombolKecepatan30.setOnClickListener(tampilan -> aturBatasKecepatan(30));
-        tombolKecepatan70.setOnClickListener(tampilan -> aturBatasKecepatan(70));
-        tombolKecepatan100.setOnClickListener(tampilan -> aturBatasKecepatan(100));
-        tombolJepitBola.setOnClickListener(
-                tampilan -> aturPenjepitBola(penjepitBola == 0)
-        );
 
-        penangananTombolKembali = new OnBackPressedCallback(false) {
-            @Override
-            public void handleOnBackPressed() {
-                kembaliKePilihanMode();
+        protocolBtn.setOnClickListener(this::showProtocolMenu);
+        findViewById(R.id.physicalModeButton).setOnClickListener(v -> openPhysicalMode());
+        findViewById(R.id.virtualModeButton).setOnClickListener(v -> openVirtualJoystickMode());
+
+        backBtn.setOnClickListener(v -> backToModeSelection());
+        backToModesBtn.setOnClickListener(v -> backToModeSelection());
+        stopBtnPhysical.setOnClickListener(v -> emergencyStop());
+        stopBtnVirtual.setOnClickListener(v -> emergencyStop());
+
+        View.OnClickListener speed30Listener = v -> setSpeedLimit(30);
+        View.OnClickListener speed70Listener = v -> setSpeedLimit(70);
+        View.OnClickListener speed100Listener = v -> setSpeedLimit(100);
+
+        if (speed30Btn != null) speed30Btn.setOnClickListener(speed30Listener);
+        if (speed70Btn != null) speed70Btn.setOnClickListener(speed70Listener);
+        if (speed100Btn != null) speed100Btn.setOnClickListener(speed100Listener);
+
+        if (physSpeed30Btn != null) physSpeed30Btn.setOnClickListener(speed30Listener);
+        if (physSpeed70Btn != null) physSpeed70Btn.setOnClickListener(speed70Listener);
+        if (physSpeed100Btn != null) physSpeed100Btn.setOnClickListener(speed100Listener);
+
+        if (gripBtn != null) {
+            gripBtn.setOnClickListener(v -> toggleGrip());
+        }
+
+        cameraSwitchPhysical.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isUpdatingCamSwitch) {
+                setCameraEnabled(isChecked);
             }
-        };
-        getOnBackPressedDispatcher().addCallback(this, penangananTombolKembali);
+        });
+        cameraSwitchVirtual.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isUpdatingCamSwitch) {
+                setCameraEnabled(isChecked);
+            }
+        });
 
-        aturKendaliGamepad();
-        perbaruiTampilanNilai();
-        tampilkanPilihanKecepatan();
-        aturFormSambungan();
-        antreanLayar.post(pengirimBerkala);
+        setupEdgeToEdgeInsets();
+        setupBackPressedHandling();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (tampilan, insets) -> {
-            Insets bilahSistem = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            tampilan.setPadding(
-                    bilahSistem.left,
-                    bilahSistem.top,
-                    bilahSistem.right,
-                    bilahSistem.bottom
-            );
+        setupPhysicalGamepad();
+        updateDisplayValues();
+        updateSpeedButtons();
+        updateFormState();
+        uiHandler.post(periodicSender);
+
+        updateGamepadConnectionStatus();
+    }
+
+    private void setupEdgeToEdgeInsets() {
+        View root = findViewById(R.id.main);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-    }
 
-    private void pasangGamepadVirtual() {
-        stikPutaran.setHorizontalOnly(true);
-        stikGerak.setOnPositionChangedListener((x, y) -> {
-            majuMundur = ubahKePersenKecepatan(-y);
-            kiriKanan = ubahKePersenKecepatan(x);
-            perbaruiTampilanNilai();
-            kirimPerintahRobot();
-        });
-        stikPutaran.setOnPositionChangedListener((x, y) -> {
-            putaran = ubahKePersenKecepatan(x);
-            perbaruiTampilanNilai();
-            kirimPerintahRobot();
-        });
-    }
-
-    private void bukaHalamanFisik() {
-        aturBatasKecepatan(100);
-        memakaiModeFisik = true;
-        memakaiGamepadVirtual = false;
-        berhenti();
-        halamanPilihanMode.setVisibility(View.GONE);
-        halamanGamepad.setVisibility(View.GONE);
-        halamanDashboard.setVisibility(View.VISIBLE);
-        penangananTombolKembali.setEnabled(true);
-        aturKendaliGamepad();
-        aturBilahSistemTampil(false);
-        aturTampilanKamera();
-    }
-
-    private void bukaHalamanGamepad() {
-        memakaiModeFisik = false;
-        memakaiGamepadVirtual = true;
-        berhenti();
-        halamanPilihanMode.setVisibility(View.GONE);
-        halamanDashboard.setVisibility(View.GONE);
-        halamanGamepad.setVisibility(View.VISIBLE);
-        penangananTombolKembali.setEnabled(true);
-        aturKendaliGamepad();
-        aturBilahSistemTampil(false);
-        aturTampilanKamera();
-    }
-
-    private void aturKameraDiaktifkan(boolean aktif) {
-        kameraDiaktifkan = aktif;
-        memperbaruiSakelarKamera = true;
-        try {
-            if (sakelarKameraFisik.isChecked() != aktif) {
-                sakelarKameraFisik.setChecked(aktif);
-            }
-            if (sakelarKameraVirtual.isChecked() != aktif) {
-                sakelarKameraVirtual.setChecked(aktif);
-            }
-        } finally {
-            memperbaruiSakelarKamera = false;
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (controller != null) {
+            controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         }
-        aturTampilanKamera();
     }
 
-    private void aturTampilanKamera() {
-        kameraFisik.setVisibility(kameraDiaktifkan ? View.VISIBLE : View.GONE);
-        kameraVirtual.setVisibility(kameraDiaktifkan ? View.VISIBLE : View.GONE);
-        if (!kameraDiaktifkan) {
-            placeholderKameraFisik.setVisibility(View.GONE);
-            placeholderKameraVirtual.setVisibility(View.GONE);
-            hentikanPenerimaKamera();
-            kameraFisik.setImageDrawable(null);
-            kameraVirtual.setImageDrawable(null);
+    private void setupBackPressedHandling() {
+        backPressedCallback = new OnBackPressedCallback(false) {
+            @Override
+            public void handleOnBackPressed() {
+                backToModeSelection();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, backPressedCallback);
+    }
+
+    private void setupVirtualGamepad() {
+        if (turnJoystick != null) turnJoystick.setHorizontalOnly(true);
+        if (moveJoystick != null) {
+            moveJoystick.setOnPositionChangedListener((x, y) -> {
+                moveY = scaleToFloat(-y);
+                moveX = scaleToFloat(x);
+                updateDisplayValues();
+                sendCommand();
+            });
+        }
+        if (turnJoystick != null) {
+            turnJoystick.setOnPositionChangedListener((x, y) -> {
+                turn = scaleToFloat(x);
+                updateDisplayValues();
+                sendCommand();
+            });
+        }
+    }
+
+    private float scaleToFloat(float rawVal) {
+        float absVal = Math.abs(rawVal);
+        if (absVal < STICK_THRESHOLD) {
+            return 0.0f;
+        }
+        float speedRatio = speedLimit / 100.0f;
+        float scaled = rawVal * speedRatio;
+        return Math.round(scaled * 100.0f) / 100.0f;
+    }
+
+    private void openPhysicalMode() {
+        isPhysicalMode = true;
+        isVirtualGamepadMode = false;
+        modeSelectionPage.setVisibility(View.GONE);
+        dashboardPage.setVisibility(View.VISIBLE);
+        gamepadPage.setVisibility(View.GONE);
+        backPressedCallback.setEnabled(true);
+        updateDisplayValues();
+        updateCameraDisplay();
+        updateGamepadConnectionStatus();
+    }
+
+    private void openVirtualJoystickMode() {
+        isPhysicalMode = false;
+        isVirtualGamepadMode = true;
+        modeSelectionPage.setVisibility(View.GONE);
+        dashboardPage.setVisibility(View.GONE);
+        gamepadPage.setVisibility(View.VISIBLE);
+        backPressedCallback.setEnabled(true);
+        updateDisplayValues();
+        updateCameraDisplay();
+        updateGamepadConnectionStatus();
+    }
+
+    private void backToModeSelection() {
+        isPhysicalMode = false;
+        isVirtualGamepadMode = false;
+        dashboardPage.setVisibility(View.GONE);
+        gamepadPage.setVisibility(View.GONE);
+        modeSelectionPage.setVisibility(View.VISIBLE);
+        backPressedCallback.setEnabled(false);
+        updateCameraDisplay();
+    }
+
+    private void setCameraEnabled(boolean enabled) {
+        isCameraEnabled = enabled;
+        isUpdatingCamSwitch = true;
+        if (cameraSwitchPhysical.isChecked() != enabled) cameraSwitchPhysical.setChecked(enabled);
+        if (cameraSwitchVirtual.isChecked() != enabled) cameraSwitchVirtual.setChecked(enabled);
+        isUpdatingCamSwitch = false;
+        updateCameraDisplay();
+    }
+
+    private void updateCameraDisplay() {
+        physicalCamPreview.setVisibility(isCameraEnabled ? View.VISIBLE : View.GONE);
+        virtualCamPreview.setVisibility(isCameraEnabled ? View.VISIBLE : View.GONE);
+
+        if (!isCameraEnabled) {
+            physicalCamPlaceholder.setVisibility(View.GONE);
+            virtualCamPlaceholder.setVisibility(View.GONE);
+            stopCamera();
+            physicalCamPreview.setImageDrawable(null);
+            virtualCamPreview.setImageDrawable(null);
             return;
         }
 
-        if (halamanDashboard.getVisibility() == View.VISIBLE
-                || halamanGamepad.getVisibility() == View.VISIBLE) {
-            mulaiPenerimaKamera();
+        if (dashboardPage.getVisibility() == View.VISIBLE || gamepadPage.getVisibility() == View.VISIBLE) {
+            startCamera();
+        } else {
+            stopCamera();
         }
     }
 
-    private void kembaliKePilihanMode() {
-        berhenti();
-        memakaiModeFisik = false;
-        memakaiGamepadVirtual = false;
-        halamanGamepad.setVisibility(View.GONE);
-        halamanDashboard.setVisibility(View.GONE);
-        halamanPilihanMode.setVisibility(View.VISIBLE);
-        penangananTombolKembali.setEnabled(false);
-        aturKendaliGamepad();
-        hentikanPenerimaKamera();
-        aturBilahSistemTampil(true);
-    }
-
-    private void tampilkanPilihanProtokol() {
-        PopupMenu menu = new PopupMenu(this, tombolProtokol);
+    private void showProtocolMenu(View anchor) {
+        PopupMenu menu = new PopupMenu(this, anchor);
         menu.getMenu().add("ZMQ");
         menu.getMenu().add("UDP");
         menu.setOnMenuItemClickListener(item -> {
-            boolean pilihUdp = "UDP".contentEquals(item.getTitle());
-            if (memakaiUdp != pilihUdp) {
-                int portDefaultSebelumnya = memakaiUdp ? PORT_UDP_PERINTAH : PORT_ZMQ;
-                int portDefaultBaru = pilihUdp ? PORT_UDP_PERINTAH : PORT_ZMQ;
-                String portSaatIni = portRobotInput.getText().toString().trim();
-                if (portSaatIni.isEmpty() || portSaatIni.equals(Integer.toString(portDefaultSebelumnya))) {
-                    portRobotInput.setText(Integer.toString(portDefaultBaru));
+            boolean selectUdp = "UDP".contentEquals(item.getTitle());
+            if (useUdp != selectUdp) {
+                int prevPort = useUdp ? PORT_UDP_CMD : PORT_ZMQ;
+                int newPort = selectUdp ? PORT_UDP_CMD : PORT_ZMQ;
+                if (portInput.getText().toString().trim().equals(Integer.toString(prevPort))) {
+                    portInput.setText(Integer.toString(newPort));
                 }
-                memakaiUdp = pilihUdp;
+                useUdp = selectUdp;
+                protocolBtn.setText(useUdp ? "UDP  ▼" : "ZMQ  ▼");
             }
-            tombolProtokol.setText(memakaiUdp ? "UDP  ▼" : "ZMQ  ▼");
             return true;
         });
         menu.show();
     }
 
-    private void aturKendaliGamepad() {
-        boolean halamanVirtualTerbuka = memakaiGamepadVirtual
-                && halamanGamepad.getVisibility() == View.VISIBLE;
-        panelGamepadVirtual.setVisibility(halamanVirtualTerbuka ? View.VISIBLE : View.GONE);
-        stikGerak.setEnabled(halamanVirtualTerbuka);
-        stikPutaran.setEnabled(halamanVirtualTerbuka);
-        tombolJepitBola.setEnabled(halamanVirtualTerbuka);
-    }
-
-    private void aturBatasKecepatan(int batasBaru) {
-        int batasLama = batasKecepatan;
-        if (batasLama != 0 && batasBaru != batasLama) {
-            majuMundur = Math.round(majuMundur * batasBaru / (float) batasLama);
-            kiriKanan = Math.round(kiriKanan * batasBaru / (float) batasLama);
-            putaran = Math.round(putaran * batasBaru / (float) batasLama);
+    private void setSpeedLimit(int limit) {
+        speedLimit = limit;
+        updateSpeedButtons();
+        if (isVirtualGamepadMode && moveJoystick != null && turnJoystick != null) {
+            moveY = scaleToFloat(moveJoystick.getPositionX() == 0 ? 0 : -moveJoystick.getPositionY());
+            moveX = scaleToFloat(moveJoystick.getPositionX());
+            turn = scaleToFloat(turnJoystick.getPositionX());
         }
-        batasKecepatan = batasBaru;
-        tampilkanPilihanKecepatan();
-        perbaruiTampilanNilai();
-        kirimPerintahRobot();
+        updateDisplayValues();
+        sendCommand();
     }
 
-    private void tampilkanPilihanKecepatan() {
-        aturTampilanTombolKecepatan(tombolKecepatan30, batasKecepatan == 30);
-        aturTampilanTombolKecepatan(tombolKecepatan70, batasKecepatan == 70);
-        aturTampilanTombolKecepatan(tombolKecepatan100, batasKecepatan == 100);
+    private void updateSpeedButtons() {
+        int activeBg = 0xFF000000;
+        int inactiveBg = 0x80000000;
+        int activeBgVirt = 0xFF000000;
+        int inactiveBgVirt = 0xBFFFFFFF;
+
+        if (speed30Btn != null) updateButtonAppearance(speed30Btn, speedLimit == 30, activeBgVirt, inactiveBgVirt);
+        if (speed70Btn != null) updateButtonAppearance(speed70Btn, speedLimit == 70, activeBgVirt, inactiveBgVirt);
+        if (speed100Btn != null) updateButtonAppearance(speed100Btn, speedLimit == 100, activeBgVirt, inactiveBgVirt);
+
+        if (physSpeed30Btn != null) updateButtonAppearance(physSpeed30Btn, speedLimit == 30, activeBg, inactiveBg);
+        if (physSpeed70Btn != null) updateButtonAppearance(physSpeed70Btn, speedLimit == 70, activeBg, inactiveBg);
+        if (physSpeed100Btn != null) updateButtonAppearance(physSpeed100Btn, speedLimit == 100, activeBg, inactiveBg);
     }
 
-    private static void aturTampilanTombolKecepatan(Button tombol, boolean aktif) {
-        tombol.setBackgroundTintList(ColorStateList.valueOf(
-                aktif ? 0xFF000000 : 0xBFFFFFFF
-        ));
-        tombol.setTextColor(aktif ? 0xFFFFFFFF : 0xFF000000);
+    private void updateButtonAppearance(MaterialButton btn, boolean isActive, int activeBg, int inactiveBg) {
+        btn.setBackgroundTintList(ColorStateList.valueOf(isActive ? activeBg : inactiveBg));
+        btn.setTextColor(isActive ? 0xFFFFFFFF : 0xFF000000);
     }
 
-    private void hentikanRobotDarurat() {
-        resetNilaiKendali();
-        penjepitBola = 0;
-        perbaruiTampilanNilai();
-        kirimPerintahRobot();
+    private void toggleGrip() {
+        grip = (grip == 0) ? 1 : 0;
+        updateDisplayValues();
+        sendCommand();
     }
 
-    private int ubahKePersenKecepatan(float arah) {
-        return Math.round(ubahKePersen(arah) * batasKecepatan / 100f);
+    private void emergencyStop() {
+        resetControlValues();
+        updateDisplayValues();
+        sendCommand();
     }
 
-    private void aturBilahSistemTampil(boolean tampil) {
-        WindowInsetsControllerCompat pengendali = WindowCompat.getInsetsController(
-                getWindow(),
-                findViewById(R.id.main)
-        );
-        if (tampil) {
-            pengendali.show(WindowInsetsCompat.Type.systemBars());
-        } else {
-            pengendali.hide(WindowInsetsCompat.Type.systemBars());
-            pengendali.setSystemBarsBehavior(
-                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            );
-        }
+    private void resetControlValues() {
+        moveY = 0.0f;
+        moveX = 0.0f;
+        turn = 0.0f;
+        isTurnLeftPressed = false;
+        isTurnRightPressed = false;
+        if (moveJoystick != null) moveJoystick.setPosition(0, 0);
+        if (turnJoystick != null) turnJoystick.setPosition(0, 0);
     }
 
-    private void aturPenjepitBola(boolean jepit) {
-        penjepitBola = jepit ? 1 : 0;
-        perbaruiTampilanNilai();
-        kirimPerintahRobot();
+    private void updateDisplayValues() {
+        String xStr = String.format(Locale.US, "%.2f", moveY);
+        String yStr = String.format(Locale.US, "%.2f", moveX);
+        String wzStr = String.format(Locale.US, "%.2f", turn);
+        String gripStr = String.valueOf(grip);
+
+        xValText.setText(xStr);
+        yValText.setText(yStr);
+        wzValText.setText(wzStr);
+        gripValText.setText(gripStr);
+
+        gamepadXValText.setText(xStr);
+        gamepadYValText.setText(yStr);
+        gamepadWzValText.setText(wzStr);
+        gamepadGripValText.setText(gripStr);
     }
 
-    @Override
-    public boolean dispatchGenericMotionEvent(MotionEvent gerakan) {
-        boolean memakaiGamepad = gerakan.isFromSource(InputDevice.SOURCE_JOYSTICK)
-                || gerakan.isFromSource(InputDevice.SOURCE_GAMEPAD);
-        if (!memakaiGamepad || !memakaiModeFisik) {
-            return super.dispatchGenericMotionEvent(gerakan);
-        }
-
-        if (gerakan.getAction() == MotionEvent.ACTION_MOVE) {
-            majuMundur = ubahKePersenKecepatan(-gerakan.getAxisValue(MotionEvent.AXIS_Y));
-            kiriKanan = ubahKePersenKecepatan(gerakan.getAxisValue(MotionEvent.AXIS_X));
-            putaran = ubahKePersenKecepatan(bacaPutaranGamepad(gerakan));
-            perbaruiTampilanNilai();
-            kirimPerintahRobot();
-            return true;
-        }
-        return super.dispatchGenericMotionEvent(gerakan);
+    private void updateStatusText(String statusStr, int colorHex) {
+        statusText.setText(statusStr);
+        statusText.setTextColor(colorHex);
     }
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent tombol) {
-        if (memakaiModeFisik) {
-            if (tombol.getAction() == KeyEvent.ACTION_DOWN && tombol.getRepeatCount() == 0) {
-                if (tombol.getKeyCode() == KeyEvent.KEYCODE_BUTTON_A) {
-                    aturPenjepitBola(true);
-                    return true;
-                }
-                if (tombol.getKeyCode() == KeyEvent.KEYCODE_BUTTON_B) {
-                    aturPenjepitBola(false);
-                    return true;
-                }
-                if (tombol.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT
-                        || tombol.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                    setelTombolPutar(tombol.getKeyCode(), true);
-                    return true;
-                }
-            }
-            if (tombol.getAction() == KeyEvent.ACTION_UP
-                    && (tombol.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT
-                    || tombol.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT)) {
-                setelTombolPutar(tombol.getKeyCode(), false);
-                return true;
-            }
-        }
-        return super.dispatchKeyEvent(tombol);
+    private static String cleanHostAddress(String rawHost) {
+        if (rawHost == null) return "";
+        String host = rawHost.trim();
+        if (host.startsWith("http://")) host = host.substring(7);
+        else if (host.startsWith("https://")) host = host.substring(8);
+
+        int slashIndex = host.indexOf('/');
+        if (slashIndex != -1) host = host.substring(0, slashIndex);
+
+        int colonIndex = host.indexOf(':');
+        if (colonIndex != -1) host = host.substring(0, colonIndex);
+
+        return host.trim();
     }
 
-    private void setelTombolPutar(int tombol, boolean ditekan) {
-        if (tombol == KeyEvent.KEYCODE_DPAD_LEFT) {
-            tombolPutarKiriDitekan = ditekan;
-        } else {
-            tombolPutarKananDitekan = ditekan;
-        }
-
-        putaran = tombolPutarKiriDitekan == tombolPutarKananDitekan
-                ? 0
-                : tombolPutarKiriDitekan ? -batasKecepatan : batasKecepatan;
-        perbaruiTampilanNilai();
-        kirimPerintahRobot();
-    }
-
-    private static int ubahKePersen(float arah) {
-        if (Math.abs(arah) < BATAS_STIK) {
-            return 0;
-        }
-        return Math.max(-100, Math.min(100, Math.round(arah * 100)));
-    }
-
-    static float sumbuPutaran(float mendatar, float tegak) {
-        return Math.abs(mendatar) >= Math.abs(tegak) ? mendatar : -tegak;
-    }
-
-    static float sumbuPutaranTambahan(float kiri, float kanan) {
-        return Math.max(-1, Math.min(1, (kanan - kiri) * 2));
-    }
-
-    private static float bacaPutaranGamepad(MotionEvent gerakan) {
-        float sumbuUtama = sumbuPutaran(
-                gerakan.getAxisValue(MotionEvent.AXIS_RX),
-                gerakan.getAxisValue(MotionEvent.AXIS_RY)
-        );
-        if (Math.abs(sumbuUtama) >= BATAS_STIK) {
-            return sumbuUtama;
-        }
-
-        InputDevice perangkat = gerakan.getDevice();
-        if (perangkat == null) {
-            return sumbuUtama;
-        }
-
-        InputDevice.MotionRange sumbuKiri = perangkat.getMotionRange(MotionEvent.AXIS_Z);
-        InputDevice.MotionRange sumbuKanan = perangkat.getMotionRange(MotionEvent.AXIS_RZ);
-        if (sumbuKiri == null && sumbuKanan == null) {
-            return sumbuUtama;
-        }
-
-        float kiri = sumbuKiri == null
-                ? posisiNetralSumbu(sumbuKanan, gerakan.getAxisValue(MotionEvent.AXIS_RZ))
-                : ubahKeRentangNormal(
-                gerakan.getAxisValue(MotionEvent.AXIS_Z),
-                sumbuKiri
-        );
-        float kanan = sumbuKanan == null
-                ? posisiNetralSumbu(sumbuKiri, gerakan.getAxisValue(MotionEvent.AXIS_Z))
-                : ubahKeRentangNormal(
-                gerakan.getAxisValue(MotionEvent.AXIS_RZ),
-                sumbuKanan
-        );
-        float sumbuTambahan = sumbuPutaranTambahan(kiri, kanan);
-        return Math.abs(sumbuTambahan) >= BATAS_STIK ? sumbuTambahan : sumbuUtama;
-    }
-
-    private static float ubahKeRentangNormal(
-            float nilaiSumbu,
-            InputDevice.MotionRange rentang
-    ) {
-        float lebarRentang = rentang.getMax() - rentang.getMin();
-        if (lebarRentang <= 0) {
-            return 0;
-        }
-        float nilaiNormal = (nilaiSumbu - rentang.getMin()) / lebarRentang;
-        return Math.max(0, Math.min(1, nilaiNormal));
-    }
-
-    private static float posisiNetralSumbu(
-            InputDevice.MotionRange rentang,
-            float nilaiSumbu
-    ) {
-        if (rentang.getMin() < 0 && rentang.getMax() > 0) {
-            float jarakDatar = Math.max(rentang.getFlat(), 0.05f);
-            if (nilaiSumbu <= rentang.getMin() + jarakDatar) {
-                return 0;
-            }
-            return 0.5f;
-        }
-        return 0;
-    }
-
-    private static String tulisNilai(int nilai) {
-        return nilai > 0 ? "+" + nilai : Integer.toString(nilai);
-    }
-
-    private static String bersihkanAlamatHost(String raw) {
-        String bersih = raw.trim()
-                .replaceFirst("^(?i)(tcp|udp|http|https)://", "")
-                .replaceAll("/+$", "");
-        int posisiTitikDua = bersih.indexOf(':');
-        if (posisiTitikDua > 0 && bersih.indexOf(':', posisiTitikDua + 1) == -1) {
-            bersih = bersih.substring(0, posisiTitikDua).trim();
-        }
-        return bersih;
-    }
-
-    private static boolean adalahAlamatLokal(String host) {
-        String h = host.toLowerCase(Locale.ROOT);
-        if (h.equals("localhost") || h.endsWith(".local")
-                || h.startsWith("10.")
-                || h.startsWith("192.168.")
-                || h.startsWith("127.")
-                || h.startsWith("169.254.")) {
-            return true;
-        }
-        if (h.startsWith("172.")) {
-            String[] bagian = h.split("\\.");
-            if (bagian.length >= 2) {
-                try {
-                    int oktetKedua = Integer.parseInt(bagian[1]);
-                    return oktetKedua >= 16 && oktetKedua <= 31;
-                } catch (NumberFormatException ignored) {
-                    return false;
-                }
-            }
-        }
-        return false;
-    }
-
-    private Network cariJaringanLokal() {
+    private static boolean isLocalAddress(String host) {
+        if (host.equalsIgnoreCase("localhost")) return true;
         try {
-            ConnectivityManager cm =
-                    (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (cm == null) {
-                return null;
-            }
-            Network jaringanEthernet = null;
+            InetAddress addr = InetAddress.getByName(host);
+            return addr.isLoopbackAddress() || addr.isSiteLocalAddress();
+        } catch (IOException ignored) {
+            return false;
+        }
+    }
+
+    private Network findLocalNetwork() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (cm == null) return null;
+
+            Network ethernetNet = null;
             for (Network net : cm.getAllNetworks()) {
                 NetworkCapabilities caps = cm.getNetworkCapabilities(net);
-                if (caps == null) {
-                    continue;
-                }
-                if (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    return net;
-                }
-                if (caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                    jaringanEthernet = net;
+                if (caps != null) {
+                    if (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                        return net;
+                    }
+                    if (caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                        ethernetNet = net;
+                    }
                 }
             }
-            return jaringanEthernet;
+            return ethernetNet;
         } catch (RuntimeException ignored) {
             return null;
         }
     }
 
-    private void aturPengikatanJaringan(Network jaringan) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
+    private void bindProcessNetwork(Network net) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || net == null) return;
         try {
-            ConnectivityManager cm =
-                    (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             if (cm != null) {
-                cm.bindProcessToNetwork(jaringan);
+                cm.bindProcessToNetwork(net);
             }
-        } catch (RuntimeException ignored) {
-            // Abaikan jika izin ACCESS_NETWORK_STATE belum ditambahkan
-        }
+        } catch (RuntimeException ignored) {}
     }
 
-    private static String ambilPesanKesalahan(Throwable kesalahan) {
-        if (kesalahan instanceof SecurityException) {
-            return "Izin INTERNET ditolak. Cek AndroidManifest.xml.";
-        }
-        String pesan = kesalahan.getMessage();
-        if (pesan == null || pesan.trim().isEmpty()) {
-            return kesalahan.getClass().getSimpleName();
-        }
-        return pesan;
-    }
-
-    private void hubungkanKeRobot() {
-        String alamat = bersihkanAlamatHost(alamatRobotInput.getText().toString());
-        alamatRobotInput.setText(alamat);
+    private void connect() {
+        String address = cleanHostAddress(ipInput.getText().toString());
+        ipInput.setText(address);
 
         final int port;
         try {
-            port = Integer.parseInt(portRobotInput.getText().toString().trim());
-        } catch (NumberFormatException kesalahan) {
-            tampilkanStatus("Port belum diisi dengan benar.");
+            port = Integer.parseInt(portInput.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            updateStatusText("Invalid Port", 0xFFD32F2F);
             return;
         }
-        if (alamat.isEmpty() || port < 1 || port > 65535) {
-            tampilkanStatus("Periksa kembali alamat robot dan port.");
+        if (address.isEmpty() || port < 1 || port > 65535) {
+            updateStatusText("Invalid IP/Port", 0xFFD32F2F);
             return;
         }
 
-        resetNilaiKendali();
-        perbaruiTampilanNilai();
+        resetControlValues();
+        updateDisplayValues();
 
-        final boolean gunakanUdp = memakaiUdp;
-        final String tujuan = "tcp://" + alamat + ":" + port;
-        final int percobaan = ++nomorPercobaanSambungan;
-        sudahTerhubung = false;
-        sedangMenghubungkan = true;
-        tombolConnect.setText("Batalkan");
-        aturFormSambungan();
-        tampilkanStatus("Menyambungkan ke " + alamat + ":" + port + " (" + (gunakanUdp ? "UDP" : "ZMQ") + ")...");
+        final boolean tryUdp = useUdp;
+        final String targetUrl = "tcp://" + address + ":" + port;
+        final int session = ++connSession;
+        isConnected = false;
+        isConnecting = true;
+        connectBtn.setText("Cancel");
+        updateFormState();
+        updateStatusText("Connecting...", 0xFFF57C00);
 
-        jalurKomunikasi.execute(() -> {
-            if (percobaan != nomorPercobaanSambungan) {
-                return;
-            }
-            tutupJalurKomunikasi();
+        commExecutor.execute(() -> {
+            if (session != connSession) return;
+            closeComm();
             try {
-                Network jaringanLokal = adalahAlamatLokal(alamat) ? cariJaringanLokal() : null;
-                aturPengikatanJaringan(jaringanLokal);
+                Network localNet = isLocalAddress(address) ? findLocalNetwork() : null;
+                bindProcessNetwork(localNet);
 
-                koneksiUdp = gunakanUdp;
-                if (gunakanUdp) {
-                    alamatUdp = jaringanLokal != null
-                            ? jaringanLokal.getByName(alamat)
-                            : InetAddress.getByName(alamat);
-                    portUdp = port;
-                    soketUdp = new DatagramSocket();
-                    soketUdp.setSoTimeout(TIMEOUT_ZMQ_MS);
-                    if (jaringanLokal != null) {
-                        jaringanLokal.bindSocket(soketUdp);
+                isUdpConn = tryUdp;
+                if (tryUdp) {
+                    udpAddress = (localNet != null) ? localNet.getByName(address) : InetAddress.getByName(address);
+                    udpPort = port;
+                    udpSocket = new DatagramSocket();
+                    udpSocket.setSoTimeout(TIMEOUT_ZMQ_MS);
+                    if (localNet != null) {
+                        localNet.bindSocket(udpSocket);
                     }
 
-                    // Kirim paket awal 0,0,0,0 untuk tes kirim UDP
-                    byte[] isiAwal = "0,0,0,0".getBytes(StandardCharsets.UTF_8);
-                    soketUdp.send(new DatagramPacket(isiAwal, isiAwal.length, alamatUdp, portUdp));
+                    byte[] initPacket = "0.00,0.00,0.00,0".getBytes(StandardCharsets.UTF_8);
+                    udpSocket.send(new DatagramPacket(initPacket, initPacket.length, udpAddress, udpPort));
                 } else {
-                    jalurRobot = ZMQ.context(1);
-                    pengirimPerintah = jalurRobot.socket(ZMQ.REQ);
-                    pengirimPerintah.setLinger(0);
-                    pengirimPerintah.setReconnectIVL(200);
-                    pengirimPerintah.setReconnectIVLMax(1000);
-                    pengirimPerintah.setSendTimeOut(TIMEOUT_HANDSHAKE_ZMQ_MS);
-                    pengirimPerintah.setReceiveTimeOut(TIMEOUT_HANDSHAKE_ZMQ_MS);
-                    pengirimPerintah.connect(tujuan);
+                    zmqContext = ZMQ.context(1);
+                    zmqSocket = zmqContext.socket(ZMQ.REQ);
+                    zmqSocket.setLinger(0);
+                    zmqSocket.setReconnectIVL(200);
+                    zmqSocket.setReconnectIVLMax(1000);
+                    zmqSocket.setSendTimeOut(TIMEOUT_HANDSHAKE_ZMQ_MS);
+                    zmqSocket.setReceiveTimeOut(TIMEOUT_HANDSHAKE_ZMQ_MS);
+                    zmqSocket.connect(targetUrl);
 
-                    // Handshake awal: pastikan server wifi_node di Mini PC merespons
-                    if (!pengirimPerintah.send("0,0,0,0")) {
-                        throw new IOException("Gagal mengirim paket awal ke robot.");
+                    if (!zmqSocket.send("0.00,0.00,0.00,0")) {
+                        throw new IOException("Handshake failed");
                     }
-                    String balasanAwal = pengirimPerintah.recvStr();
-                    if (balasanAwal == null) {
-                        throw new IOException("Robot tidak merespons (cek IP, port, dan wifi_node).");
+                    String reply = zmqSocket.recvStr();
+                    if (reply == null) {
+                        throw new IOException("No response from server");
                     }
 
-                    pengirimPerintah.setSendTimeOut(TIMEOUT_ZMQ_MS);
-                    pengirimPerintah.setReceiveTimeOut(TIMEOUT_ZMQ_MS);
+                    zmqSocket.setSendTimeOut(TIMEOUT_ZMQ_MS);
+                    zmqSocket.setReceiveTimeOut(TIMEOUT_ZMQ_MS);
                 }
 
-                if (percobaan != nomorPercobaanSambungan) {
-                    tutupJalurKomunikasi();
+                if (session != connSession) {
+                    closeComm();
                     return;
                 }
 
-                antreanLayar.post(() -> {
-                    if (percobaan == nomorPercobaanSambungan) {
-                        sedangMenghubungkan = false;
-                        sudahTerhubung = true;
-                        tombolConnect.setText("Putuskan");
-                        aturFormSambungan();
-                        tampilkanStatus(gunakanUdp
-                                ? "UDP aktif ke " + alamat + ":" + port
-                                : "Terhubung (ZMQ) ke " + alamat + ":" + port);
-                        kirimPerintahRobot();
+                uiHandler.post(() -> {
+                    if (session == connSession) {
+                        isConnecting = false;
+                        isConnected = true;
+                        connectBtn.setText("Disconnect");
+                        updateFormState();
+                        updateStatusText("Connected", 0xFF388E3C);
+                        sendCommand();
                     }
                 });
-            } catch (IOException | RuntimeException kesalahan) {
-                if (percobaan == nomorPercobaanSambungan) {
-                    tutupJalurKomunikasi();
-                    sudahTerhubung = false;
-                    final String pesanError = ambilPesanKesalahan(kesalahan);
-                    antreanLayar.post(() -> {
-                        if (percobaan == nomorPercobaanSambungan) {
-                            sedangMenghubungkan = false;
-                            sudahTerhubung = false;
-                            tombolConnect.setText("Hubungkan");
-                            aturFormSambungan();
-                            tampilkanStatus("Gagal konek: " + pesanError);
+            } catch (IOException | RuntimeException e) {
+                if (session == connSession) {
+                    closeComm();
+                    isConnected = false;
+                    uiHandler.post(() -> {
+                        if (session == connSession) {
+                            isConnecting = false;
+                            isConnected = false;
+                            connectBtn.setText("Connect");
+                            updateFormState();
+                            updateStatusText("No response", 0xFFD32F2F);
                         }
                     });
                 }
@@ -775,333 +638,323 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void putuskanDariRobot() {
-        boolean sambunganSedangDicoba = sedangMenghubungkan;
-        ++nomorPercobaanSambungan;
-        sedangMenghubungkan = false;
-        sudahTerhubung = false;
-        adaPerintahMenunggu.set(false);
-        resetNilaiKendali();
-        perbaruiTampilanNilai();
+    private void disconnect() {
+        boolean wasConnecting = isConnecting;
+        ++connSession;
+        isConnecting = false;
+        isConnected = false;
+        isCommandPending.set(false);
+        resetControlValues();
+        updateDisplayValues();
 
-        tombolConnect.setText("Hubungkan");
-        aturFormSambungan();
-        tampilkanStatus(sambunganSedangDicoba ? "Sambungan dibatalkan." : "Koneksi terputus.");
-        jalurKomunikasi.execute(this::tutupJalurKomunikasi);
+        connectBtn.setText("Connect");
+        updateFormState();
+        updateStatusText("Disconnected", 0xFFE53935);
+        commExecutor.execute(this::closeComm);
     }
 
-    private void resetNilaiKendali() {
-        majuMundur = 0;
-        kiriKanan = 0;
-        putaran = 0;
-        tombolPutarKiriDitekan = false;
-        tombolPutarKananDitekan = false;
-        if (stikGerak != null) {
-            stikGerak.setPosition(0, 0);
-        }
-        if (stikPutaran != null) {
-            stikPutaran.setPosition(0, 0);
-        }
+    private void updateFormState() {
+        boolean editable = !isConnected && !isConnecting;
+        ipInput.setEnabled(editable);
+        portInput.setEnabled(editable);
+        protocolBtn.setEnabled(editable);
     }
 
-    private void berhenti() {
-        resetNilaiKendali();
-        perbaruiTampilanNilai();
-        kirimPerintahRobot();
-    }
+    private void sendCommand() {
+        updateDisplayValues();
+        if (!isConnected) return;
 
-    private void aturFormSambungan() {
-        boolean bisaMengubahAlamat = !sudahTerhubung && !sedangMenghubungkan;
-        alamatRobotInput.setEnabled(bisaMengubahAlamat);
-        portRobotInput.setEnabled(bisaMengubahAlamat);
-        tombolProtokol.setEnabled(bisaMengubahAlamat);
-    }
+        isCommandPending.set(true);
+        if (!isSending.compareAndSet(false, true)) return;
 
-    private void kirimPerintahRobot() {
-        perbaruiTampilanNilai();
-        if (!sudahTerhubung) {
-            return;
-        }
-
-        adaPerintahMenunggu.set(true);
-        if (!pengirimanSedangBerjalan.compareAndSet(false, true)) {
-            return;
-        }
-
-        final int percobaan = nomorPercobaanSambungan;
-        jalurKomunikasi.execute(() -> {
-            boolean pemilikPengiriman = true;
+        final int session = connSession;
+        commExecutor.execute(() -> {
+            boolean ownsSending = true;
             try {
-                while (sudahTerhubung && percobaan == nomorPercobaanSambungan) {
-                    adaPerintahMenunggu.set(false);
-                    String isiPerintah = majuMundur + "," + kiriKanan + ","
-                            + putaran + "," + penjepitBola;
-                    if (koneksiUdp) {
-                        if (soketUdp == null || alamatUdp == null) {
-                            break;
-                        }
-                        byte[] isi = isiPerintah.getBytes(StandardCharsets.UTF_8);
-                        DatagramPacket paket = new DatagramPacket(
-                                isi,
-                                isi.length,
-                                alamatUdp,
-                                portUdp
-                        );
-                        soketUdp.send(paket);
+                while (isConnected && session == connSession) {
+                    isCommandPending.set(false);
+                    String cmdStr = String.format(Locale.US, "%.2f,%.2f,%.2f,%d", moveY, moveX, turn, grip);
+
+                    if (isUdpConn) {
+                        if (udpSocket == null || udpAddress == null) break;
+                        byte[] payload = cmdStr.getBytes(StandardCharsets.UTF_8);
+                        DatagramPacket packet = new DatagramPacket(payload, payload.length, udpAddress, udpPort);
+                        udpSocket.send(packet);
                     } else {
-                        if (pengirimPerintah == null) {
-                            break;
-                        }
-                        boolean terkirim = pengirimPerintah.send(isiPerintah);
-                        if (!terkirim) {
-                            throw new IllegalStateException("Permintaan tidak terkirim.");
-                        }
+                        if (zmqSocket == null) break;
+                        boolean sent = zmqSocket.send(cmdStr);
+                        if (!sent) throw new IllegalStateException("Send failed");
 
-                        String balasan = pengirimPerintah.recvStr();
-                        if (balasan == null) {
-                            throw new IllegalStateException("Tidak ada balasan dari robot.");
-                        }
+                        String reply = zmqSocket.recvStr();
+                        if (reply == null) throw new IllegalStateException("No reply");
                     }
 
-                    if (adaPerintahMenunggu.getAndSet(false)) {
-                        continue;
-                    }
+                    if (isCommandPending.getAndSet(false)) continue;
 
-                    pengirimanSedangBerjalan.set(false);
-                    pemilikPengiriman = false;
-                    if (!adaPerintahMenunggu.get()
-                            || !pengirimanSedangBerjalan.compareAndSet(false, true)) {
-                        return;
-                    }
-                    pemilikPengiriman = true;
+                    isSending.set(false);
+                    ownsSending = false;
+                    if (!isCommandPending.get() || !isSending.compareAndSet(false, true)) return;
+                    ownsSending = true;
                 }
-            } catch (IOException | RuntimeException kesalahan) {
-                adaPerintahMenunggu.set(false);
-                if (percobaan == nomorPercobaanSambungan) {
-                    tutupJalurKomunikasi();
-                    sudahTerhubung = false;
-                    final String pesanError = ambilPesanKesalahan(kesalahan);
-                    antreanLayar.post(() -> {
-                        if (percobaan == nomorPercobaanSambungan) {
-                            sedangMenghubungkan = false;
-                            tombolConnect.setText("Hubungkan");
-                            aturFormSambungan();
-                            tampilkanStatus("Komunikasi terputus: " + pesanError);
+            } catch (IOException | RuntimeException e) {
+                isCommandPending.set(false);
+                if (session == connSession) {
+                    closeComm();
+                    isConnected = false;
+                    uiHandler.post(() -> {
+                        if (session == connSession) {
+                            isConnecting = false;
+                            connectBtn.setText("Connect");
+                            updateFormState();
+                            updateStatusText("Lost connection", 0xFFD32F2F);
                         }
                     });
                 }
             } finally {
-                if (pemilikPengiriman) {
-                    pengirimanSedangBerjalan.set(false);
+                if (ownsSending) {
+                    isSending.set(false);
                 }
             }
         });
     }
 
-    private void mulaiPenerimaKamera() {
-        if (!kameraDiaktifkan) {
-            return;
-        }
-        hentikanPenerimaKamera();
-        final int sesi = ++sesiKamera;
-        aturPlaceholderKamera("menunggu camera", View.VISIBLE);
-        kameraFisik.setImageDrawable(null);
-        kameraVirtual.setImageDrawable(null);
+    private void startCamera() {
+        if (!isCameraEnabled) return;
+        stopCamera();
+        final int session = ++cameraSession;
+        setPlaceholderText("Connecting camera...", View.VISIBLE);
+        physicalCamPreview.setImageDrawable(null);
+        virtualCamPreview.setImageDrawable(null);
 
-        jalurKamera.execute(() -> {
+        cameraExecutor.execute(() -> {
             DatagramSocket socket = null;
             try {
                 socket = new DatagramSocket(null);
                 socket.setReuseAddress(true);
-                socket.setReceiveBufferSize(1_048_576);
-                socket.bind(new InetSocketAddress(PORT_KAMERA_UDP));
-                if (sesi != sesiKamera) {
-                    return;
-                }
-                penerimaKameraUdp = socket;
+                socket.setReceiveBufferSize(1048576);
+                socket.bind(new InetSocketAddress(PORT_UDP_CAM));
+                if (session != cameraSession) return;
 
-                CameraFrameAssembler penyusunFrame = new CameraFrameAssembler();
-                byte[] buffer = new byte[BATAS_UDP_BYTES];
-                while (sesi == sesiKamera) {
-                    DatagramPacket paket = new DatagramPacket(buffer, buffer.length);
-                    socket.receive(paket);
-                    byte[] dataFrame = penyusunFrame.accept(
-                            paket.getData(),
-                            paket.getLength()
-                    );
-                    if (dataFrame == null) {
-                        continue;
-                    }
+                cameraUdpReceiver = socket;
+                CameraFrameAssembler frameAssembler = new CameraFrameAssembler();
+                byte[] buffer = new byte[MAX_UDP_BYTES];
 
-                    Bitmap frame = decodeFrameKamera(dataFrame);
+                while (session == cameraSession) {
+                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                    socket.receive(packet);
+                    byte[] frameData = frameAssembler.accept(packet.getData(), packet.getLength());
+                    if (frameData == null) continue;
+
+                    Bitmap frame = decodeCameraFrame(frameData);
                     if (frame != null) {
-                        antrekanFrameTerbaru(frame, sesi);
+                        enqueueFrame(frame, session);
                     }
                 }
-            } catch (IOException kesalahan) {
-                if (sesi == sesiKamera) {
-                    antreanLayar.post(() -> {
-                        if (sesi == sesiKamera) {
-                            aturPlaceholderKamera("KAMERA UDP ERROR", View.VISIBLE);
+            } catch (IOException e) {
+                if (session == cameraSession) {
+                    uiHandler.post(() -> {
+                        if (session == cameraSession) {
+                            setPlaceholderText("Camera Error", View.VISIBLE);
                         }
                     });
                 }
             } finally {
-                if (socket != null) {
-                    socket.close();
-                }
-                if (penerimaKameraUdp == socket) {
-                    penerimaKameraUdp = null;
-                }
+                if (socket != null) socket.close();
+                if (cameraUdpReceiver == socket) cameraUdpReceiver = null;
             }
         });
     }
 
-    private void hentikanPenerimaKamera() {
-        ++sesiKamera;
-        DatagramSocket socket = penerimaKameraUdp;
-        penerimaKameraUdp = null;
-        if (socket != null) {
-            socket.close();
-        }
-        Bitmap frame = frameMenunggu.getAndSet(null);
-        if (frame != null) {
-            frame.recycle();
-        }
+    private void stopCamera() {
+        ++cameraSession;
+        DatagramSocket socket = cameraUdpReceiver;
+        cameraUdpReceiver = null;
+        if (socket != null) socket.close();
+
+        Bitmap frame = pendingFrame.getAndSet(null);
+        if (frame != null) frame.recycle();
     }
 
-    private void aturPlaceholderKamera(String teks, int visibilitas) {
-        placeholderKameraFisik.setText(teks);
-        placeholderKameraVirtual.setText(teks);
-        placeholderKameraFisik.setVisibility(visibilitas);
-        placeholderKameraVirtual.setVisibility(visibilitas);
+    private void setPlaceholderText(String text, int visibility) {
+        physicalCamPlaceholder.setText(text);
+        virtualCamPlaceholder.setText(text);
+        physicalCamPlaceholder.setVisibility(visibility);
+        virtualCamPlaceholder.setVisibility(visibility);
     }
 
-    private void antrekanFrameTerbaru(Bitmap frame, int sesi) {
-        if (sesi != sesiKamera) {
+    private void enqueueFrame(Bitmap frame, int session) {
+        if (session != cameraSession) {
             frame.recycle();
             return;
         }
-        Bitmap frameLama = frameMenunggu.getAndSet(frame);
-        if (frameLama != null) {
-            frameLama.recycle();
-        }
-        if (renderFrameTerjadwal.compareAndSet(false, true)) {
-            antreanLayar.post(this::renderFrameKamera);
+        Bitmap oldFrame = pendingFrame.getAndSet(frame);
+        if (oldFrame != null) oldFrame.recycle();
+
+        if (isFrameRenderScheduled.compareAndSet(false, true)) {
+            uiHandler.post(this::renderCameraFrame);
         }
     }
 
-    private void renderFrameKamera() {
-        Bitmap frame = frameMenunggu.getAndSet(null);
-        if (frame != null) {
-            ImageView preview = kameraDiaktifkan
-                    && halamanDashboard.getVisibility() == View.VISIBLE
-                    ? kameraFisik
-                    : kameraDiaktifkan && halamanGamepad.getVisibility() == View.VISIBLE
-                    ? kameraVirtual : null;
-            if (preview == null || isFinishing()) {
-                frame.recycle();
-            } else {
-                preview.setImageBitmap(frame);
-                if (preview == kameraFisik) {
-                    placeholderKameraFisik.setVisibility(View.GONE);
-                } else {
-                    placeholderKameraVirtual.setVisibility(View.GONE);
+    private void renderCameraFrame() {
+        isFrameRenderScheduled.set(false);
+        Bitmap frame = pendingFrame.getAndSet(null);
+        if (frame == null) return;
+
+        ImageView preview = isPhysicalMode ? physicalCamPreview : (isVirtualGamepadMode ? virtualCamPreview : null);
+        if (preview == null) {
+            frame.recycle();
+            return;
+        }
+
+        if (preview == physicalCamPreview) {
+            physicalCamPlaceholder.setVisibility(View.GONE);
+        } else {
+            virtualCamPlaceholder.setVisibility(View.GONE);
+        }
+
+        preview.setImageBitmap(frame);
+    }
+
+    private static Bitmap decodeCameraFrame(byte[] frameData) {
+        BitmapFactory.Options boundsOpts = new BitmapFactory.Options();
+        boundsOpts.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(frameData, 0, frameData.length, boundsOpts);
+
+        if (boundsOpts.outWidth <= 0 || boundsOpts.outHeight <= 0) return null;
+
+        int sampleSize = 1;
+        while (boundsOpts.outWidth / sampleSize > MAX_CAM_DIMEN || boundsOpts.outHeight / sampleSize > MAX_CAM_DIMEN) {
+            sampleSize *= 2;
+        }
+
+        BitmapFactory.Options decodeOpts = new BitmapFactory.Options();
+        decodeOpts.inSampleSize = sampleSize;
+        return BitmapFactory.decodeByteArray(frameData, 0, frameData.length, decodeOpts);
+    }
+
+    private void setupPhysicalGamepad() {
+        View decorView = getWindow().getDecorView();
+        decorView.setOnGenericMotionListener((v, event) -> {
+            if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK
+                    && event.getAction() == MotionEvent.ACTION_MOVE
+                    && isPhysicalMode) {
+                float y = getCenteredAxis(event, MotionEvent.AXIS_Y);
+                float x = getCenteredAxis(event, MotionEvent.AXIS_X);
+                float rx = getCenteredAxis(event, MotionEvent.AXIS_Z);
+                if (rx == 0.0f) rx = getCenteredAxis(event, MotionEvent.AXIS_RZ);
+
+                moveY = scaleToFloat(-y);
+                moveX = scaleToFloat(x);
+                turn = scaleToFloat(rx);
+                updateDisplayValues();
+                sendCommand();
+                return true;
+            }
+            return false;
+        });
+
+        decorView.setOnKeyListener((v, keyCode, event) -> {
+            if (isPhysicalMode && isGamepadEvent(event)) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BUTTON_L1 || keyCode == KeyEvent.KEYCODE_BUTTON_R1) {
+                        toggleGrip();
+                        return true;
+                    }
+                    if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+                        isTurnLeftPressed = true;
+                        turn = scaleToFloat(-1.0f);
+                        updateDisplayValues();
+                        sendCommand();
+                        return true;
+                    }
+                    if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                        isTurnRightPressed = true;
+                        turn = scaleToFloat(1.0f);
+                        updateDisplayValues();
+                        sendCommand();
+                        return true;
+                    }
+                } else if (event.getAction() == KeyEvent.ACTION_UP) {
+                    if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+                        isTurnLeftPressed = false;
+                        if (!isTurnRightPressed) turn = 0.0f;
+                        updateDisplayValues();
+                        sendCommand();
+                        return true;
+                    }
+                    if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                        isTurnRightPressed = false;
+                        if (!isTurnLeftPressed) turn = 0.0f;
+                        updateDisplayValues();
+                        sendCommand();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        });
+    }
+
+    private static float getCenteredAxis(MotionEvent event, int axis) {
+        InputDevice device = event.getDevice();
+        if (device == null) return 0.0f;
+        InputDevice.MotionRange range = device.getMotionRange(axis, event.getSource());
+        if (range == null) return 0.0f;
+        float value = event.getAxisValue(axis);
+        if (Math.abs(value) <= range.getFlat()) return 0.0f;
+        return value;
+    }
+
+    private static boolean isGamepadEvent(KeyEvent event) {
+        int source = event.getSource();
+        return (source & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD
+                || (source & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK;
+    }
+
+    private void updateGamepadConnectionStatus() {
+        int[] deviceIds = InputDevice.getDeviceIds();
+        boolean hasGamepad = false;
+        for (int id : deviceIds) {
+            InputDevice device = InputDevice.getDevice(id);
+            if (device != null && !device.isVirtual()) {
+                int sources = device.getSources();
+                if ((sources & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD
+                        || (sources & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK) {
+                    hasGamepad = true;
+                    break;
                 }
             }
         }
-        renderFrameTerjadwal.set(false);
-        if (frameMenunggu.get() != null
-                && renderFrameTerjadwal.compareAndSet(false, true)) {
-            antreanLayar.post(this::renderFrameKamera);
-        }
+        String label = hasGamepad ? "Gamepad Connected" : "No Gamepad";
+        gamepadStatus.setText(label);
+        virtualGamepadStatus.setText(label);
     }
 
-    private static Bitmap decodeFrameKamera(byte[] dataFrame) {
-        BitmapFactory.Options batas = new BitmapFactory.Options();
-        batas.inJustDecodeBounds = true;
-        BitmapFactory.decodeByteArray(dataFrame, 0, dataFrame.length, batas);
-        if (batas.outWidth <= 0
-                || batas.outHeight <= 0
-                || batas.outWidth > 8192
-                || batas.outHeight > 8192) {
-            return null;
+    private void closeComm() {
+        isUdpConn = false;
+        if (udpSocket != null) {
+            udpSocket.close();
+            udpSocket = null;
         }
+        udpAddress = null;
 
-        int ukuranSampel = 1;
-        while (batas.outWidth / ukuranSampel > BATAS_DIMENSI_KAMERA
-                || batas.outHeight / ukuranSampel > BATAS_DIMENSI_KAMERA) {
-            ukuranSampel *= 2;
+        if (zmqSocket != null) {
+            zmqSocket.close();
+            zmqSocket = null;
         }
-        BitmapFactory.Options opsi = new BitmapFactory.Options();
-        opsi.inSampleSize = ukuranSampel;
-        return BitmapFactory.decodeByteArray(dataFrame, 0, dataFrame.length, opsi);
-    }
-
-    private void perbaruiTampilanNilai() {
-        if (nilaiX == null) {
-            return;
+        if (zmqContext != null) {
+            zmqContext.close();
+            zmqContext = null;
         }
-        String nilaiXText = tulisNilai(kiriKanan);
-        String nilaiYText = tulisNilai(majuMundur);
-        String nilaiWzText = tulisNilai(putaran);
-        String nilaiGripText = Integer.toString(penjepitBola);
-
-        nilaiX.setText(nilaiXText);
-        nilaiY.setText(nilaiYText);
-        nilaiWz.setText(nilaiWzText);
-        nilaiGrip.setText(nilaiGripText);
-        nilaiXGamepad.setText(nilaiXText);
-        nilaiYGamepad.setText(nilaiYText);
-        nilaiWzGamepad.setText(nilaiWzText);
-        nilaiGripGamepad.setText(nilaiGripText);
-        tombolJepitBola.setText(penjepitBola == 1 ? "LEPAS" : "AMBIL");
-    }
-
-    private void tampilkanStatus(String pesan) {
-        teksStatus.setText(pesan);
-        teksStatus.setTextColor(sudahTerhubung ? 0xFF16803C : 0xFFE53935);
-        statusGamepad.setText(sudahTerhubung ? "Terhubung" : pesan);
-        statusGamepadVirtual.setText(sudahTerhubung ? "Terhubung" : pesan);
-    }
-
-    private void tutupJalurKomunikasi() {
-        koneksiUdp = false;
-        if (soketUdp != null) {
-            try {
-                soketUdp.close();
-            } catch (Exception ignored) {
-            }
-            soketUdp = null;
-        }
-        alamatUdp = null;
-        if (pengirimPerintah != null) {
-            try {
-                pengirimPerintah.close();
-            } catch (Exception ignored) {
-            }
-            pengirimPerintah = null;
-        }
-        if (jalurRobot != null) {
-            try {
-                jalurRobot.close();
-            } catch (Exception ignored) {
-            }
-            jalurRobot = null;
-        }
-        aturPengikatanJaringan(null);
     }
 
     @Override
     protected void onDestroy() {
-        antreanLayar.removeCallbacks(pengirimBerkala);
-        hentikanPenerimaKamera();
-        jalurKamera.shutdownNow();
-        ++nomorPercobaanSambungan;
-        sudahTerhubung = false;
-        resetNilaiKendali();
-        jalurKomunikasi.execute(this::tutupJalurKomunikasi);
-        jalurKomunikasi.shutdown();
+        uiHandler.removeCallbacks(periodicSender);
+        disconnect();
+        stopCamera();
+        commExecutor.shutdownNow();
+        cameraExecutor.shutdownNow();
         super.onDestroy();
     }
 }

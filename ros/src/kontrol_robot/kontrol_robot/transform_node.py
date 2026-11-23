@@ -14,14 +14,14 @@ def parse_pesan_android(pesan):
         if len(parts) != 4:
             raise ValueError("Pesan harus memiliki 4 nilai yang dipisahkan oleh koma.")
         
-        nilai_x = int(parts[0].strip())
-        nilai_y = int(parts[1].strip())
-        nilai_z = int(parts[2].strip())
-        nilai_w = int(parts[3].strip())
+        nilai_x = float(parts[0].strip())
+        nilai_y = float(parts[1].strip())
+        nilai_z = float(parts[2].strip())
+        nilai_w = float(parts[3].strip())
 
         return nilai_x, nilai_y, nilai_z, nilai_w
-    except ValueError as e:
-        return None
+    except (TypeError, ValueError):
+        return None, None, None, None
 def ambang_nilai(nilai, ambang):
     if abs(nilai) < ambang:
         return 0

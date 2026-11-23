@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "../../../.."
+		},
+		{
+			"path": "../../../../../RobotControllerBola"
+		}
+	],
+	"extensions": {
+		"recommendations": [
+			"google.google-antigravity"
+		]
+	}
+}
