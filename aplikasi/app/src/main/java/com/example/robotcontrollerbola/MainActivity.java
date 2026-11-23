@@ -1,7 +1,13 @@
 package com.example.robotcontrollerbola;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,8 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
@@ -34,6 +40,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -43,10 +50,13 @@ public class MainActivity extends AppCompatActivity {
     private static final float BATAS_STIK = 0.1f;
     private static final long JEDA_KIRIM_PERINTAH_MS = 30L;
     private static final int PORT_ZMQ = 5555;
-    private static final int PORT_UDP_PERINTAH = 5005;
-    private static final int PORT_KAMERA_UDP = 5006;
+    private static final int PORT_UDP_PERINTAH = 5556;
+    private static final int PORT_KAMERA_UDP = 5005;
+    private static final int TIMEOUT_HANDSHAKE_ZMQ_MS = 4000;
+    private static final int TIMEOUT_ZMQ_MS = 2500;
     private static final int BATAS_UDP_BYTES = 65507;
     private static final int BATAS_DIMENSI_KAMERA = 1920;
+
     private final Handler antreanLayar = new Handler(Looper.getMainLooper());
     private final ExecutorService jalurKomunikasi = Executors.newSingleThreadExecutor();
     private final ExecutorService jalurKamera = Executors.newSingleThreadExecutor();
@@ -61,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
     private Button tombolProtokol;
     private Button tombolStopFisik;
     private Button tombolStopVirtual;
+    private Button tombolKecepatan30;
+    private Button tombolKecepatan70;
+    private Button tombolKecepatan100;
     private Button tombolJepitBola;
     private SwitchMaterial sakelarKameraFisik;
     private SwitchMaterial sakelarKameraVirtual;
@@ -96,22 +109,23 @@ public class MainActivity extends AppCompatActivity {
     private volatile DatagramSocket penerimaKameraUdp;
     private int portUdp;
 
-    private boolean sedangMenghubungkan;
+    private volatile boolean sedangMenghubungkan;
     private volatile boolean sudahTerhubung;
     private volatile boolean memakaiUdp;
     private volatile boolean koneksiUdp;
     private volatile int sesiKamera;
+    private volatile int nomorPercobaanSambungan;
     private boolean memakaiModeFisik;
     private boolean memakaiGamepadVirtual;
     private boolean kameraDiaktifkan = true;
     private boolean memperbaruiSakelarKamera;
+    private int batasKecepatan = 100;
     private boolean tombolPutarKiriDitekan;
     private boolean tombolPutarKananDitekan;
-    private int nomorPercobaanSambungan;
-    private volatile float majuMundur;
-    private volatile float kiriKanan;
-    private volatile float putaran;
-    private volatile float penjepitBola;
+    private volatile int majuMundur;
+    private volatile int kiriKanan;
+    private volatile int putaran;
+    private volatile int penjepitBola;
 
     private final Runnable pengirimBerkala = new Runnable() {
         @Override
@@ -135,6 +149,9 @@ public class MainActivity extends AppCompatActivity {
         tombolProtokol = findViewById(R.id.protocolButton);
         tombolStopFisik = findViewById(R.id.physicalStopButton);
         tombolStopVirtual = findViewById(R.id.virtualStopButton);
+        tombolKecepatan30 = findViewById(R.id.speed30Button);
+        tombolKecepatan70 = findViewById(R.id.speed70Button);
+        tombolKecepatan100 = findViewById(R.id.speed100Button);
         tombolJepitBola = findViewById(R.id.gripButton);
         sakelarKameraFisik = findViewById(R.id.physicalCameraSwitch);
         sakelarKameraVirtual = findViewById(R.id.virtualCameraSwitch);
@@ -161,6 +178,18 @@ public class MainActivity extends AppCompatActivity {
         kameraVirtual = findViewById(R.id.virtualCameraPreview);
         stikGerak = findViewById(R.id.movementJoystick);
         stikPutaran = findViewById(R.id.rotationJoystick);
+
+        // Sinkronkan tampilan protokol & port default saat pertama dibuka
+        String portAwal = portRobotInput.getText().toString().trim();
+        if (portAwal.equals(Integer.toString(PORT_UDP_PERINTAH))) {
+            memakaiUdp = true;
+        } else {
+            memakaiUdp = false;
+            if (portAwal.isEmpty()) {
+                portRobotInput.setText(Integer.toString(PORT_ZMQ));
+            }
+        }
+        tombolProtokol.setText(memakaiUdp ? "UDP  ▼" : "ZMQ  ▼");
 
         pasangGamepadVirtual();
         stikGerak.setOpacity(0.5f);
@@ -197,6 +226,9 @@ public class MainActivity extends AppCompatActivity {
         tombolKembaliKeMode.setOnClickListener(tampilan -> kembaliKePilihanMode());
         tombolStopFisik.setOnClickListener(tampilan -> hentikanRobotDarurat());
         tombolStopVirtual.setOnClickListener(tampilan -> hentikanRobotDarurat());
+        tombolKecepatan30.setOnClickListener(tampilan -> aturBatasKecepatan(30));
+        tombolKecepatan70.setOnClickListener(tampilan -> aturBatasKecepatan(70));
+        tombolKecepatan100.setOnClickListener(tampilan -> aturBatasKecepatan(100));
         tombolJepitBola.setOnClickListener(
                 tampilan -> aturPenjepitBola(penjepitBola == 0)
         );
@@ -211,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
         aturKendaliGamepad();
         perbaruiTampilanNilai();
+        tampilkanPilihanKecepatan();
         aturFormSambungan();
         antreanLayar.post(pengirimBerkala);
 
@@ -229,19 +262,20 @@ public class MainActivity extends AppCompatActivity {
     private void pasangGamepadVirtual() {
         stikPutaran.setHorizontalOnly(true);
         stikGerak.setOnPositionChangedListener((x, y) -> {
-            majuMundur = ubahKePersen(-y);
-            kiriKanan = ubahKePersen(x);
+            majuMundur = ubahKePersenKecepatan(-y);
+            kiriKanan = ubahKePersenKecepatan(x);
             perbaruiTampilanNilai();
             kirimPerintahRobot();
         });
         stikPutaran.setOnPositionChangedListener((x, y) -> {
-            putaran = ubahKePersen(x);
+            putaran = ubahKePersenKecepatan(x);
             perbaruiTampilanNilai();
             kirimPerintahRobot();
         });
     }
 
     private void bukaHalamanFisik() {
+        aturBatasKecepatan(100);
         memakaiModeFisik = true;
         memakaiGamepadVirtual = false;
         berhenti();
@@ -323,8 +357,8 @@ public class MainActivity extends AppCompatActivity {
             if (memakaiUdp != pilihUdp) {
                 int portDefaultSebelumnya = memakaiUdp ? PORT_UDP_PERINTAH : PORT_ZMQ;
                 int portDefaultBaru = pilihUdp ? PORT_UDP_PERINTAH : PORT_ZMQ;
-                if (portRobotInput.getText().toString().trim()
-                        .equals(Integer.toString(portDefaultSebelumnya))) {
+                String portSaatIni = portRobotInput.getText().toString().trim();
+                if (portSaatIni.isEmpty() || portSaatIni.equals(Integer.toString(portDefaultSebelumnya))) {
                     portRobotInput.setText(Integer.toString(portDefaultBaru));
                 }
                 memakaiUdp = pilihUdp;
@@ -344,17 +378,41 @@ public class MainActivity extends AppCompatActivity {
         tombolJepitBola.setEnabled(halamanVirtualTerbuka);
     }
 
-    private void hentikanRobotDarurat() {
-        majuMundur = 0;
-        kiriKanan = 0;
-        putaran = 0;
-        penjepitBola = 0;
-        tombolPutarKiriDitekan = false;
-        tombolPutarKananDitekan = false;
-        stikGerak.setPosition(0, 0);
-        stikPutaran.setPosition(0, 0);
+    private void aturBatasKecepatan(int batasBaru) {
+        int batasLama = batasKecepatan;
+        if (batasLama != 0 && batasBaru != batasLama) {
+            majuMundur = Math.round(majuMundur * batasBaru / (float) batasLama);
+            kiriKanan = Math.round(kiriKanan * batasBaru / (float) batasLama);
+            putaran = Math.round(putaran * batasBaru / (float) batasLama);
+        }
+        batasKecepatan = batasBaru;
+        tampilkanPilihanKecepatan();
         perbaruiTampilanNilai();
         kirimPerintahRobot();
+    }
+
+    private void tampilkanPilihanKecepatan() {
+        aturTampilanTombolKecepatan(tombolKecepatan30, batasKecepatan == 30);
+        aturTampilanTombolKecepatan(tombolKecepatan70, batasKecepatan == 70);
+        aturTampilanTombolKecepatan(tombolKecepatan100, batasKecepatan == 100);
+    }
+
+    private static void aturTampilanTombolKecepatan(Button tombol, boolean aktif) {
+        tombol.setBackgroundTintList(ColorStateList.valueOf(
+                aktif ? 0xFF000000 : 0xBFFFFFFF
+        ));
+        tombol.setTextColor(aktif ? 0xFFFFFFFF : 0xFF000000);
+    }
+
+    private void hentikanRobotDarurat() {
+        resetNilaiKendali();
+        penjepitBola = 0;
+        perbaruiTampilanNilai();
+        kirimPerintahRobot();
+    }
+
+    private int ubahKePersenKecepatan(float arah) {
+        return Math.round(ubahKePersen(arah) * batasKecepatan / 100f);
     }
 
     private void aturBilahSistemTampil(boolean tampil) {
@@ -387,9 +445,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (gerakan.getAction() == MotionEvent.ACTION_MOVE) {
-            majuMundur = ubahKePersen(-gerakan.getAxisValue(MotionEvent.AXIS_Y));
-            kiriKanan = ubahKePersen(gerakan.getAxisValue(MotionEvent.AXIS_X));
-            putaran = ubahKePersen(bacaPutaranGamepad(gerakan));
+            majuMundur = ubahKePersenKecepatan(-gerakan.getAxisValue(MotionEvent.AXIS_Y));
+            kiriKanan = ubahKePersenKecepatan(gerakan.getAxisValue(MotionEvent.AXIS_X));
+            putaran = ubahKePersenKecepatan(bacaPutaranGamepad(gerakan));
             perbaruiTampilanNilai();
             kirimPerintahRobot();
             return true;
@@ -433,17 +491,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         putaran = tombolPutarKiriDitekan == tombolPutarKananDitekan
-                ? 0f
-                : tombolPutarKiriDitekan ? -100f : 100f;
+                ? 0
+                : tombolPutarKiriDitekan ? -batasKecepatan : batasKecepatan;
         perbaruiTampilanNilai();
         kirimPerintahRobot();
     }
 
-    private static float ubahKePersen(float arah) {
+    private static int ubahKePersen(float arah) {
         if (Math.abs(arah) < BATAS_STIK) {
-            return 0f;
+            return 0;
         }
-        return Math.max(-100f, Math.min(100f, arah * 100f));
+        return Math.max(-100, Math.min(100, Math.round(arah * 100)));
     }
 
     static float sumbuPutaran(float mendatar, float tegak) {
@@ -477,15 +535,15 @@ public class MainActivity extends AppCompatActivity {
         float kiri = sumbuKiri == null
                 ? posisiNetralSumbu(sumbuKanan, gerakan.getAxisValue(MotionEvent.AXIS_RZ))
                 : ubahKeRentangNormal(
-                        gerakan.getAxisValue(MotionEvent.AXIS_Z),
-                        sumbuKiri
-                );
+                gerakan.getAxisValue(MotionEvent.AXIS_Z),
+                sumbuKiri
+        );
         float kanan = sumbuKanan == null
                 ? posisiNetralSumbu(sumbuKiri, gerakan.getAxisValue(MotionEvent.AXIS_Z))
                 : ubahKeRentangNormal(
-                        gerakan.getAxisValue(MotionEvent.AXIS_RZ),
-                        sumbuKanan
-                );
+                gerakan.getAxisValue(MotionEvent.AXIS_RZ),
+                sumbuKanan
+        );
         float sumbuTambahan = sumbuPutaranTambahan(kiri, kanan);
         return Math.abs(sumbuTambahan) >= BATAS_STIK ? sumbuTambahan : sumbuUtama;
     }
@@ -516,49 +574,176 @@ public class MainActivity extends AppCompatActivity {
         return 0;
     }
 
-    private static String tulisNilai(float nilai) {
-        String teks = String.format(java.util.Locale.US, "%.2f", nilai);
-        return nilai > 0 ? "+" + teks : teks;
+    private static String tulisNilai(int nilai) {
+        return nilai > 0 ? "+" + nilai : Integer.toString(nilai);
+    }
+
+    private static String bersihkanAlamatHost(String raw) {
+        String bersih = raw.trim()
+                .replaceFirst("^(?i)(tcp|udp|http|https)://", "")
+                .replaceAll("/+$", "");
+        int posisiTitikDua = bersih.indexOf(':');
+        if (posisiTitikDua > 0 && bersih.indexOf(':', posisiTitikDua + 1) == -1) {
+            bersih = bersih.substring(0, posisiTitikDua).trim();
+        }
+        return bersih;
+    }
+
+    private static boolean adalahAlamatLokal(String host) {
+        String h = host.toLowerCase(Locale.ROOT);
+        if (h.equals("localhost") || h.endsWith(".local")
+                || h.startsWith("10.")
+                || h.startsWith("192.168.")
+                || h.startsWith("127.")
+                || h.startsWith("169.254.")) {
+            return true;
+        }
+        if (h.startsWith("172.")) {
+            String[] bagian = h.split("\\.");
+            if (bagian.length >= 2) {
+                try {
+                    int oktetKedua = Integer.parseInt(bagian[1]);
+                    return oktetKedua >= 16 && oktetKedua <= 31;
+                } catch (NumberFormatException ignored) {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Network cariJaringanLokal() {
+        try {
+            ConnectivityManager cm =
+                    (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (cm == null) {
+                return null;
+            }
+            Network jaringanEthernet = null;
+            for (Network net : cm.getAllNetworks()) {
+                NetworkCapabilities caps = cm.getNetworkCapabilities(net);
+                if (caps == null) {
+                    continue;
+                }
+                if (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    return net;
+                }
+                if (caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    jaringanEthernet = net;
+                }
+            }
+            return jaringanEthernet;
+        } catch (RuntimeException ignored) {
+            return null;
+        }
+    }
+
+    private void aturPengikatanJaringan(Network jaringan) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return;
+        }
+        try {
+            ConnectivityManager cm =
+                    (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (cm != null) {
+                cm.bindProcessToNetwork(jaringan);
+            }
+        } catch (RuntimeException ignored) {
+            // Abaikan jika izin ACCESS_NETWORK_STATE belum ditambahkan
+        }
+    }
+
+    private static String ambilPesanKesalahan(Throwable kesalahan) {
+        if (kesalahan instanceof SecurityException) {
+            return "Izin INTERNET ditolak. Cek AndroidManifest.xml.";
+        }
+        String pesan = kesalahan.getMessage();
+        if (pesan == null || pesan.trim().isEmpty()) {
+            return kesalahan.getClass().getSimpleName();
+        }
+        return pesan;
     }
 
     private void hubungkanKeRobot() {
-        String alamat = alamatRobotInput.getText().toString().trim();
+        String alamat = bersihkanAlamatHost(alamatRobotInput.getText().toString());
+        alamatRobotInput.setText(alamat);
+
         final int port;
         try {
             port = Integer.parseInt(portRobotInput.getText().toString().trim());
         } catch (NumberFormatException kesalahan) {
-            tampilkanStatus("Port belum diisi dengan benar");
+            tampilkanStatus("Port belum diisi dengan benar.");
             return;
         }
         if (alamat.isEmpty() || port < 1 || port > 65535) {
-            tampilkanStatus("Periksa kembali IP address dan port");
+            tampilkanStatus("Periksa kembali alamat robot dan port.");
             return;
         }
 
-        berhenti();
+        resetNilaiKendali();
+        perbaruiTampilanNilai();
+
         final boolean gunakanUdp = memakaiUdp;
         final String tujuan = "tcp://" + alamat + ":" + port;
         final int percobaan = ++nomorPercobaanSambungan;
+        sudahTerhubung = false;
         sedangMenghubungkan = true;
         tombolConnect.setText("Batalkan");
         aturFormSambungan();
-        tampilkanStatus("Sedang menyambungkan ke " + alamat + "...");
+        tampilkanStatus("Menyambungkan ke " + alamat + ":" + port + " (" + (gunakanUdp ? "UDP" : "ZMQ") + ")...");
 
         jalurKomunikasi.execute(() -> {
+            if (percobaan != nomorPercobaanSambungan) {
+                return;
+            }
+            tutupJalurKomunikasi();
             try {
+                Network jaringanLokal = adalahAlamatLokal(alamat) ? cariJaringanLokal() : null;
+                aturPengikatanJaringan(jaringanLokal);
+
                 koneksiUdp = gunakanUdp;
                 if (gunakanUdp) {
-                    alamatUdp = InetAddress.getByName(alamat);
+                    alamatUdp = jaringanLokal != null
+                            ? jaringanLokal.getByName(alamat)
+                            : InetAddress.getByName(alamat);
                     portUdp = port;
                     soketUdp = new DatagramSocket();
+                    soketUdp.setSoTimeout(TIMEOUT_ZMQ_MS);
+                    if (jaringanLokal != null) {
+                        jaringanLokal.bindSocket(soketUdp);
+                    }
+
+                    // Kirim paket awal 0,0,0,0 untuk tes kirim UDP
+                    byte[] isiAwal = "0,0,0,0".getBytes(StandardCharsets.UTF_8);
+                    soketUdp.send(new DatagramPacket(isiAwal, isiAwal.length, alamatUdp, portUdp));
                 } else {
                     jalurRobot = ZMQ.context(1);
                     pengirimPerintah = jalurRobot.socket(ZMQ.REQ);
                     pengirimPerintah.setLinger(0);
-                    pengirimPerintah.setSendTimeOut(2000);
-                    pengirimPerintah.setReceiveTimeOut(2000);
+                    pengirimPerintah.setReconnectIVL(200);
+                    pengirimPerintah.setReconnectIVLMax(1000);
+                    pengirimPerintah.setSendTimeOut(TIMEOUT_HANDSHAKE_ZMQ_MS);
+                    pengirimPerintah.setReceiveTimeOut(TIMEOUT_HANDSHAKE_ZMQ_MS);
                     pengirimPerintah.connect(tujuan);
+
+                    // Handshake awal: pastikan server wifi_node di Mini PC merespons
+                    if (!pengirimPerintah.send("0,0,0,0")) {
+                        throw new IOException("Gagal mengirim paket awal ke robot.");
+                    }
+                    String balasanAwal = pengirimPerintah.recvStr();
+                    if (balasanAwal == null) {
+                        throw new IOException("Robot tidak merespons (cek IP, port, dan wifi_node).");
+                    }
+
+                    pengirimPerintah.setSendTimeOut(TIMEOUT_ZMQ_MS);
+                    pengirimPerintah.setReceiveTimeOut(TIMEOUT_ZMQ_MS);
                 }
+
+                if (percobaan != nomorPercobaanSambungan) {
+                    tutupJalurKomunikasi();
+                    return;
+                }
+
                 antreanLayar.post(() -> {
                     if (percobaan == nomorPercobaanSambungan) {
                         sedangMenghubungkan = false;
@@ -566,46 +751,61 @@ public class MainActivity extends AppCompatActivity {
                         tombolConnect.setText("Putuskan");
                         aturFormSambungan();
                         tampilkanStatus(gunakanUdp
-                                ? "UDP siap mengirim ke " + alamat + "."
-                                : "Siap mengirim ke " + alamat + ".");
+                                ? "UDP aktif ke " + alamat + ":" + port
+                                : "Terhubung (ZMQ) ke " + alamat + ":" + port);
                         kirimPerintahRobot();
                     }
                 });
             } catch (IOException | RuntimeException kesalahan) {
-                tutupJalurKomunikasi();
-                antreanLayar.post(() -> {
-                    if (percobaan == nomorPercobaanSambungan) {
-                        sedangMenghubungkan = false;
-                        sudahTerhubung = false;
-                        tombolConnect.setText("Hubungkan");
-                        aturFormSambungan();
-                        tampilkanStatus("Tidak bisa menyambungkan: " + kesalahan.getMessage());
-                    }
-                });
+                if (percobaan == nomorPercobaanSambungan) {
+                    tutupJalurKomunikasi();
+                    sudahTerhubung = false;
+                    final String pesanError = ambilPesanKesalahan(kesalahan);
+                    antreanLayar.post(() -> {
+                        if (percobaan == nomorPercobaanSambungan) {
+                            sedangMenghubungkan = false;
+                            sudahTerhubung = false;
+                            tombolConnect.setText("Hubungkan");
+                            aturFormSambungan();
+                            tampilkanStatus("Gagal konek: " + pesanError);
+                        }
+                    });
+                }
             }
         });
     }
 
     private void putuskanDariRobot() {
         boolean sambunganSedangDicoba = sedangMenghubungkan;
-        berhenti();
         ++nomorPercobaanSambungan;
         sedangMenghubungkan = false;
         sudahTerhubung = false;
-        tombolConnect.setText("Connect");
+        adaPerintahMenunggu.set(false);
+        resetNilaiKendali();
+        perbaruiTampilanNilai();
+
+        tombolConnect.setText("Hubungkan");
         aturFormSambungan();
-        tampilkanStatus(sambunganSedangDicoba ? "sambungan dibatalkan" : "koneksi terputus");
+        tampilkanStatus(sambunganSedangDicoba ? "Sambungan dibatalkan." : "Koneksi terputus.");
         jalurKomunikasi.execute(this::tutupJalurKomunikasi);
     }
 
-    private void berhenti() {
+    private void resetNilaiKendali() {
         majuMundur = 0;
         kiriKanan = 0;
         putaran = 0;
         tombolPutarKiriDitekan = false;
         tombolPutarKananDitekan = false;
-        stikGerak.setPosition(0, 0);
-        stikPutaran.setPosition(0, 0);
+        if (stikGerak != null) {
+            stikGerak.setPosition(0, 0);
+        }
+        if (stikPutaran != null) {
+            stikPutaran.setPosition(0, 0);
+        }
+    }
+
+    private void berhenti() {
+        resetNilaiKendali();
         perbaruiTampilanNilai();
         kirimPerintahRobot();
     }
@@ -632,7 +832,7 @@ public class MainActivity extends AppCompatActivity {
         jalurKomunikasi.execute(() -> {
             boolean pemilikPengiriman = true;
             try {
-                while (true) {
+                while (sudahTerhubung && percobaan == nomorPercobaanSambungan) {
                     adaPerintahMenunggu.set(false);
                     String isiPerintah = majuMundur + "," + kiriKanan + ","
                             + putaran + "," + penjepitBola;
@@ -654,12 +854,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                         boolean terkirim = pengirimPerintah.send(isiPerintah);
                         if (!terkirim) {
-                            throw new IllegalStateException("tidak terkirim");
+                            throw new IllegalStateException("Permintaan tidak terkirim.");
                         }
 
                         String balasan = pengirimPerintah.recvStr();
                         if (balasan == null) {
-                            throw new IllegalStateException("tidak ada balasan");
+                            throw new IllegalStateException("Tidak ada balasan dari robot.");
                         }
                     }
 
@@ -677,16 +877,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (IOException | RuntimeException kesalahan) {
                 adaPerintahMenunggu.set(false);
-                tutupJalurKomunikasi();
-                sudahTerhubung = false;
-                antreanLayar.post(() -> {
-                    if (percobaan == nomorPercobaanSambungan) {
-                        sedangMenghubungkan = false;
-                        tombolConnect.setText("connect");
-                        aturFormSambungan();
-                        tampilkanStatus("Komunikasi gagal: " + kesalahan.getMessage());
-                    }
-                });
+                if (percobaan == nomorPercobaanSambungan) {
+                    tutupJalurKomunikasi();
+                    sudahTerhubung = false;
+                    final String pesanError = ambilPesanKesalahan(kesalahan);
+                    antreanLayar.post(() -> {
+                        if (percobaan == nomorPercobaanSambungan) {
+                            sedangMenghubungkan = false;
+                            tombolConnect.setText("Hubungkan");
+                            aturFormSambungan();
+                            tampilkanStatus("Komunikasi terputus: " + pesanError);
+                        }
+                    });
+                }
             } finally {
                 if (pemilikPengiriman) {
                     pengirimanSedangBerjalan.set(false);
@@ -717,7 +920,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 penerimaKameraUdp = socket;
 
-                Camera penyusunFrame = new Camera();
+                CameraFrameAssembler penyusunFrame = new CameraFrameAssembler();
                 byte[] buffer = new byte[BATAS_UDP_BYTES];
                 while (sesi == sesiKamera) {
                     DatagramPacket paket = new DatagramPacket(buffer, buffer.length);
@@ -739,7 +942,7 @@ public class MainActivity extends AppCompatActivity {
                 if (sesi == sesiKamera) {
                     antreanLayar.post(() -> {
                         if (sesi == sesiKamera) {
-                            aturPlaceholderKamera("KAMERA ERROR", View.VISIBLE);
+                            aturPlaceholderKamera("KAMERA UDP ERROR", View.VISIBLE);
                         }
                     });
                 }
@@ -842,7 +1045,7 @@ public class MainActivity extends AppCompatActivity {
         String nilaiXText = tulisNilai(kiriKanan);
         String nilaiYText = tulisNilai(majuMundur);
         String nilaiWzText = tulisNilai(putaran);
-        String nilaiGripText = String.format(java.util.Locale.US, "%.2f", penjepitBola);
+        String nilaiGripText = Integer.toString(penjepitBola);
 
         nilaiX.setText(nilaiXText);
         nilaiY.setText(nilaiYText);
@@ -865,18 +1068,28 @@ public class MainActivity extends AppCompatActivity {
     private void tutupJalurKomunikasi() {
         koneksiUdp = false;
         if (soketUdp != null) {
-            soketUdp.close();
+            try {
+                soketUdp.close();
+            } catch (Exception ignored) {
+            }
             soketUdp = null;
         }
         alamatUdp = null;
         if (pengirimPerintah != null) {
-            pengirimPerintah.close();
+            try {
+                pengirimPerintah.close();
+            } catch (Exception ignored) {
+            }
             pengirimPerintah = null;
         }
         if (jalurRobot != null) {
-            jalurRobot.close();
+            try {
+                jalurRobot.close();
+            } catch (Exception ignored) {
+            }
             jalurRobot = null;
         }
+        aturPengikatanJaringan(null);
     }
 
     @Override
@@ -884,9 +1097,9 @@ public class MainActivity extends AppCompatActivity {
         antreanLayar.removeCallbacks(pengirimBerkala);
         hentikanPenerimaKamera();
         jalurKamera.shutdownNow();
-        berhenti();
         ++nomorPercobaanSambungan;
         sudahTerhubung = false;
+        resetNilaiKendali();
         jalurKomunikasi.execute(this::tutupJalurKomunikasi);
         jalurKomunikasi.shutdown();
         super.onDestroy();

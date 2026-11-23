@@ -3,7 +3,7 @@ package com.example.robotcontrollerbola;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
-final class Camera {
+final class CameraFrameAssembler {
     static final int MAX_FRAME_BYTES = 4 * 1024 * 1024;
     private static final int HEADER_BYTES = 8;
     private static final int MAX_FRAGMENTS = 4096;

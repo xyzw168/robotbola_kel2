@@ -33,7 +33,7 @@ public class ExampleUnitTest {
 
     @Test
     public void frameJpegSatuDatagramDiteruskanUtuh() {
-        Camera assembler = new Camera();
+        CameraFrameAssembler assembler = new CameraFrameAssembler();
         byte[] frame = {(byte) 0xFF, (byte) 0xD8, 1, 2};
 
         assertArrayEquals(frame, assembler.accept(frame, frame.length));
@@ -41,7 +41,7 @@ public class ExampleUnitTest {
 
     @Test
     public void fragmenJpegDisusunMenurutNomorPaket() {
-        Camera assembler = new Camera();
+        CameraFrameAssembler assembler = new CameraFrameAssembler();
         byte[] fragmenKedua = paketFragmen(7, 2, 1, new byte[]{3, 4});
         byte[] fragmenPertama = paketFragmen(
                 7,
@@ -59,7 +59,7 @@ public class ExampleUnitTest {
 
     @Test
     public void paketFragmenDenganUkuranPayloadKeliruDitolak() {
-        Camera assembler = new Camera();
+        CameraFrameAssembler assembler = new CameraFrameAssembler();
         byte[] packet = paketFragmen(1, 1, 0, new byte[]{1, 2});
         packet[7] = 3;
 
