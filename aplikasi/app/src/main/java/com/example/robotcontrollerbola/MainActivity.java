@@ -542,7 +542,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             port = Integer.parseInt(portInput.getText().toString().trim());
         } catch (NumberFormatException e) {
-            updateStatusText("Invalid Port", 0xFFD32F2F);
+            updateStatusText("Invalid IP/Port", 0xFFD32F2F);
             return;
         }
         if (address.isEmpty() || port < 1 || port > 65535) {
@@ -560,7 +560,7 @@ public class MainActivity extends AppCompatActivity {
         Connecting = true;
         connectButton.setText("Cancel");
         updateFormState();
-        updateStatusText("Connecting...", 0xFFF57C00);
+        updateStatusText("Connecting.", 0xFFF57C00);
 
         commExecutor.execute(() -> {
             if (session != connSession) return;
@@ -596,7 +596,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     String reply = socketZMQ.recvStr();
                     if (reply == null) {
-                        throw new IOException("No response from server");
+                        throw new IOException("No respon");
                     }
 
                     socketZMQ.setSendTimeOut(TIMEOUT_ZMQ_MS);
@@ -626,9 +626,9 @@ public class MainActivity extends AppCompatActivity {
                         if (session == connSession) {
                             Connecting = false;
                             Connected = false;
-                            connectButton.setText("Connect");
+                            connectButton.setText("CONNECT");
                             updateFormState();
-                            updateStatusText("No response", 0xFFD32F2F);
+                            updateStatusText("No respon", 0xFFD32F2F);
                         }
                     });
                 }
@@ -644,7 +644,7 @@ public class MainActivity extends AppCompatActivity {
         resetControlValues();
         updateDisplayValues();
 
-        connectButton.setText("Connect");
+        connectButton.setText("CONNECT");
         updateFormState();
         updateStatusText("Disconnected", 0xFFE53935);
         commExecutor.execute(this::closeComm);
@@ -701,7 +701,7 @@ public class MainActivity extends AppCompatActivity {
                     uiHandler.post(() -> {
                         if (session == connSession) {
                             Connecting = false;
-                            connectButton.setText("Connect");
+                            connectButton.setText("CONNECT");
                             updateFormState();
                             updateStatusText("Lost connection", 0xFFD32F2F);
                         }
@@ -719,7 +719,7 @@ public class MainActivity extends AppCompatActivity {
         if (!isCameraEnabled) return;
         stopCamera();
         final int session = ++cameraSession;
-        setPlaceholderText("Connecting camera...", View.VISIBLE);
+        setPlaceholderText("Connecting camera", View.VISIBLE);
         physicalCamPreview.setImageDrawable(null);
         virtualCamPreview.setImageDrawable(null);
 
@@ -922,7 +922,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        String label = hasGamepad ? "Gamepad Connected" : "No Gamepad";
+        String label = hasGamepad ? "Gamepad Aktif" : "No Gamepad";
         gamepadStatus.setText(label);
         virtualGamepadStatus.setText(label);
     }
