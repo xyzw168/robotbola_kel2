@@ -108,10 +108,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean tombolPutarKiriDitekan;
     private boolean tombolPutarKananDitekan;
     private int nomorPercobaanSambungan;
-    private volatile int majuMundur;
-    private volatile int kiriKanan;
-    private volatile int putaran;
-    private volatile int penjepitBola;
+    private volatile float majuMundur;
+    private volatile float kiriKanan;
+    private volatile float putaran;
+    private volatile float penjepitBola;
 
     private final Runnable pengirimBerkala = new Runnable() {
         @Override
@@ -433,17 +433,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         putaran = tombolPutarKiriDitekan == tombolPutarKananDitekan
-                ? 0
-                : tombolPutarKiriDitekan ? -100 : 100;
+                ? 0f
+                : tombolPutarKiriDitekan ? -100f : 100f;
         perbaruiTampilanNilai();
         kirimPerintahRobot();
     }
 
-    private static int ubahKePersen(float arah) {
+    private static float ubahKePersen(float arah) {
         if (Math.abs(arah) < BATAS_STIK) {
-            return 0;
+            return 0f;
         }
-        return Math.max(-100, Math.min(100, Math.round(arah * 100)));
+        return Math.max(-100f, Math.min(100f, arah * 100f));
     }
 
     static float sumbuPutaran(float mendatar, float tegak) {
@@ -516,8 +516,9 @@ public class MainActivity extends AppCompatActivity {
         return 0;
     }
 
-    private static String tulisNilai(int nilai) {
-        return nilai > 0 ? "+" + nilai : Integer.toString(nilai);
+    private static String tulisNilai(float nilai) {
+        String teks = String.format(java.util.Locale.US, "%.2f", nilai);
+        return nilai > 0 ? "+" + teks : teks;
     }
 
     private void hubungkanKeRobot() {
@@ -554,8 +555,8 @@ public class MainActivity extends AppCompatActivity {
                     jalurRobot = ZMQ.context(1);
                     pengirimPerintah = jalurRobot.socket(ZMQ.REQ);
                     pengirimPerintah.setLinger(0);
-                    pengirimPerintah.setSendTimeOut(1000);
-                    pengirimPerintah.setReceiveTimeOut(1000);
+                    pengirimPerintah.setSendTimeOut(2000);
+                    pengirimPerintah.setReceiveTimeOut(2000);
                     pengirimPerintah.connect(tujuan);
                 }
                 antreanLayar.post(() -> {
@@ -841,7 +842,7 @@ public class MainActivity extends AppCompatActivity {
         String nilaiXText = tulisNilai(kiriKanan);
         String nilaiYText = tulisNilai(majuMundur);
         String nilaiWzText = tulisNilai(putaran);
-        String nilaiGripText = Integer.toString(penjepitBola);
+        String nilaiGripText = String.format(java.util.Locale.US, "%.2f", penjepitBola);
 
         nilaiX.setText(nilaiXText);
         nilaiY.setText(nilaiYText);
