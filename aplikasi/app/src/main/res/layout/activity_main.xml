@@ -88,7 +88,7 @@
                 android:padding="9dp">
 
                 <EditText
-                    android:id="@+id/ipAddressInput"
+                    android:id="@+id/inputIPaddress"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
@@ -320,7 +320,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/physicalCameraSwitch"
+                android:id="@+id/gamepadCameraSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
@@ -452,7 +452,7 @@
             android:layout_height="match_parent">
 
             <com.example.robotcontrollerbola.Gamepad
-                android:id="@+id/movementJoystick"
+                android:id="@+id/posisiJoystick"
                 android:layout_width="190dp"
                 android:layout_height="190dp"
                 android:layout_gravity="start|center_vertical"
@@ -461,7 +461,7 @@
                 android:enabled="true" />
 
             <com.example.robotcontrollerbola.Gamepad
-                android:id="@+id/rotationJoystick"
+                android:id="@+id/rotasiJoystick"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
                 android:layout_gravity="end|center_vertical"
@@ -597,7 +597,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/virtualCameraSwitch"
+                android:id="@+id/joystickCameraSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"

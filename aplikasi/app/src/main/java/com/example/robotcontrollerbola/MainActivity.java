@@ -66,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private final AtomicBoolean isFrameRenderScheduled = new AtomicBoolean();
     private final AtomicReference<Bitmap> pendingFrame = new AtomicReference<>();
 
-    private EditText ipInput;
+    private EditText inputIPaddress;
     private EditText portInput;
-    private Button connectBtn;
-    private Button protocolBtn;
+    private Button connectButton;
+    private Button protocolButton;
     private Button stopBtnPhysical;
     private Button stopBtnVirtual;
 
@@ -79,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
     private MaterialButton physSpeed30Btn;
     private MaterialButton physSpeed70Btn;
     private MaterialButton physSpeed100Btn;
-    private MaterialButton gripBtn;
+    private MaterialButton gripButton;
 
-    private SwitchMaterial cameraSwitchPhysical;
-    private SwitchMaterial cameraSwitchVirtual;
+    private SwitchMaterial gamepadCameraSwitch;
+    private SwitchMaterial joystickCameraSwitch;
     private Button backBtn;
     private Button backToModesBtn;
     private TextView statusText;
@@ -105,20 +105,20 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout modeSelectionPage;
     private ImageView physicalCamPreview;
     private ImageView virtualCamPreview;
-    private Gamepad moveJoystick;
-    private Gamepad turnJoystick;
+    private Gamepad posisiJoystick;
+    private Gamepad rotasiJoystick;
     private OnBackPressedCallback backPressedCallback;
 
     private ZMQ.Context zmqContext;
-    private ZMQ.Socket zmqSocket;
+    private ZMQ.Socket socketZMQ;
     private DatagramSocket udpSocket;
     private InetAddress udpAddress;
-    private volatile DatagramSocket cameraUdpReceiver;
+    private volatile DatagramSocket socketCamera;
     private int udpPort;
 
-    private volatile boolean isConnecting;
-    private volatile boolean isConnected;
-    private volatile boolean useUdp;
+    private volatile boolean Connecting;
+    private volatile boolean Connected;
+    private volatile boolean useUDP;
     private volatile boolean isUdpConn;
     private volatile int cameraSession;
     private volatile int connSession;
@@ -127,18 +127,18 @@ public class MainActivity extends AppCompatActivity {
     private boolean isCameraEnabled = true;
     private boolean isUpdatingCamSwitch;
     private int speedLimit = 100;
-    private boolean isTurnLeftPressed;
-    private boolean isTurnRightPressed;
+    private boolean isTurnLeft;
+    private boolean isTurnRight;
 
-    private volatile float x = 0.0f;
-    private volatile float y = 0.0f;
-    private volatile float z = 0.0f;
-    private volatile int w = 0;
+    private volatile float majuMundur = 0.0f;
+    private volatile float kiriKanan = 0.0f;
+    private volatile float rotasi = 0.0f;
+    private volatile int grip = 0;
 
     private final Runnable periodicSender = new Runnable() {
         @Override
         public void run() {
-            if (isConnected) {
+            if (Connected) {
                 sendCommand();
             }
             uiHandler.postDelayed(this, SEND_INTERVAL_MS);
@@ -151,10 +151,10 @@ public class MainActivity extends AppCompatActivity {
         WindowCompat.enableEdgeToEdge(getWindow());
         setContentView(R.layout.activity_main);
 
-        ipInput = findViewById(R.id.ipAddressInput);
+        inputIPaddress = findViewById(R.id.inputIPaddress);
         portInput = findViewById(R.id.portInput);
-        connectBtn = findViewById(R.id.connectButton);
-        protocolBtn = findViewById(R.id.protocolButton);
+        connectButton = findViewById(R.id.connectButton);
+        protocolButton = findViewById(R.id.protocolButton);
         stopBtnPhysical = findViewById(R.id.physicalStopButton);
         stopBtnVirtual = findViewById(R.id.virtualStopButton);
 
@@ -164,10 +164,10 @@ public class MainActivity extends AppCompatActivity {
         physSpeed30Btn = findViewById(R.id.physicalSpeed30Button);
         physSpeed70Btn = findViewById(R.id.physicalSpeed70Button);
         physSpeed100Btn = findViewById(R.id.physicalSpeed100Button);
-        gripBtn = findViewById(R.id.gripButton);
+        gripButton = findViewById(R.id.gripButton);
 
-        cameraSwitchPhysical = findViewById(R.id.physicalCameraSwitch);
-        cameraSwitchVirtual = findViewById(R.id.virtualCameraSwitch);
+        gamepadCameraSwitch = findViewById(R.id.gamepadCameraSwitch);
+        joystickCameraSwitch = findViewById(R.id.joystickCameraSwitch);
         backBtn = findViewById(R.id.backButton);
         backToModesBtn = findViewById(R.id.backToModesButton);
         statusText = findViewById(R.id.statusText);
@@ -190,33 +190,33 @@ public class MainActivity extends AppCompatActivity {
         modeSelectionPage = findViewById(R.id.modeSelectionPage);
         physicalCamPreview = findViewById(R.id.physicalCameraPreview);
         virtualCamPreview = findViewById(R.id.virtualCameraPreview);
-        moveJoystick = findViewById(R.id.movementJoystick);
-        turnJoystick = findViewById(R.id.rotationJoystick);
+        posisiJoystick = findViewById(R.id.posisiJoystick);
+        rotasiJoystick = findViewById(R.id.rotasiJoystick);
 
         String initialPort = portInput.getText().toString().trim();
         if (initialPort.equals(Integer.toString(PORT_UDP_CMD))) {
-            useUdp = true;
+            useUDP = true;
         } else {
-            useUdp = false;
+            useUDP = false;
             if (initialPort.isEmpty()) {
                 portInput.setText(Integer.toString(PORT_ZMQ));
             }
         }
-        protocolBtn.setText(useUdp ? "UDP  ▼" : "ZMQ  ▼");
+        protocolButton.setText(useUDP ? "UDP  ▼" : "ZMQ  ▼");
 
         setupVirtualGamepad();
-        if (moveJoystick != null) moveJoystick.setOpacity(0.5f);
-        if (turnJoystick != null) turnJoystick.setOpacity(0.5f);
+        if (posisiJoystick != null) posisiJoystick.setOpacity(0.5f);
+        if (rotasiJoystick != null) rotasiJoystick.setOpacity(0.5f);
 
-        connectBtn.setOnClickListener(v -> {
-            if (isConnecting || isConnected) {
+        connectButton.setOnClickListener(v -> {
+            if (Connecting || Connected) {
                 disconnect();
             } else {
                 connect();
             }
         });
 
-        protocolBtn.setOnClickListener(this::showProtocolMenu);
+        protocolButton.setOnClickListener(this::showProtocolMenu);
         findViewById(R.id.physicalModeButton).setOnClickListener(v -> openPhysicalMode());
         findViewById(R.id.virtualModeButton).setOnClickListener(v -> openVirtualJoystickMode());
 
@@ -237,16 +237,16 @@ public class MainActivity extends AppCompatActivity {
         if (physSpeed70Btn != null) physSpeed70Btn.setOnClickListener(speed70Listener);
         if (physSpeed100Btn != null) physSpeed100Btn.setOnClickListener(speed100Listener);
 
-        if (gripBtn != null) {
-            gripBtn.setOnClickListener(v -> toggleGrip());
+        if (gripButton != null) {
+            gripButton.setOnClickListener(v -> toggleGrip());
         }
 
-        cameraSwitchPhysical.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        gamepadCameraSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!isUpdatingCamSwitch) {
                 setCameraEnabled(isChecked);
             }
         });
-        cameraSwitchVirtual.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        joystickCameraSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!isUpdatingCamSwitch) {
                 setCameraEnabled(isChecked);
             }
@@ -289,18 +289,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupVirtualGamepad() {
-        if (turnJoystick != null) turnJoystick.setHorizontalOnly(true);
-        if (moveJoystick != null) {
-            moveJoystick.setOnPositionChangedListener((joyX, joyY) -> {
-                x = scaleToFloat(-joyY);
-                y = scaleToFloat(joyX);
+        if (rotasiJoystick != null) rotasiJoystick.setHorizontalOnly(true);
+        if (posisiJoystick != null) {
+            posisiJoystick.setOnPositionChangedListener((joyX, joyY) -> {
+                majuMundur = scaleToFloat(-joyY);
+                kiriKanan = scaleToFloat(joyX);
                 updateDisplayValues();
                 sendCommand();
             });
         }
-        if (turnJoystick != null) {
-            turnJoystick.setOnPositionChangedListener((joyX, joyY) -> {
-                z = scaleToFloat(joyX);
+        if (rotasiJoystick != null) {
+            rotasiJoystick.setOnPositionChangedListener((joyX, joyY) -> {
+                rotasi = scaleToFloat(joyX);
                 updateDisplayValues();
                 sendCommand();
             });
@@ -354,8 +354,8 @@ public class MainActivity extends AppCompatActivity {
     private void setCameraEnabled(boolean enabled) {
         isCameraEnabled = enabled;
         isUpdatingCamSwitch = true;
-        if (cameraSwitchPhysical.isChecked() != enabled) cameraSwitchPhysical.setChecked(enabled);
-        if (cameraSwitchVirtual.isChecked() != enabled) cameraSwitchVirtual.setChecked(enabled);
+        if (gamepadCameraSwitch.isChecked() != enabled) gamepadCameraSwitch.setChecked(enabled);
+        if (joystickCameraSwitch.isChecked() != enabled) joystickCameraSwitch.setChecked(enabled);
         isUpdatingCamSwitch = false;
         updateCameraDisplay();
     }
@@ -386,14 +386,14 @@ public class MainActivity extends AppCompatActivity {
         menu.getMenu().add("UDP");
         menu.setOnMenuItemClickListener(item -> {
             boolean selectUdp = "UDP".contentEquals(item.getTitle());
-            if (useUdp != selectUdp) {
-                int prevPort = useUdp ? PORT_UDP_CMD : PORT_ZMQ;
+            if (useUDP != selectUdp) {
+                int prevPort = useUDP ? PORT_UDP_CMD : PORT_ZMQ;
                 int newPort = selectUdp ? PORT_UDP_CMD : PORT_ZMQ;
                 if (portInput.getText().toString().trim().equals(Integer.toString(prevPort))) {
                     portInput.setText(Integer.toString(newPort));
                 }
-                useUdp = selectUdp;
-                protocolBtn.setText(useUdp ? "UDP  ▼" : "ZMQ  ▼");
+                useUDP = selectUdp;
+                protocolButton.setText(useUDP ? "UDP  ▼" : "ZMQ  ▼");
             }
             return true;
         });
@@ -403,10 +403,10 @@ public class MainActivity extends AppCompatActivity {
     private void setSpeedLimit(int limit) {
         speedLimit = limit;
         updateSpeedButtons();
-        if (isVirtualGamepadMode && moveJoystick != null && turnJoystick != null) {
-            x = scaleToFloat(moveJoystick.getPositionX() == 0 ? 0 : -moveJoystick.getPositionY());
-            y = scaleToFloat(moveJoystick.getPositionX());
-            z = scaleToFloat(turnJoystick.getPositionX());
+        if (isVirtualGamepadMode && posisiJoystick != null && rotasiJoystick != null) {
+            majuMundur = scaleToFloat(posisiJoystick.getPositionX() == 0 ? 0 : -posisiJoystick.getPositionY());
+            kiriKanan = scaleToFloat(posisiJoystick.getPositionX());
+            rotasi = scaleToFloat(rotasiJoystick.getPositionX());
         }
         updateDisplayValues();
         sendCommand();
@@ -433,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void toggleGrip() {
-        w = (w == 0) ? 1 : 0;
+        grip = (grip == 0) ? 1 : 0;
         updateDisplayValues();
         sendCommand();
     }
@@ -445,20 +445,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetControlValues() {
-        x = 0.0f;
-        y = 0.0f;
-        z = 0.0f;
-        isTurnLeftPressed = false;
-        isTurnRightPressed = false;
-        if (moveJoystick != null) moveJoystick.setPosition(0, 0);
-        if (turnJoystick != null) turnJoystick.setPosition(0, 0);
+        majuMundur = 0.0f;
+        kiriKanan = 0.0f;
+        rotasi = 0.0f;
+        isTurnLeft = false;
+        isTurnRight = false;
+        if (posisiJoystick != null) posisiJoystick.setPosition(0, 0);
+        if (rotasiJoystick != null) rotasiJoystick.setPosition(0, 0);
     }
 
     private void updateDisplayValues() {
-        String xStr = String.format(Locale.US, "%.2f", x);
-        String yStr = String.format(Locale.US, "%.2f", y);
-        String zStr = String.format(Locale.US, "%.2f", z);
-        String wStr = String.valueOf(w);
+        String xStr = String.format(Locale.US, "%.2f", majuMundur);
+        String yStr = String.format(Locale.US, "%.2f", kiriKanan);
+        String zStr = String.format(Locale.US, "%.2f", rotasi);
+        String wStr = String.valueOf(grip);
 
         xValText.setText(xStr);
         yValText.setText(yStr);
@@ -535,8 +535,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void connect() {
-        String address = cleanHostAddress(ipInput.getText().toString());
-        ipInput.setText(address);
+        String address = cleanHostAddress(inputIPaddress.getText().toString());
+        inputIPaddress.setText(address);
 
         final int port;
         try {
@@ -553,12 +553,12 @@ public class MainActivity extends AppCompatActivity {
         resetControlValues();
         updateDisplayValues();
 
-        final boolean tryUdp = useUdp;
+        final boolean tryUdp = useUDP;
         final String targetUrl = "tcp://" + address + ":" + port;
         final int session = ++connSession;
-        isConnected = false;
-        isConnecting = true;
-        connectBtn.setText("Cancel");
+        Connected = false;
+        Connecting = true;
+        connectButton.setText("Cancel");
         updateFormState();
         updateStatusText("Connecting...", 0xFFF57C00);
 
@@ -583,24 +583,24 @@ public class MainActivity extends AppCompatActivity {
                     udpSocket.send(new DatagramPacket(initPacket, initPacket.length, udpAddress, udpPort));
                 } else {
                     zmqContext = ZMQ.context(1);
-                    zmqSocket = zmqContext.socket(ZMQ.REQ);
-                    zmqSocket.setLinger(0);
-                    zmqSocket.setReconnectIVL(200);
-                    zmqSocket.setReconnectIVLMax(1000);
-                    zmqSocket.setSendTimeOut(TIMEOUT_HANDSHAKE_ZMQ_MS);
-                    zmqSocket.setReceiveTimeOut(TIMEOUT_HANDSHAKE_ZMQ_MS);
-                    zmqSocket.connect(targetUrl);
+                    socketZMQ = zmqContext.socket(ZMQ.REQ);
+                    socketZMQ.setLinger(0);
+                    socketZMQ.setReconnectIVL(200);
+                    socketZMQ.setReconnectIVLMax(1000);
+                    socketZMQ.setSendTimeOut(TIMEOUT_HANDSHAKE_ZMQ_MS);
+                    socketZMQ.setReceiveTimeOut(TIMEOUT_HANDSHAKE_ZMQ_MS);
+                    socketZMQ.connect(targetUrl);
 
-                    if (!zmqSocket.send("0.00,0.00,0.00,0")) {
+                    if (!socketZMQ.send("0.00,0.00,0.00,0")) {
                         throw new IOException("Handshake failed");
                     }
-                    String reply = zmqSocket.recvStr();
+                    String reply = socketZMQ.recvStr();
                     if (reply == null) {
                         throw new IOException("No response from server");
                     }
 
-                    zmqSocket.setSendTimeOut(TIMEOUT_ZMQ_MS);
-                    zmqSocket.setReceiveTimeOut(TIMEOUT_ZMQ_MS);
+                    socketZMQ.setSendTimeOut(TIMEOUT_ZMQ_MS);
+                    socketZMQ.setReceiveTimeOut(TIMEOUT_ZMQ_MS);
                 }
 
                 if (session != connSession) {
@@ -610,9 +610,9 @@ public class MainActivity extends AppCompatActivity {
 
                 uiHandler.post(() -> {
                     if (session == connSession) {
-                        isConnecting = false;
-                        isConnected = true;
-                        connectBtn.setText("Disconnect");
+                        Connecting = false;
+                        Connected = true;
+                        connectButton.setText("Disconnect");
                         updateFormState();
                         updateStatusText("Connected", 0xFF388E3C);
                         sendCommand();
@@ -621,12 +621,12 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException | RuntimeException e) {
                 if (session == connSession) {
                     closeComm();
-                    isConnected = false;
+                    Connected = false;
                     uiHandler.post(() -> {
                         if (session == connSession) {
-                            isConnecting = false;
-                            isConnected = false;
-                            connectBtn.setText("Connect");
+                            Connecting = false;
+                            Connected = false;
+                            connectButton.setText("Connect");
                             updateFormState();
                             updateStatusText("No response", 0xFFD32F2F);
                         }
@@ -638,28 +638,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void disconnect() {
         ++connSession;
-        isConnecting = false;
-        isConnected = false;
+        Connecting = false;
+        Connected = false;
         isCommandPending.set(false);
         resetControlValues();
         updateDisplayValues();
 
-        connectBtn.setText("Connect");
+        connectButton.setText("Connect");
         updateFormState();
         updateStatusText("Disconnected", 0xFFE53935);
         commExecutor.execute(this::closeComm);
     }
 
     private void updateFormState() {
-        boolean editable = !isConnected && !isConnecting;
-        ipInput.setEnabled(editable);
+        boolean editable = !Connected && !Connecting;
+        inputIPaddress.setEnabled(editable);
         portInput.setEnabled(editable);
-        protocolBtn.setEnabled(editable);
+        protocolButton.setEnabled(editable);
     }
 
     private void sendCommand() {
         updateDisplayValues();
-        if (!isConnected) return;
+        if (!Connected) return;
 
         isCommandPending.set(true);
         if (!isSending.compareAndSet(false, true)) return;
@@ -668,9 +668,9 @@ public class MainActivity extends AppCompatActivity {
         commExecutor.execute(() -> {
             boolean ownsSending = true;
             try {
-                while (isConnected && session == connSession) {
+                while (Connected && session == connSession) {
                     isCommandPending.set(false);
-                    String cmdStr = String.format(Locale.US, "%.2f,%.2f,%.2f,%d", x, y, z, w);
+                    String cmdStr = String.format(Locale.US, "%.2f,%.2f,%.2f,%d", majuMundur, kiriKanan, rotasi, grip);
 
                     if (isUdpConn) {
                         if (udpSocket == null || udpAddress == null) break;
@@ -678,11 +678,11 @@ public class MainActivity extends AppCompatActivity {
                         DatagramPacket packet = new DatagramPacket(payload, payload.length, udpAddress, udpPort);
                         udpSocket.send(packet);
                     } else {
-                        if (zmqSocket == null) break;
-                        boolean sent = zmqSocket.send(cmdStr);
+                        if (socketZMQ == null) break;
+                        boolean sent = socketZMQ.send(cmdStr);
                         if (!sent) throw new IllegalStateException("Send failed");
 
-                        String reply = zmqSocket.recvStr();
+                        String reply = socketZMQ.recvStr();
                         if (reply == null) throw new IllegalStateException("No reply");
                     }
 
@@ -697,11 +697,11 @@ public class MainActivity extends AppCompatActivity {
                 isCommandPending.set(false);
                 if (session == connSession) {
                     closeComm();
-                    isConnected = false;
+                    Connected = false;
                     uiHandler.post(() -> {
                         if (session == connSession) {
-                            isConnecting = false;
-                            connectBtn.setText("Connect");
+                            Connecting = false;
+                            connectButton.setText("Connect");
                             updateFormState();
                             updateStatusText("Lost connection", 0xFFD32F2F);
                         }
@@ -732,7 +732,7 @@ public class MainActivity extends AppCompatActivity {
                 socket.bind(new InetSocketAddress(PORT_UDP_CAM));
                 if (session != cameraSession) return;
 
-                cameraUdpReceiver = socket;
+                socketCamera = socket;
                 CameraFrameAssembler frameAssembler = new CameraFrameAssembler();
                 byte[] buffer = new byte[MAX_UDP_BYTES];
 
@@ -757,15 +757,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             } finally {
                 if (socket != null) socket.close();
-                if (cameraUdpReceiver == socket) cameraUdpReceiver = null;
+                if (socketCamera == socket) socketCamera = null;
             }
         });
     }
 
     private void stopCamera() {
         ++cameraSession;
-        DatagramSocket socket = cameraUdpReceiver;
-        cameraUdpReceiver = null;
+        DatagramSocket socket = socketCamera;
+        socketCamera = null;
         if (socket != null) socket.close();
 
         Bitmap frame = pendingFrame.getAndSet(null);
@@ -840,9 +840,9 @@ public class MainActivity extends AppCompatActivity {
                 float rawZ = getCenteredAxis(event, MotionEvent.AXIS_Z);
                 if (rawZ == 0.0f) rawZ = getCenteredAxis(event, MotionEvent.AXIS_RZ);
 
-                x = scaleToFloat(-rawY);
-                y = scaleToFloat(rawX);
-                z = scaleToFloat(rawZ);
+                majuMundur = scaleToFloat(-rawY);
+                kiriKanan = scaleToFloat(rawX);
+                rotasi = scaleToFloat(rawZ);
                 updateDisplayValues();
                 sendCommand();
                 return true;
@@ -858,30 +858,30 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                     if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-                        isTurnLeftPressed = true;
-                        z = scaleToFloat(-1.0f);
+                        isTurnLeft = true;
+                        rotasi = scaleToFloat(-1.0f);
                         updateDisplayValues();
                         sendCommand();
                         return true;
                     }
                     if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                        isTurnRightPressed = true;
-                        z = scaleToFloat(1.0f);
+                        isTurnRight = true;
+                        rotasi = scaleToFloat(1.0f);
                         updateDisplayValues();
                         sendCommand();
                         return true;
                     }
                 } else if (event.getAction() == KeyEvent.ACTION_UP) {
                     if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-                        isTurnLeftPressed = false;
-                        if (!isTurnRightPressed) z = 0.0f;
+                        isTurnLeft = false;
+                        if (!isTurnRight) rotasi = 0.0f;
                         updateDisplayValues();
                         sendCommand();
                         return true;
                     }
                     if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                        isTurnRightPressed = false;
-                        if (!isTurnLeftPressed) z = 0.0f;
+                        isTurnRight = false;
+                        if (!isTurnLeft) rotasi = 0.0f;
                         updateDisplayValues();
                         sendCommand();
                         return true;
@@ -935,9 +935,9 @@ public class MainActivity extends AppCompatActivity {
         }
         udpAddress = null;
 
-        if (zmqSocket != null) {
-            zmqSocket.close();
-            zmqSocket = null;
+        if (socketZMQ != null) {
+            socketZMQ.close();
+            socketZMQ = null;
         }
         if (zmqContext != null) {
             zmqContext.close();

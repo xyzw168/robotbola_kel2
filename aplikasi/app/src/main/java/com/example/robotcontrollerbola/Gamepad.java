@@ -20,9 +20,9 @@ public class Gamepad extends View {
     private final Paint stickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint dotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private float posX;
-    private float posY;
-    private boolean horizontalOnly;
+    private float posisiX;
+    private float posisiY;
+    private boolean horizontal;
     private float opacity = 1f;
     private int activePointer = NO_POINTER;
     private OnPositionChangedListener listener;
@@ -38,9 +38,9 @@ public class Gamepad extends View {
     }
 
     public void setHorizontalOnly(boolean enabled) {
-        this.horizontalOnly = enabled;
+        this.horizontal = enabled;
         if (enabled) {
-            this.posY = 0;
+            this.posisiY = 0;
             invalidate();
         }
     }
@@ -51,17 +51,17 @@ public class Gamepad extends View {
     }
 
     public void setPosition(float x, float y) {
-        this.posX = clamp(x);
-        this.posY = horizontalOnly ? 0 : clamp(y);
+        this.posisiX = limit(x);
+        this.posisiY = horizontal ? 0 : limit(y);
         invalidate();
     }
 
     public float getPositionX() {
-        return posX;
+        return posisiX;
     }
 
     public float getPositionY() {
-        return posY;
+        return posisiY;
     }
 
     @Override
@@ -85,12 +85,12 @@ public class Gamepad extends View {
         linePaint.setStrokeWidth(dp(1));
         canvas.drawCircle(centerX, centerY, stickDist * 0.55f, linePaint);
         canvas.drawLine(centerX - stickDist, centerY, centerX + stickDist, centerY, linePaint);
-        if (!horizontalOnly) {
+        if (!horizontal) {
             canvas.drawLine(centerX, centerY - stickDist, centerX, centerY + stickDist, linePaint);
         }
 
-        float stickX = centerX + posX * stickDist;
-        float stickY = centerY + posY * stickDist;
+        float stickX = centerX + posisiX * stickDist;
+        float stickY = centerY + posisiY * stickDist;
         stickPaint.setColor(Color.argb(Math.round(230 * opacity), 255, 255, 255));
         stickPaint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(stickX, stickY, stickRadius, stickPaint);
@@ -134,16 +134,16 @@ public class Gamepad extends View {
                         activePointer = event.getPointerId(replacementIdx);
                         updatePositionFromTouch(event, replacementIdx);
                     } else {
-                        releaseStick();
+                        lepasStick();
                     }
                 }
                 return true;
             case MotionEvent.ACTION_UP:
-                releaseStick();
+                lepasStick();
                 performClick();
                 return true;
             case MotionEvent.ACTION_CANCEL:
-                releaseStick();
+                lepasStick();
                 return true;
             default:
                 return true;
@@ -157,21 +157,21 @@ public class Gamepad extends View {
         float centerX = getWidth() / 2f;
         float centerY = getHeight() / 2f;
 
-        float x = clamp((event.getX(pointerIdx) - centerX) / stickDist);
-        float y = horizontalOnly ? 0 : clamp((event.getY(pointerIdx) - centerY) / stickDist);
+        float x = limit((event.getX(pointerIdx) - centerX) / stickDist);
+        float y = horizontal ? 0 : limit((event.getY(pointerIdx) - centerY) / stickDist);
         float len = (float) Math.sqrt(x * x + y * y);
         if (len > 1) {
             x /= len;
             y /= len;
         }
 
-        this.posX = x;
-        this.posY = y;
+        this.posisiX = x;
+        this.posisiY = y;
         invalidate();
         notifyListener();
     }
 
-    private void releaseStick() {
+    private void lepasStick() {
         activePointer = NO_POINTER;
         setPosition(0, 0);
         notifyListener();
@@ -179,7 +179,7 @@ public class Gamepad extends View {
 
     private void notifyListener() {
         if (listener != null) {
-            listener.onPositionChanged(posX, posY);
+            listener.onPositionChanged(posisiX, posisiY);
         }
     }
 
@@ -193,7 +193,7 @@ public class Gamepad extends View {
         return val * getResources().getDisplayMetrics().density;
     }
 
-    private static float clamp(float val) {
+    private static float limit(float val) {
         return Math.max(-1, Math.min(1, val));
     }
 }
