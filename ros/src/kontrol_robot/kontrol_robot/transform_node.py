@@ -4,7 +4,7 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float32
 
-RENTANG_IN = 100
+RENTANG_IN = 100 #--> satuannya persen
 
 
 def parse_pesan_android(pesan):
@@ -47,7 +47,7 @@ class TransformNode(Node):
             return None
         
         cmd = Twist()
-        cmd.linear.x = skala(x, RENTANG_IN, 1)
+        cmd.linear.x = skala(x, RENTANG_IN, 1) #ganti ganti aja buat nentuin kecepatan robotnya
         cmd.linear.y = skala(y, RENTANG_IN, 1)
         cmd.angular.z = skala(z, RENTANG_IN, 1)
 
