@@ -1,0 +1,8 @@
+<library path="stm32_system">
+  <class
+    name="stm32_ros2_control_hardware/STM32System"
+    type="stm32_ros2_control_hardware::STM32System"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>Four-wheel mecanum and gripper hardware interface using a newline-delimited USB serial protocol to an STM32.</description>
+  </class>
+</library>

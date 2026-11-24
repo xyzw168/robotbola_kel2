@@ -4,8 +4,7 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float32
 
-RENTANG_IN = 100  #ini berapa ya harusnya 100 apa 180 jir
-TANDA = (1,1,1,1)
+RENTANG_IN = 100
 
 
 def parse_pesan_android(pesan):
@@ -20,12 +19,9 @@ def parse_pesan_android(pesan):
         nilai_w = int(parts[3].strip())
 
         return nilai_x, nilai_y, nilai_z, nilai_w
-    except ValueError as e:
+    except ValueError:
         return None
-def ambang_nilai(nilai, ambang):
-    if abs(nilai) < ambang:
-        return 0
-    return nilai
+    
 def skala(nilai, rentang_in, maks):
     return float((nilai / rentang_in) * maks)
     
@@ -49,14 +45,14 @@ class TransformNode(Node):
         x, y, z, w = parse_pesan_android(pesan)
         if x is None or y is None or z is None or w is None:
             return None
-
+        
         cmd = Twist()
-        cmd.linear.x = skala(ambang_nilai(x, 10), RENTANG_IN, 0.5)
-        cmd.linear.y = skala(ambang_nilai(y, 10), RENTANG_IN, 0.5)
-        cmd.angular.z = skala(ambang_nilai(z, 10), RENTANG_IN, 0.5)
-    
+        cmd.linear.x = skala(x, RENTANG_IN, 1)
+        cmd.linear.y = skala(y, RENTANG_IN, 1)
+        cmd.angular.z = skala(z, RENTANG_IN, 1)
+
         grip = Float32()
-        grip.data =  float(w)
+        grip.data = float(w)
 
         perintah = String()
         perintah.data = pesan
@@ -69,4 +65,3 @@ def main(args=None):
         node = TransformNode()
         rclpy.spin(node)
         rclpy.shutdown()
-    
