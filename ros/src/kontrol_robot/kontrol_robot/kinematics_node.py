@@ -4,24 +4,20 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Float32MultiArray
 from kontrol_robot.omni_kinematics import OmniKinematics3 
 
+wheel_deg = [0.0, 120.0, 240.0]  # arah dorong roda, derajat (asumsi)
+wheel_radius   = 0.15 # meter, radius roda 
+robot_radius    = 0.20 # meter, jarak pusat robot ke roda (asumsi)
+max_speed        = 10.47 #rad/s   
+
+
 class KinematicsNode(Node):
     def __init__(self):
         super().__init__('kinematics_node')
         self.cmd_vel_subscriber = self.create_subscription(
             Twist, '/cmd_vel', self.on_cmd_vel, 10
         )
-        self.declare_parameter('wheel_angles_deg', [0.0, 120.0, 240.0])
-        self.declare_parameter('wheel_radius', 0.075) #dalam meter
-        self.declare_parameter('robot_radius', 0.20) #meter
-        self.declare_parameter('max_speed', 10.47) #dalam rad/s batasnya adalah 100rpm maka dihasilkan kecepatan maksimum 10.47 rad/s
-
-
-        sudut = self.get_parameter('wheel_angles_deg').value
-        r     = self.get_parameter('wheel_radius').value
-        R     = self.get_parameter('robot_radius').value
-        batas = self.get_parameter('max_speed').value
         
-        self.ik = OmniKinematics3(sudut, r, R, batas)
+        self.ik = OmniKinematics3(wheel_deg, wheel_radius, robot_radius, max_speed)
         self.wheel_speeds_publisher_ = self.create_publisher(Float32MultiArray, '/wheel_speeds', 10)
                 
     def on_cmd_vel(self, msg):
