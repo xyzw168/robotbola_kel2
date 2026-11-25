@@ -4,7 +4,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Float32MultiArray
 from kontrol_robot.omni_kinematics import OmniKinematics3 
 
-wheel_deg = [0.0, 120.0, 240.0]  # arah dorong roda, derajat (asumsi)
+wheel_deg = [120, -120.0, 0]  # arah dorong roda, derajat (asumsi)
 wheel_radius   = 0.15 # meter, radius roda 
 robot_radius    = 0.20 # meter, jarak pusat robot ke roda (asumsi)
 max_speed        = 10.47 #rad/s   
