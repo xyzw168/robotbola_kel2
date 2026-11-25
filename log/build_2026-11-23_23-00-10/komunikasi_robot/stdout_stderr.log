@@ -1,0 +1,19 @@
+running develop
+running egg_info
+writing komunikasi_robot.egg-info/PKG-INFO
+writing dependency_links to komunikasi_robot.egg-info/dependency_links.txt
+writing entry points to komunikasi_robot.egg-info/entry_points.txt
+writing requirements to komunikasi_robot.egg-info/requires.txt
+writing top-level names to komunikasi_robot.egg-info/top_level.txt
+reading manifest file 'komunikasi_robot.egg-info/SOURCES.txt'
+writing manifest file 'komunikasi_robot.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi-robot.egg-link (link to .)
+Installing serial_node script to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot
+Installing udp_node script to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot
+Installing wifi_node script to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot
+
+Installed /home/ulil/Bandha_ws/build/komunikasi_robot
+running symlink_data
+symbolically linking /home/ulil/Bandha_ws/build/komunikasi_robot/resource/komunikasi_robot -> /home/ulil/Bandha_ws/install/komunikasi_robot/share/ament_index/resource_index/packages
+symbolically linking /home/ulil/Bandha_ws/build/komunikasi_robot/package.xml -> /home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot

@@ -1,0 +1,320 @@
+[0.063s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--symlink-install']
+[0.063s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=True, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0xffff912c00d0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0xffff91286fe0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0xffff91286fe0>>, mixin_verb=('build',))
+[0.147s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.147s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.147s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.147s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.147s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.147s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.147s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/ulil/Bandha_ws'
+[0.147s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.147s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.147s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.147s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.147s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.147s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.147s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.147s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.147s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src/camera_robot) by extensions ['ignore', 'ignore_ament_install']
+[0.154s] Level 1:colcon.colcon_core.package_identification:_identify(src/camera_robot) by extension 'ignore'
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(src/camera_robot) by extension 'ignore_ament_install'
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(src/camera_robot) by extensions ['colcon_pkg']
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(src/camera_robot) by extension 'colcon_pkg'
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(src/camera_robot) by extensions ['colcon_meta']
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(src/camera_robot) by extension 'colcon_meta'
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(src/camera_robot) by extensions ['ros']
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(src/camera_robot) by extension 'ros'
+[0.156s] DEBUG:colcon.colcon_core.package_identification:Package 'src/camera_robot' with type 'ros.ament_python' and name 'camera_robot'
+[0.156s] Level 1:colcon.colcon_core.package_identification:_identify(src/komunikasi_robot) by extensions ['ignore', 'ignore_ament_install']
+[0.156s] Level 1:colcon.colcon_core.package_identification:_identify(src/komunikasi_robot) by extension 'ignore'
+[0.156s] Level 1:colcon.colcon_core.package_identification:_identify(src/komunikasi_robot) by extension 'ignore_ament_install'
+[0.156s] Level 1:colcon.colcon_core.package_identification:_identify(src/komunikasi_robot) by extensions ['colcon_pkg']
+[0.156s] Level 1:colcon.colcon_core.package_identification:_identify(src/komunikasi_robot) by extension 'colcon_pkg'
+[0.156s] Level 1:colcon.colcon_core.package_identification:_identify(src/komunikasi_robot) by extensions ['colcon_meta']
+[0.156s] Level 1:colcon.colcon_core.package_identification:_identify(src/komunikasi_robot) by extension 'colcon_meta'
+[0.156s] Level 1:colcon.colcon_core.package_identification:_identify(src/komunikasi_robot) by extensions ['ros']
+[0.156s] Level 1:colcon.colcon_core.package_identification:_identify(src/komunikasi_robot) by extension 'ros'
+[0.157s] DEBUG:colcon.colcon_core.package_identification:Package 'src/komunikasi_robot' with type 'ros.ament_python' and name 'komunikasi_robot'
+[0.157s] Level 1:colcon.colcon_core.package_identification:_identify(src/kontrol_robot) by extensions ['ignore', 'ignore_ament_install']
+[0.157s] Level 1:colcon.colcon_core.package_identification:_identify(src/kontrol_robot) by extension 'ignore'
+[0.157s] Level 1:colcon.colcon_core.package_identification:_identify(src/kontrol_robot) by extension 'ignore_ament_install'
+[0.157s] Level 1:colcon.colcon_core.package_identification:_identify(src/kontrol_robot) by extensions ['colcon_pkg']
+[0.157s] Level 1:colcon.colcon_core.package_identification:_identify(src/kontrol_robot) by extension 'colcon_pkg'
+[0.157s] Level 1:colcon.colcon_core.package_identification:_identify(src/kontrol_robot) by extensions ['colcon_meta']
+[0.157s] Level 1:colcon.colcon_core.package_identification:_identify(src/kontrol_robot) by extension 'colcon_meta'
+[0.157s] Level 1:colcon.colcon_core.package_identification:_identify(src/kontrol_robot) by extensions ['ros']
+[0.157s] Level 1:colcon.colcon_core.package_identification:_identify(src/kontrol_robot) by extension 'ros'
+[0.158s] DEBUG:colcon.colcon_core.package_identification:Package 'src/kontrol_robot' with type 'ros.ament_python' and name 'kontrol_robot'
+[0.158s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extensions ['ignore', 'ignore_ament_install']
+[0.158s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extension 'ignore'
+[0.158s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extension 'ignore_ament_install'
+[0.158s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extensions ['colcon_pkg']
+[0.158s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extension 'colcon_pkg'
+[0.158s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extensions ['colcon_meta']
+[0.158s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extension 'colcon_meta'
+[0.158s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extensions ['ros']
+[0.158s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extension 'ros'
+[0.158s] DEBUG:colcon.colcon_core.package_identification:Package 'src/robot_bringup' with type 'ros.ament_cmake' and name 'robot_bringup'
+[0.158s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.158s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.158s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.158s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.158s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.179s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.179s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.180s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 4 installed packages in /home/ulil/bandha_ws/install
+[0.181s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 273 installed packages in /opt/ros/humble
+[0.181s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'camera_robot' build argument 'cmake_args' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'camera_robot' build argument 'cmake_target' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'camera_robot' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'camera_robot' build argument 'cmake_clean_cache' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'camera_robot' build argument 'cmake_clean_first' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'camera_robot' build argument 'cmake_force_configure' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'camera_robot' build argument 'ament_cmake_args' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'camera_robot' build argument 'catkin_cmake_args' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'camera_robot' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.200s] DEBUG:colcon.colcon_core.verb:Building package 'camera_robot' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/ulil/Bandha_ws/build/camera_robot', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/ulil/Bandha_ws/install/camera_robot', 'merge_install': False, 'path': '/home/ulil/Bandha_ws/src/camera_robot', 'symlink_install': True, 'test_result_base': None}
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'komunikasi_robot' build argument 'cmake_args' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'komunikasi_robot' build argument 'cmake_target' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'komunikasi_robot' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'komunikasi_robot' build argument 'cmake_clean_cache' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'komunikasi_robot' build argument 'cmake_clean_first' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'komunikasi_robot' build argument 'cmake_force_configure' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'komunikasi_robot' build argument 'ament_cmake_args' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'komunikasi_robot' build argument 'catkin_cmake_args' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'komunikasi_robot' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.200s] DEBUG:colcon.colcon_core.verb:Building package 'komunikasi_robot' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/ulil/Bandha_ws/build/komunikasi_robot', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/ulil/Bandha_ws/install/komunikasi_robot', 'merge_install': False, 'path': '/home/ulil/Bandha_ws/src/komunikasi_robot', 'symlink_install': True, 'test_result_base': None}
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'kontrol_robot' build argument 'cmake_args' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'kontrol_robot' build argument 'cmake_target' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'kontrol_robot' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'kontrol_robot' build argument 'cmake_clean_cache' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'kontrol_robot' build argument 'cmake_clean_first' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'kontrol_robot' build argument 'cmake_force_configure' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'kontrol_robot' build argument 'ament_cmake_args' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'kontrol_robot' build argument 'catkin_cmake_args' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'kontrol_robot' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.200s] DEBUG:colcon.colcon_core.verb:Building package 'kontrol_robot' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/ulil/Bandha_ws/build/kontrol_robot', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/ulil/Bandha_ws/install/kontrol_robot', 'merge_install': False, 'path': '/home/ulil/Bandha_ws/src/kontrol_robot', 'symlink_install': True, 'test_result_base': None}
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'robot_bringup' build argument 'cmake_args' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'robot_bringup' build argument 'cmake_target' from command line to 'None'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'robot_bringup' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'robot_bringup' build argument 'cmake_clean_cache' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'robot_bringup' build argument 'cmake_clean_first' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'robot_bringup' build argument 'cmake_force_configure' from command line to 'False'
+[0.200s] Level 5:colcon.colcon_core.verb:set package 'robot_bringup' build argument 'ament_cmake_args' from command line to 'None'
+[0.201s] Level 5:colcon.colcon_core.verb:set package 'robot_bringup' build argument 'catkin_cmake_args' from command line to 'None'
+[0.201s] Level 5:colcon.colcon_core.verb:set package 'robot_bringup' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.201s] DEBUG:colcon.colcon_core.verb:Building package 'robot_bringup' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/ulil/Bandha_ws/build/robot_bringup', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/ulil/Bandha_ws/install/robot_bringup', 'merge_install': False, 'path': '/home/ulil/Bandha_ws/src/robot_bringup', 'symlink_install': True, 'test_result_base': None}
+[0.201s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.201s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.201s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/ulil/Bandha_ws/src/camera_robot' with build type 'ament_python'
+[0.201s] Level 1:colcon.colcon_core.shell:create_environment_hook('camera_robot', 'ament_prefix_path')
+[0.202s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.203s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/hook/ament_prefix_path.ps1'
+[0.203s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/hook/ament_prefix_path.dsv'
+[0.203s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/hook/ament_prefix_path.sh'
+[0.203s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.203s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.205s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/ulil/Bandha_ws/src/komunikasi_robot' with build type 'ament_python'
+[0.205s] Level 1:colcon.colcon_core.shell:create_environment_hook('komunikasi_robot', 'ament_prefix_path')
+[0.205s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/hook/ament_prefix_path.ps1'
+[0.206s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/hook/ament_prefix_path.dsv'
+[0.207s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/hook/ament_prefix_path.sh'
+[0.207s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.207s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.209s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/ulil/Bandha_ws/src/kontrol_robot' with build type 'ament_python'
+[0.209s] Level 1:colcon.colcon_core.shell:create_environment_hook('kontrol_robot', 'ament_prefix_path')
+[0.210s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/hook/ament_prefix_path.ps1'
+[0.210s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/hook/ament_prefix_path.dsv'
+[0.211s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/hook/ament_prefix_path.sh'
+[0.211s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.211s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.214s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/ulil/Bandha_ws/src/robot_bringup' with build type 'ament_cmake'
+[0.214s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/ulil/Bandha_ws/src/robot_bringup'
+[0.215s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.215s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.333s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/ulil/Bandha_ws/src/camera_robot'
+[0.334s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.334s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.438s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/ulil/Bandha_ws/src/komunikasi_robot'
+[0.438s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.438s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.538s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/ulil/Bandha_ws/src/kontrol_robot'
+[0.539s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.539s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.544s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/ulil/Bandha_ws/build/robot_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ulil/bandha_ws/install/kontrol_robot:/home/ulil/bandha_ws/install/komunikasi_robot:/home/ulil/bandha_ws/install/camera_robot:/opt/ros/humble /usr/bin/cmake /home/ulil/Bandha_ws/src/robot_bringup -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/ulil/Bandha_ws/install/robot_bringup
+[0.807s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/ulil/Bandha_ws/build/robot_bringup' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ulil/bandha_ws/install/kontrol_robot:/home/ulil/bandha_ws/install/komunikasi_robot:/home/ulil/bandha_ws/install/camera_robot:/opt/ros/humble /usr/bin/cmake /home/ulil/Bandha_ws/src/robot_bringup -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/ulil/Bandha_ws/install/robot_bringup
+[0.807s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/ulil/Bandha_ws/build/robot_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ulil/bandha_ws/install/kontrol_robot:/home/ulil/bandha_ws/install/komunikasi_robot:/home/ulil/bandha_ws/install/camera_robot:/opt/ros/humble /usr/bin/cmake --build /home/ulil/Bandha_ws/build/robot_bringup -- -j4 -l4
+[0.836s] DEBUG:colcon.colcon_core.task.python.build:Available setuptools commands: saveopts, alias, egg_info, upload_docs, install, build, build_ext, init_catalog, sdist, symlink_data, install_headers, check, bdist_dumb, bdist_wheel, develop, test, build_scripts, upload, bdist_rpm, easy_install, update_catalog, rotate, install_data, install_lib, clean, register, compile_catalog, nosetests, build_py, dist_info, bdist, build_clib, install_scripts, install_egg_info, setopt, bdist_egg, extract_messages
+[0.837s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/ulil/Bandha_ws/build/robot_bringup' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ulil/bandha_ws/install/kontrol_robot:/home/ulil/bandha_ws/install/komunikasi_robot:/home/ulil/bandha_ws/install/camera_robot:/opt/ros/humble /usr/bin/cmake --build /home/ulil/Bandha_ws/build/robot_bringup -- -j4 -l4
+[0.842s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/ulil/Bandha_ws/build/robot_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ulil/bandha_ws/install/kontrol_robot:/home/ulil/bandha_ws/install/komunikasi_robot:/home/ulil/bandha_ws/install/camera_robot:/opt/ros/humble /usr/bin/cmake --install /home/ulil/Bandha_ws/build/robot_bringup
+[0.851s] DEBUG:colcon.colcon_core.task.python.build:Available setuptools commands: saveopts, alias, egg_info, upload_docs, install, build, build_ext, init_catalog, sdist, symlink_data, install_headers, check, bdist_dumb, bdist_wheel, develop, test, build_scripts, upload, bdist_rpm, easy_install, update_catalog, rotate, install_data, install_lib, clean, register, compile_catalog, nosetests, build_py, dist_info, bdist, build_clib, install_scripts, install_egg_info, setopt, bdist_egg, extract_messages
+[0.861s] DEBUG:colcon.colcon_core.task.python.build:Available setuptools commands: saveopts, alias, egg_info, upload_docs, install, build, build_ext, init_catalog, sdist, symlink_data, install_headers, check, bdist_dumb, bdist_wheel, develop, test, build_scripts, upload, bdist_rpm, easy_install, update_catalog, rotate, install_data, install_lib, clean, register, compile_catalog, nosetests, build_py, dist_info, bdist, build_clib, install_scripts, install_egg_info, setopt, bdist_egg, extract_messages
+[0.869s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robot_bringup)
+[0.870s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/ulil/Bandha_ws/build/robot_bringup' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ulil/bandha_ws/install/kontrol_robot:/home/ulil/bandha_ws/install/komunikasi_robot:/home/ulil/bandha_ws/install/camera_robot:/opt/ros/humble /usr/bin/cmake --install /home/ulil/Bandha_ws/build/robot_bringup
+[0.871s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup' for CMake module files
+[0.871s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup' for CMake config files
+[0.871s] Level 1:colcon.colcon_core.shell:create_environment_hook('robot_bringup', 'cmake_prefix_path')
+[0.872s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/hook/cmake_prefix_path.ps1'
+[0.872s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/hook/cmake_prefix_path.dsv'
+[0.872s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/hook/cmake_prefix_path.sh'
+[0.873s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup/bin'
+[0.873s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup/lib/pkgconfig/robot_bringup.pc'
+[0.873s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup/lib/python3.10/site-packages'
+[0.873s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup/bin'
+[0.873s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/package.ps1'
+[0.874s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/package.dsv'
+[0.874s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/package.sh'
+[0.874s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/package.bash'
+[0.875s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/package.zsh'
+[0.875s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/ulil/Bandha_ws/install/robot_bringup/share/colcon-core/packages/robot_bringup)
+[0.876s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(robot_bringup)
+[0.876s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup' for CMake module files
+[0.876s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup' for CMake config files
+[0.876s] Level 1:colcon.colcon_core.shell:create_environment_hook('robot_bringup', 'cmake_prefix_path')
+[0.876s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/hook/cmake_prefix_path.ps1'
+[0.876s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/hook/cmake_prefix_path.dsv'
+[0.877s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/hook/cmake_prefix_path.sh'
+[0.877s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup/bin'
+[0.877s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup/lib/pkgconfig/robot_bringup.pc'
+[0.877s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup/lib/python3.10/site-packages'
+[0.877s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/robot_bringup/bin'
+[0.878s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/package.ps1'
+[0.878s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/package.dsv'
+[0.878s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/package.sh'
+[0.878s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/package.bash'
+[0.878s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/robot_bringup/share/robot_bringup/package.zsh'
+[0.879s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/ulil/Bandha_ws/install/robot_bringup/share/colcon-core/packages/robot_bringup)
+[0.987s] DEBUG:colcon.colcon_core.task.python.build:Available setuptools 'develop' options: --site-dirs, --no-find-links, --force-installation-into-system-dir, --no-user-cfg, --always-unzip, --build-directory, --user, --no-deps, --allow-hosts, --optimize, --dry-run, --install-dir, --egg-path, --exclude-scripts, --help, --upgrade, --quiet, --record, --install-layout, --editable, --version, --multi-version, --prefix, --script-dir, --zip-ok, --find-links, --local-snapshots-ok, --always-copy, --verbose, --index-url, --uninstall
+[0.987s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/komunikasi_robot/share/ament_index/resource_index/packages/komunikasi_robot
+[0.987s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/package.xml
+[0.987s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot/serial_node
+[0.988s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot/udp_node
+[0.988s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot/wifi_node
+[1.002s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/ulil/Bandha_ws/build/komunikasi_robot': PYTHONPATH=/home/ulil/Bandha_ws/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ulil/Bandha_ws/build/komunikasi_robot/build --no-deps symlink_data --force
+[1.003s] DEBUG:colcon.colcon_core.task.python.build:Available setuptools 'develop' options: --site-dirs, --no-find-links, --force-installation-into-system-dir, --no-user-cfg, --always-unzip, --build-directory, --user, --no-deps, --allow-hosts, --optimize, --dry-run, --install-dir, --egg-path, --exclude-scripts, --help, --upgrade, --quiet, --record, --install-layout, --editable, --version, --multi-version, --prefix, --script-dir, --zip-ok, --find-links, --local-snapshots-ok, --always-copy, --verbose, --index-url, --uninstall
+[1.003s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/camera_robot/share/ament_index/resource_index/packages/camera_robot
+[1.003s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/package.xml
+[1.003s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/camera_robot/lib/camera_robot/camera_node
+[1.004s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/ulil/Bandha_ws/build/camera_robot': PYTHONPATH=/home/ulil/Bandha_ws/build/camera_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/camera_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ulil/Bandha_ws/build/camera_robot/build --no-deps symlink_data --force
+[1.004s] DEBUG:colcon.colcon_core.task.python.build:Available setuptools 'develop' options: --site-dirs, --no-find-links, --force-installation-into-system-dir, --no-user-cfg, --always-unzip, --build-directory, --user, --no-deps, --allow-hosts, --optimize, --dry-run, --install-dir, --egg-path, --exclude-scripts, --help, --upgrade, --quiet, --record, --install-layout, --editable, --version, --multi-version, --prefix, --script-dir, --zip-ok, --find-links, --local-snapshots-ok, --always-copy, --verbose, --index-url, --uninstall
+[1.004s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/kontrol_robot/share/ament_index/resource_index/packages/kontrol_robot
+[1.004s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/package.xml
+[1.004s] DEBUG:colcon.colcon_core.task.python.build:While undoing a previous installation files outside the Python library path are being ignored: /home/ulil/Bandha_ws/install/kontrol_robot/lib/kontrol_robot/transform_node
+[1.006s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/ulil/Bandha_ws/build/kontrol_robot': PYTHONPATH=/home/ulil/Bandha_ws/build/kontrol_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ulil/Bandha_ws/build/kontrol_robot/build --no-deps symlink_data --force
+[1.208s] Level 1:colcon.colcon_core.shell:create_environment_hook('komunikasi_robot', 'pythonpath_develop')
+[1.208s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/ulil/Bandha_ws/build/komunikasi_robot' returned '0': PYTHONPATH=/home/ulil/Bandha_ws/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ulil/Bandha_ws/build/komunikasi_robot/build --no-deps symlink_data --force
+[1.209s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/build/komunikasi_robot/share/komunikasi_robot/hook/pythonpath_develop.ps1'
+[1.209s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/build/komunikasi_robot/share/komunikasi_robot/hook/pythonpath_develop.dsv'
+[1.209s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/build/komunikasi_robot/share/komunikasi_robot/hook/pythonpath_develop.sh'
+[1.210s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/komunikasi_robot' for CMake module files
+[1.210s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/komunikasi_robot' for CMake config files
+[1.210s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/komunikasi_robot/lib'
+[1.210s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/komunikasi_robot/bin'
+[1.210s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/komunikasi_robot/lib/pkgconfig/komunikasi_robot.pc'
+[1.210s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages'
+[1.210s] Level 1:colcon.colcon_core.shell:create_environment_hook('komunikasi_robot', 'pythonpath')
+[1.210s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/hook/pythonpath.ps1'
+[1.211s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/hook/pythonpath.dsv'
+[1.211s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/hook/pythonpath.sh'
+[1.211s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/komunikasi_robot/bin'
+[1.211s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(komunikasi_robot)
+[1.211s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/package.ps1'
+[1.212s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/package.dsv'
+[1.212s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/package.sh'
+[1.212s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/package.bash'
+[1.212s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot/package.zsh'
+[1.212s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/ulil/Bandha_ws/install/komunikasi_robot/share/colcon-core/packages/komunikasi_robot)
+[1.213s] Level 1:colcon.colcon_core.shell:create_environment_hook('kontrol_robot', 'pythonpath_develop')
+[1.213s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/build/kontrol_robot/share/kontrol_robot/hook/pythonpath_develop.ps1'
+[1.213s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/ulil/Bandha_ws/build/kontrol_robot' returned '0': PYTHONPATH=/home/ulil/Bandha_ws/build/kontrol_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ulil/Bandha_ws/build/kontrol_robot/build --no-deps symlink_data --force
+[1.214s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/build/kontrol_robot/share/kontrol_robot/hook/pythonpath_develop.dsv'
+[1.214s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/build/kontrol_robot/share/kontrol_robot/hook/pythonpath_develop.sh'
+[1.214s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/kontrol_robot' for CMake module files
+[1.214s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/kontrol_robot' for CMake config files
+[1.214s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/kontrol_robot/lib'
+[1.214s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/kontrol_robot/bin'
+[1.214s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/kontrol_robot/lib/pkgconfig/kontrol_robot.pc'
+[1.214s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages'
+[1.214s] Level 1:colcon.colcon_core.shell:create_environment_hook('kontrol_robot', 'pythonpath')
+[1.215s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/hook/pythonpath.ps1'
+[1.215s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/hook/pythonpath.dsv'
+[1.215s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/hook/pythonpath.sh'
+[1.215s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/kontrol_robot/bin'
+[1.215s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(kontrol_robot)
+[1.215s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/package.ps1'
+[1.215s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/package.dsv'
+[1.216s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/package.sh'
+[1.216s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/package.bash'
+[1.216s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/package.zsh'
+[1.216s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/ulil/Bandha_ws/install/kontrol_robot/share/colcon-core/packages/kontrol_robot)
+[1.217s] Level 1:colcon.colcon_core.shell:create_environment_hook('camera_robot', 'pythonpath_develop')
+[1.217s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/build/camera_robot/share/camera_robot/hook/pythonpath_develop.ps1'
+[1.217s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/build/camera_robot/share/camera_robot/hook/pythonpath_develop.dsv'
+[1.217s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/ulil/Bandha_ws/build/camera_robot' returned '0': PYTHONPATH=/home/ulil/Bandha_ws/build/camera_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/camera_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ulil/Bandha_ws/build/camera_robot/build --no-deps symlink_data --force
+[1.217s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/build/camera_robot/share/camera_robot/hook/pythonpath_develop.sh'
+[1.218s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/camera_robot' for CMake module files
+[1.218s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/camera_robot' for CMake config files
+[1.218s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/camera_robot/lib'
+[1.218s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/camera_robot/bin'
+[1.218s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/camera_robot/lib/pkgconfig/camera_robot.pc'
+[1.218s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/camera_robot/lib/python3.10/site-packages'
+[1.218s] Level 1:colcon.colcon_core.shell:create_environment_hook('camera_robot', 'pythonpath')
+[1.218s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/hook/pythonpath.ps1'
+[1.218s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/hook/pythonpath.dsv'
+[1.218s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/hook/pythonpath.sh'
+[1.219s] Level 1:colcon.colcon_core.environment:checking '/home/ulil/Bandha_ws/install/camera_robot/bin'
+[1.219s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(camera_robot)
+[1.219s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/package.ps1'
+[1.219s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/package.dsv'
+[1.219s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/package.sh'
+[1.219s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/package.bash'
+[1.220s] INFO:colcon.colcon_core.shell:Creating package script '/home/ulil/Bandha_ws/install/camera_robot/share/camera_robot/package.zsh'
+[1.220s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/ulil/Bandha_ws/install/camera_robot/share/colcon-core/packages/camera_robot)
+[1.220s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[1.220s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[1.220s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[1.220s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[1.223s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[1.223s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[1.223s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[1.233s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[1.233s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/ulil/Bandha_ws/install/local_setup.ps1'
+[1.234s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/ulil/Bandha_ws/install/_local_setup_util_ps1.py'
+[1.234s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/ulil/Bandha_ws/install/setup.ps1'
+[1.235s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/ulil/Bandha_ws/install/local_setup.sh'
+[1.236s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/ulil/Bandha_ws/install/_local_setup_util_sh.py'
+[1.236s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/ulil/Bandha_ws/install/setup.sh'
+[1.237s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/ulil/Bandha_ws/install/local_setup.bash'
+[1.238s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/ulil/Bandha_ws/install/setup.bash'
+[1.239s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/ulil/Bandha_ws/install/local_setup.zsh'
+[1.239s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/ulil/Bandha_ws/install/setup.zsh'

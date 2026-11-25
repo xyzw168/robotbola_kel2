@@ -1,0 +1,44 @@
+[0.543s] Invoking command in '/home/ulil/Bandha_ws/build/komunikasi_robot': PYTHONPATH=/home/ulil/Bandha_ws/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --uninstall --editable --build-directory /home/ulil/Bandha_ws/build/komunikasi_robot/build
+[0.673s] running develop
+[0.743s] Removing /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi-robot.egg-link (link to .)
+[0.767s] Invoked command in '/home/ulil/Bandha_ws/build/komunikasi_robot' returned '0': PYTHONPATH=/home/ulil/Bandha_ws/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --uninstall --editable --build-directory /home/ulil/Bandha_ws/build/komunikasi_robot/build
+[0.767s] Invoking command in '/home/ulil/Bandha_ws/src/komunikasi_robot': PYTHONPATH=/home/ulil/Bandha_ws/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/komunikasi_robot build --build-base /home/ulil/Bandha_ws/build/komunikasi_robot/build install --record /home/ulil/Bandha_ws/build/komunikasi_robot/install.log --install-scripts $base/lib/komunikasi_robot --single-version-externally-managed install_data --force
+[0.868s] running egg_info
+[0.869s] writing ../../build/komunikasi_robot/komunikasi_robot.egg-info/PKG-INFO
+[0.869s] writing dependency_links to ../../build/komunikasi_robot/komunikasi_robot.egg-info/dependency_links.txt
+[0.869s] writing entry points to ../../build/komunikasi_robot/komunikasi_robot.egg-info/entry_points.txt
+[0.869s] writing requirements to ../../build/komunikasi_robot/komunikasi_robot.egg-info/requires.txt
+[0.869s] writing top-level names to ../../build/komunikasi_robot/komunikasi_robot.egg-info/top_level.txt
+[0.870s] reading manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+[0.871s] writing manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+[0.871s] running build
+[0.871s] running build_py
+[0.871s] creating /home/ulil/Bandha_ws/build/komunikasi_robot/build
+[0.871s] creating /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib
+[0.871s] creating /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.871s] copying komunikasi_robot/wifi_node.py -> /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.871s] copying komunikasi_robot/serial_node.py -> /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.871s] copying komunikasi_robot/__init__.py -> /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.871s] copying komunikasi_robot/udp_node.py -> /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.871s] running install
+[0.871s] running install_lib
+[0.872s] creating /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.872s] copying /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot/wifi_node.py -> /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.872s] copying /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot/serial_node.py -> /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.872s] copying /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot/__init__.py -> /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.872s] copying /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot/udp_node.py -> /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.872s] byte-compiling /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot/wifi_node.py to wifi_node.cpython-310.pyc
+[0.872s] byte-compiling /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot/serial_node.py to serial_node.cpython-310.pyc
+[0.872s] byte-compiling /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot/__init__.py to __init__.cpython-310.pyc
+[0.873s] byte-compiling /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot/udp_node.py to udp_node.cpython-310.pyc
+[0.873s] running install_data
+[0.873s] copying resource/komunikasi_robot -> /home/ulil/Bandha_ws/install/komunikasi_robot/share/ament_index/resource_index/packages
+[0.873s] copying package.xml -> /home/ulil/Bandha_ws/install/komunikasi_robot/share/komunikasi_robot
+[0.873s] running install_egg_info
+[0.874s] Copying ../../build/komunikasi_robot/komunikasi_robot.egg-info to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot-0.0.0-py3.10.egg-info
+[0.874s] running install_scripts
+[0.883s] Installing serial_node script to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot
+[0.883s] Installing udp_node script to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot
+[0.883s] Installing wifi_node script to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot
+[0.883s] writing list of installed files to '/home/ulil/Bandha_ws/build/komunikasi_robot/install.log'
+[0.896s] Invoked command in '/home/ulil/Bandha_ws/src/komunikasi_robot' returned '0': PYTHONPATH=/home/ulil/Bandha_ws/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/komunikasi_robot build --build-base /home/ulil/Bandha_ws/build/komunikasi_robot/build install --record /home/ulil/Bandha_ws/build/komunikasi_robot/install.log --install-scripts $base/lib/komunikasi_robot --single-version-externally-managed install_data --force

@@ -1,0 +1,26 @@
+[0.367s] Invoking command in '/home/ulil/Bandha_ws/src/build/komunikasi_robot': PYTHONPATH=/home/ulil/Bandha_ws/src/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/src/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ulil/Bandha_ws/src/build/komunikasi_robot/build --no-deps symlink_data
+[0.466s] running develop
+[0.525s] running egg_info
+[0.525s] creating komunikasi_robot.egg-info
+[0.525s] writing komunikasi_robot.egg-info/PKG-INFO
+[0.525s] writing dependency_links to komunikasi_robot.egg-info/dependency_links.txt
+[0.525s] writing entry points to komunikasi_robot.egg-info/entry_points.txt
+[0.526s] writing requirements to komunikasi_robot.egg-info/requires.txt
+[0.526s] writing top-level names to komunikasi_robot.egg-info/top_level.txt
+[0.526s] writing manifest file 'komunikasi_robot.egg-info/SOURCES.txt'
+[0.526s] reading manifest file 'komunikasi_robot.egg-info/SOURCES.txt'
+[0.527s] writing manifest file 'komunikasi_robot.egg-info/SOURCES.txt'
+[0.528s] running build_ext
+[0.528s] Creating /home/ulil/Bandha_ws/src/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi-robot.egg-link (link to .)
+[0.528s] Installing serial_node script to /home/ulil/Bandha_ws/src/install/komunikasi_robot/lib/komunikasi_robot
+[0.528s] Installing udp_node script to /home/ulil/Bandha_ws/src/install/komunikasi_robot/lib/komunikasi_robot
+[0.528s] Installing wifi_node script to /home/ulil/Bandha_ws/src/install/komunikasi_robot/lib/komunikasi_robot
+[0.528s] 
+[0.528s] Installed /home/ulil/Bandha_ws/src/build/komunikasi_robot
+[0.528s] running symlink_data
+[0.528s] creating /home/ulil/Bandha_ws/src/install/komunikasi_robot/share/ament_index
+[0.528s] creating /home/ulil/Bandha_ws/src/install/komunikasi_robot/share/ament_index/resource_index
+[0.528s] creating /home/ulil/Bandha_ws/src/install/komunikasi_robot/share/ament_index/resource_index/packages
+[0.528s] symbolically linking /home/ulil/Bandha_ws/src/build/komunikasi_robot/resource/komunikasi_robot -> /home/ulil/Bandha_ws/src/install/komunikasi_robot/share/ament_index/resource_index/packages
+[0.528s] symbolically linking /home/ulil/Bandha_ws/src/build/komunikasi_robot/package.xml -> /home/ulil/Bandha_ws/src/install/komunikasi_robot/share/komunikasi_robot
+[0.542s] Invoked command in '/home/ulil/Bandha_ws/src/build/komunikasi_robot' returned '0': PYTHONPATH=/home/ulil/Bandha_ws/src/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/src/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ulil/Bandha_ws/src/build/komunikasi_robot/build --no-deps symlink_data

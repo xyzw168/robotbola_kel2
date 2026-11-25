@@ -1,0 +1,17 @@
+running develop
+running egg_info
+writing kontrol_robot.egg-info/PKG-INFO
+writing dependency_links to kontrol_robot.egg-info/dependency_links.txt
+writing entry points to kontrol_robot.egg-info/entry_points.txt
+writing requirements to kontrol_robot.egg-info/requires.txt
+writing top-level names to kontrol_robot.egg-info/top_level.txt
+reading manifest file 'kontrol_robot.egg-info/SOURCES.txt'
+writing manifest file 'kontrol_robot.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol-robot.egg-link (link to .)
+Installing transform_node script to /home/ulil/Bandha_ws/install/kontrol_robot/lib/kontrol_robot
+
+Installed /home/ulil/Bandha_ws/build/kontrol_robot
+running symlink_data
+symbolically linking /home/ulil/Bandha_ws/build/kontrol_robot/resource/kontrol_robot -> /home/ulil/Bandha_ws/install/kontrol_robot/share/ament_index/resource_index/packages
+symbolically linking /home/ulil/Bandha_ws/build/kontrol_robot/package.xml -> /home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot

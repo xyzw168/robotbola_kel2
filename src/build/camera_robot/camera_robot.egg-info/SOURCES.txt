@@ -1,0 +1,13 @@
+package.xml
+setup.cfg
+setup.py
+camera_robot/__init__.py
+camera_robot/camera_node.py
+camera_robot.egg-info/PKG-INFO
+camera_robot.egg-info/SOURCES.txt
+camera_robot.egg-info/dependency_links.txt
+camera_robot.egg-info/entry_points.txt
+camera_robot.egg-info/requires.txt
+camera_robot.egg-info/top_level.txt
+camera_robot.egg-info/zip-safe
+resource/camera_robot

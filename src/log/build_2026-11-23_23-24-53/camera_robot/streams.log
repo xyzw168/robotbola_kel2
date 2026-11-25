@@ -1,0 +1,23 @@
+[0.357s] Invoking command in '/home/ulil/Bandha_ws/src/build/camera_robot': PYTHONPATH=/home/ulil/Bandha_ws/src/build/camera_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/src/install/camera_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ulil/Bandha_ws/src/build/camera_robot/build --no-deps symlink_data
+[0.457s] running develop
+[0.515s] running egg_info
+[0.515s] creating camera_robot.egg-info
+[0.515s] writing camera_robot.egg-info/PKG-INFO
+[0.516s] writing dependency_links to camera_robot.egg-info/dependency_links.txt
+[0.516s] writing entry points to camera_robot.egg-info/entry_points.txt
+[0.516s] writing requirements to camera_robot.egg-info/requires.txt
+[0.516s] writing top-level names to camera_robot.egg-info/top_level.txt
+[0.516s] writing manifest file 'camera_robot.egg-info/SOURCES.txt'
+[0.516s] reading manifest file 'camera_robot.egg-info/SOURCES.txt'
+[0.517s] writing manifest file 'camera_robot.egg-info/SOURCES.txt'
+[0.517s] running build_ext
+[0.517s] Creating /home/ulil/Bandha_ws/src/install/camera_robot/lib/python3.10/site-packages/camera-robot.egg-link (link to .)
+[0.518s] 
+[0.518s] Installed /home/ulil/Bandha_ws/src/build/camera_robot
+[0.518s] running symlink_data
+[0.518s] creating /home/ulil/Bandha_ws/src/install/camera_robot/share/ament_index
+[0.518s] creating /home/ulil/Bandha_ws/src/install/camera_robot/share/ament_index/resource_index
+[0.518s] creating /home/ulil/Bandha_ws/src/install/camera_robot/share/ament_index/resource_index/packages
+[0.518s] symbolically linking /home/ulil/Bandha_ws/src/build/camera_robot/resource/camera_robot -> /home/ulil/Bandha_ws/src/install/camera_robot/share/ament_index/resource_index/packages
+[0.518s] symbolically linking /home/ulil/Bandha_ws/src/build/camera_robot/package.xml -> /home/ulil/Bandha_ws/src/install/camera_robot/share/camera_robot
+[0.530s] Invoked command in '/home/ulil/Bandha_ws/src/build/camera_robot' returned '0': PYTHONPATH=/home/ulil/Bandha_ws/src/build/camera_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/src/install/camera_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ulil/Bandha_ws/src/build/camera_robot/build --no-deps symlink_data
