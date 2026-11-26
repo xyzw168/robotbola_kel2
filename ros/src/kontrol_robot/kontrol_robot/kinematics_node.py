@@ -31,8 +31,12 @@ class KinematicsNode(Node):
         out = Float32MultiArray()
         out.data =  normalize_speeds        
         self.wheel_speeds_publisher_.publish(out)
-        self.get_logger().info(f"wheel speeds: {[round(s, 2) for s in normalize_speeds]}")
-        
+        speeds_rounded = [round(speed, 2) for speed in normalize_speeds]
+        self.get_logger().info(
+            f"w1 front-right: {speeds_rounded[0]} rad/s, "
+            f"w2 front-left: {speeds_rounded[1]} rad/s, "
+            f"w3 rear: {speeds_rounded[2]} rad/s"
+        )           
 def main(args=None):
     rclpy.init(args=args)
     node = KinematicsNode()
