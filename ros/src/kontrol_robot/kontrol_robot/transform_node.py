@@ -13,10 +13,10 @@ def parse_pesan_android(pesan):
         if len(parts) != 4:
             raise ValueError("Pesan harus memiliki 4 nilai yang dipisahkan oleh koma.")
         
-        nilai_x = int(parts[0].strip()) #kan kata evan 123 = xyz trus 4 = grip
-        nilai_y = int(parts[1].strip())
-        nilai_z = int(parts[2].strip())
-        nilai_w = int(parts[3].strip())
+        nilai_x = float(parts[0].strip()) #kan kata evan 123 = xyz trus 4 = grip
+        nilai_y = float(parts[1].strip())
+        nilai_z = float(parts[2].strip())
+        nilai_w = float(parts[3].strip())
 
         return nilai_x, nilai_y, nilai_z, nilai_w
     except ValueError:
@@ -47,9 +47,9 @@ class TransformNode(Node):
             return None
         
         cmd = Twist()
-        cmd.linear.x = skala(x, RENTANG_IN, 1) #ganti ganti aja buat nentuin kecepatan robotnya
-        cmd.linear.y = skala(y, RENTANG_IN, 1)
-        cmd.angular.z = skala(z, RENTANG_IN, 1)
+        cmd.linear.x = skala(x, RENTANG_IN, 100) 
+        cmd.linear.y = skala(y, RENTANG_IN, 100)
+        cmd.angular.z = skala(z, RENTANG_IN, 100)
 
         grip = Float32()
         grip.data = float(w)

@@ -4,7 +4,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Float32MultiArray
 from kontrol_robot.omni_kinematics import OmniKinematics3 
 
-wheel_deg = [120, -120.0, 0]  # arah dorong roda, derajat (asumsi)
+wheel_deg = [60, 300, 180]  # arah dorong roda, derajat (asumsi)
 wheel_radius   = 0.15 # meter, radius roda 
 robot_radius    = 0.20 # meter, jarak pusat robot ke roda (asumsi)
 max_speed        = 10.47 #rad/s   
@@ -29,7 +29,7 @@ class KinematicsNode(Node):
         normalize_speeds = self.ik.normalize_speeds(speeds)
 
         out = Float32MultiArray()
-        out.data =  normalize_speeds        
+        out.data =  normalize_speeds       
         self.wheel_speeds_publisher_.publish(out)
         speeds_rounded = [round(speed, 2) for speed in normalize_speeds]
         self.get_logger().info(
