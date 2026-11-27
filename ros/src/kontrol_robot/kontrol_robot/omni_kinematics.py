@@ -12,7 +12,7 @@ class OmniKinematics3():
         hasil = []
         for beta in self.wheel_deg:
             b = radians(beta)
-            v = (cos(b) * vy + sin(b) * vx - self.robot_radius * omega) / self.wheel_radius
+            v = ((cos(b) * vy + sin(b) * vx + self.robot_radius * omega) / self.wheel_radius) 
             hasil.append(v)
         return hasil
     def normalize_speeds(self, speeds):
