@@ -25,6 +25,7 @@ setup(
     entry_points={
         'console_scripts': [
             'transform_node = kontrol_robot.transform_node:main',
+            'kinematics_node = kontrol_robot.kinematics_node:main',
         ],
     },
 )

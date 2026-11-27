@@ -9,6 +9,8 @@ setup.py
 ../../build/kontrol_robot/kontrol_robot.egg-info/top_level.txt
 ../../build/kontrol_robot/kontrol_robot.egg-info/zip-safe
 kontrol_robot/__init__.py
+kontrol_robot/kinematics_node.py
+kontrol_robot/omni_kinematics.py
 kontrol_robot/transform_node.py
 resource/kontrol_robot
 test/test_copyright.py

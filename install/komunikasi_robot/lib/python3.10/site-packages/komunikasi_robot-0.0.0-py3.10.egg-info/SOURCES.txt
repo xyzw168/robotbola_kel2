@@ -11,7 +11,7 @@ setup.py
 komunikasi_robot/__init__.py
 komunikasi_robot/serial_node.py
 komunikasi_robot/udp_node.py
-komunikasi_robot/wifi_node.py
+komunikasi_robot/zmq_node.py
 resource/komunikasi_robot
 test/test_copyright.py
 test/test_flake8.py

@@ -1,34 +1,24 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String 
+from std_msgs.msg import String, Float32
 from geometry_msgs.msg import Twist
-from std_msgs.msg import Float32
 
-RENTANG_IN = 100
-TANDA = (1,1,1,1)
+RENTANG_IN = 100.0  # satuannya persen
 
 
 def parse_pesan_android(pesan):
     try:
         parts = pesan.split(',')
         if len(parts) != 4:
-            raise ValueError("Pesan harus memiliki 4 nilai yang dipisahkan oleh koma.")
-        
-        nilai_x = int(parts[0].strip())
-        nilai_y = int(parts[1].strip())
-        nilai_z = int(parts[2].strip())
-        nilai_w = int(parts[3].strip())
-
-        return nilai_x, nilai_y, nilai_z, nilai_w
-    except ValueError as e:
+            return None
+        return tuple(float(p.strip()) for p in parts)
+    except ValueError:
         return None
-def ambang_nilai(nilai, ambang):
-    if abs(nilai) < ambang:
-        return 0
-    return nilai
+
+
 def skala(nilai, rentang_in, maks):
     return float((nilai / rentang_in) * maks)
-    
+
 
 class TransformNode(Node):
     def __init__(self):
@@ -43,30 +33,41 @@ class TransformNode(Node):
     def cek_pesan_android(self, msg):
         pesan = msg.data.strip()
         if not pesan:
-            self.get_logger().warning("Pesan Android kosong, diabaikan.")
+            self.get_logger().warning("kosong")
             return
-        x, y, z, w = parse_pesan_android(pesan)
-        if x is None or y is None or z is None or w is None:
-            return None
+
+        hasil = parse_pesan_android(pesan)
+        if hasil is None:
+            self.get_logger().warning(f"Format pesan tidak valid: {pesan!r}")
+            return
+        x, y, z, w = hasil
 
         cmd = Twist()
-        cmd.linear.x = skala(ambang_nilai(x, 10), RENTANG_IN, 0.5)
-        cmd.linear.y = skala(ambang_nilai(y, 10), RENTANG_IN, 0.5)
-        cmd.angular.z = skala(ambang_nilai(z, 10), RENTANG_IN, 0.5)
-        self.cmd_vel_publisher_.publish(cmd)
+        cmd.linear.x = skala(x, RENTANG_IN, 1.0)
+        cmd.linear.y = skala(y, RENTANG_IN, 1.0)
+        cmd.angular.z = skala(z, RENTANG_IN, 1.0)
 
         grip = Float32()
-        grip.data =  float(w)
+        grip.data = w
 
-        perintah = String()
-        perintah.data = pesan
-        self.get_logger().info(f"diterima: {pesan} -> x: {cmd.linear.x}, y: {cmd.linear.y}, z: {cmd.angular.z}, grip: {grip.data}")
+        self.get_logger().info(
+            f"diterima: {pesan} -> x: {cmd.linear.x:.2f}, y: {cmd.linear.y:.2f}, z: {cmd.angular.z:.2f}, grip: {grip.data}"
+        )
         self.cmd_vel_publisher_.publish(cmd)
         self.grip_publisher_.publish(grip)
 
+
 def main(args=None):
-        rclpy.init(args=args)
-        node = TransformNode()
+    rclpy.init(args=args)
+    node = TransformNode()
+    try:
         rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.destroy_node()
         rclpy.shutdown()
-    
+
+
+if __name__ == '__main__':
+    main()

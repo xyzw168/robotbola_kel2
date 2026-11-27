@@ -1,0 +1,27 @@
+running egg_info
+writing ../../build/kontrol_robot/kontrol_robot.egg-info/PKG-INFO
+writing dependency_links to ../../build/kontrol_robot/kontrol_robot.egg-info/dependency_links.txt
+writing entry points to ../../build/kontrol_robot/kontrol_robot.egg-info/entry_points.txt
+writing requirements to ../../build/kontrol_robot/kontrol_robot.egg-info/requires.txt
+writing top-level names to ../../build/kontrol_robot/kontrol_robot.egg-info/top_level.txt
+reading manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+writing manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+running build
+running build_py
+copying kontrol_robot/__init__.py -> /home/ulil/Bandha_ws/build/kontrol_robot/build/lib/kontrol_robot
+copying kontrol_robot/transform_node.py -> /home/ulil/Bandha_ws/build/kontrol_robot/build/lib/kontrol_robot
+running install
+running install_lib
+copying /home/ulil/Bandha_ws/build/kontrol_robot/build/lib/kontrol_robot/__init__.py -> /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot
+copying /home/ulil/Bandha_ws/build/kontrol_robot/build/lib/kontrol_robot/transform_node.py -> /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot
+byte-compiling /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/transform_node.py to transform_node.cpython-310.pyc
+running install_data
+copying resource/kontrol_robot -> /home/ulil/Bandha_ws/install/kontrol_robot/share/ament_index/resource_index/packages
+copying package.xml -> /home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot
+running install_egg_info
+removing '/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/kontrol_robot/kontrol_robot.egg-info to /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info
+running install_scripts
+Installing transform_node script to /home/ulil/Bandha_ws/install/kontrol_robot/lib/kontrol_robot
+writing list of installed files to '/home/ulil/Bandha_ws/build/kontrol_robot/install.log'

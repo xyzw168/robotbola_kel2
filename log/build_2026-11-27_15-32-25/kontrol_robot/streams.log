@@ -1,0 +1,25 @@
+[0.700s] Invoking command in '/home/ulil/Bandha_ws/src/kontrol_robot': PYTHONPATH=/home/ulil/Bandha_ws/build/kontrol_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/kontrol_robot build --build-base /home/ulil/Bandha_ws/build/kontrol_robot/build install --record /home/ulil/Bandha_ws/build/kontrol_robot/install.log --install-scripts $base/lib/kontrol_robot --single-version-externally-managed install_data
+[0.809s] running egg_info
+[0.815s] writing ../../build/kontrol_robot/kontrol_robot.egg-info/PKG-INFO
+[0.815s] writing dependency_links to ../../build/kontrol_robot/kontrol_robot.egg-info/dependency_links.txt
+[0.815s] writing entry points to ../../build/kontrol_robot/kontrol_robot.egg-info/entry_points.txt
+[0.816s] writing requirements to ../../build/kontrol_robot/kontrol_robot.egg-info/requires.txt
+[0.816s] writing top-level names to ../../build/kontrol_robot/kontrol_robot.egg-info/top_level.txt
+[0.833s] reading manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+[0.834s] writing manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+[0.834s] running build
+[0.834s] running build_py
+[0.834s] copying kontrol_robot/omni_kinematics.py -> /home/ulil/Bandha_ws/build/kontrol_robot/build/lib/kontrol_robot
+[0.834s] running install
+[0.836s] running install_lib
+[0.843s] copying /home/ulil/Bandha_ws/build/kontrol_robot/build/lib/kontrol_robot/omni_kinematics.py -> /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot
+[0.845s] byte-compiling /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/omni_kinematics.py to omni_kinematics.cpython-310.pyc
+[0.845s] running install_data
+[0.845s] running install_egg_info
+[0.851s] removing '/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info' (and everything under it)
+[0.852s] Copying ../../build/kontrol_robot/kontrol_robot.egg-info to /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info
+[0.852s] running install_scripts
+[0.873s] Installing kinematics_node script to /home/ulil/Bandha_ws/install/kontrol_robot/lib/kontrol_robot
+[0.873s] Installing transform_node script to /home/ulil/Bandha_ws/install/kontrol_robot/lib/kontrol_robot
+[0.873s] writing list of installed files to '/home/ulil/Bandha_ws/build/kontrol_robot/install.log'
+[0.884s] Invoked command in '/home/ulil/Bandha_ws/src/kontrol_robot' returned '0': PYTHONPATH=/home/ulil/Bandha_ws/build/kontrol_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/kontrol_robot build --build-base /home/ulil/Bandha_ws/build/kontrol_robot/build install --record /home/ulil/Bandha_ws/build/kontrol_robot/install.log --install-scripts $base/lib/kontrol_robot --single-version-externally-managed install_data

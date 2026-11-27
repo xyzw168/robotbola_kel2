@@ -25,7 +25,7 @@ setup(
     entry_points={
         'console_scripts': [
             'serial_node = komunikasi_robot.serial_node:main',
-            'wifi_node = komunikasi_robot.wifi_node:main',
+            'zmq_node = komunikasi_robot.zmq_node:main',
             'udp_node = komunikasi_robot.udp_node:main'
         ],
     },

@@ -1,6 +1,10 @@
+/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/omni_kinematics.py
 /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/__init__.py
+/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/kinematics_node.py
 /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/transform_node.py
+/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/__pycache__/omni_kinematics.cpython-310.pyc
 /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/__pycache__/__init__.cpython-310.pyc
+/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/__pycache__/kinematics_node.cpython-310.pyc
 /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot/__pycache__/transform_node.cpython-310.pyc
 /home/ulil/Bandha_ws/install/kontrol_robot/share/ament_index/resource_index/packages/kontrol_robot
 /home/ulil/Bandha_ws/install/kontrol_robot/share/kontrol_robot/package.xml
@@ -11,4 +15,5 @@
 /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info/zip-safe
 /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info/entry_points.txt
 /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info/dependency_links.txt
+/home/ulil/Bandha_ws/install/kontrol_robot/lib/kontrol_robot/kinematics_node
 /home/ulil/Bandha_ws/install/kontrol_robot/lib/kontrol_robot/transform_node

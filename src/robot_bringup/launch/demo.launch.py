@@ -3,10 +3,10 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    wifi_node = Node(
+    zmq_node = Node(
         package='komunikasi_robot',
-        executable='wifi_node',
-        name='wifi_node',
+        executable='zmq_node',
+        name='zmq_node',
         output='screen'
     )
 
@@ -40,9 +40,7 @@ def generate_launch_description():
 
 
     return LaunchDescription([
-        wifi_node,
-        serial_node,
-        udp_node,
-        camera_node,
-        transform_node
+        zmq_node,
+        # serial_node,
+        udp_node
     ])

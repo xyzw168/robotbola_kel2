@@ -1,0 +1,29 @@
+[0.591s] Invoking command in '/home/ulil/Bandha_ws/src/komunikasi_robot': PYTHONPATH=/home/ulil/Bandha_ws/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/komunikasi_robot build --build-base /home/ulil/Bandha_ws/build/komunikasi_robot/build install --record /home/ulil/Bandha_ws/build/komunikasi_robot/install.log --install-scripts $base/lib/komunikasi_robot --single-version-externally-managed install_data
+[0.724s] running egg_info
+[0.731s] writing ../../build/komunikasi_robot/komunikasi_robot.egg-info/PKG-INFO
+[0.731s] writing dependency_links to ../../build/komunikasi_robot/komunikasi_robot.egg-info/dependency_links.txt
+[0.731s] writing entry points to ../../build/komunikasi_robot/komunikasi_robot.egg-info/entry_points.txt
+[0.731s] writing requirements to ../../build/komunikasi_robot/komunikasi_robot.egg-info/requires.txt
+[0.731s] writing top-level names to ../../build/komunikasi_robot/komunikasi_robot.egg-info/top_level.txt
+[0.746s] reading manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+[0.746s] writing manifest file '../../build/komunikasi_robot/komunikasi_robot.egg-info/SOURCES.txt'
+[0.749s] running build
+[0.749s] running build_py
+[0.749s] copying komunikasi_robot/wifi_node.py -> /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.749s] copying komunikasi_robot/serial_node.py -> /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.750s] copying komunikasi_robot/udp_node.py -> /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot
+[0.750s] running install
+[0.752s] running install_lib
+[0.759s] copying /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot/wifi_node.py -> /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.759s] copying /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot/serial_node.py -> /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.759s] copying /home/ulil/Bandha_ws/build/komunikasi_robot/build/lib/komunikasi_robot/udp_node.py -> /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot
+[0.760s] running install_data
+[0.760s] running install_egg_info
+[0.766s] removing '/home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot-0.0.0-py3.10.egg-info' (and everything under it)
+[0.770s] Copying ../../build/komunikasi_robot/komunikasi_robot.egg-info to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages/komunikasi_robot-0.0.0-py3.10.egg-info
+[0.770s] running install_scripts
+[0.784s] Installing serial_node script to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot
+[0.784s] Installing udp_node script to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot
+[0.784s] Installing wifi_node script to /home/ulil/Bandha_ws/install/komunikasi_robot/lib/komunikasi_robot
+[0.784s] writing list of installed files to '/home/ulil/Bandha_ws/build/komunikasi_robot/install.log'
+[0.795s] Invoked command in '/home/ulil/Bandha_ws/src/komunikasi_robot' returned '0': PYTHONPATH=/home/ulil/Bandha_ws/build/komunikasi_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/komunikasi_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/komunikasi_robot build --build-base /home/ulil/Bandha_ws/build/komunikasi_robot/build install --record /home/ulil/Bandha_ws/build/komunikasi_robot/install.log --install-scripts $base/lib/komunikasi_robot --single-version-externally-managed install_data

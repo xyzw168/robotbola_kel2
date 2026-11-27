@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/home/ulil/Bandha_ws/src/kontrol_robot/setup.py", line 5, in <module>
+    setup(
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/__init__.py", line 117, in setup
+    return distutils.core.setup(**attrs)  # type: ignore[return-value]
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/_distutils/core.py", line 168, in setup
+    return run_commands(dist)
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/_distutils/core.py", line 184, in run_commands
+    dist.run_commands()
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/_distutils/dist.py", line 1028, in run_commands
+    self.run_command(cmd)
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/dist.py", line 1106, in run_command
+    super().run_command(command)
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/_distutils/dist.py", line 1047, in run_command
+    cmd_obj.run()
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/command/egg_info.py", line 342, in run
+    self.find_sources()
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/command/egg_info.py", line 350, in find_sources
+    mm.run()
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/command/egg_info.py", line 577, in run
+    self.prune_file_list()
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/command/sdist.py", line 166, in prune_file_list
+    super().prune_file_list()
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/_distutils/command/sdist.py", line 397, in prune_file_list
+    base_dir = self.distribution.get_fullname()
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/_core_metadata.py", line 275, in get_fullname
+    return _distribution_fullname(self.get_name(), self.get_version())
+  File "/home/ulil/.local/lib/python3.10/site-packages/setuptools/_core_metadata.py", line 293, in _distribution_fullname
+    canonicalize_version(version, strip_trailing_zero=False),
+TypeError: canonicalize_version() got an unexpected keyword argument 'strip_trailing_zero'
