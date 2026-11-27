@@ -1,0 +1,21 @@
+[0.665s] Invoking command in '/home/ulil/Bandha_ws/src/kontrol_robot': PYTHONPATH=/home/ulil/Bandha_ws/build/kontrol_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/kontrol_robot build --build-base /home/ulil/Bandha_ws/build/kontrol_robot/build install --record /home/ulil/Bandha_ws/build/kontrol_robot/install.log --install-scripts $base/lib/kontrol_robot --single-version-externally-managed install_data
+[0.777s] running egg_info
+[0.777s] writing ../../build/kontrol_robot/kontrol_robot.egg-info/PKG-INFO
+[0.777s] writing dependency_links to ../../build/kontrol_robot/kontrol_robot.egg-info/dependency_links.txt
+[0.777s] writing entry points to ../../build/kontrol_robot/kontrol_robot.egg-info/entry_points.txt
+[0.777s] writing requirements to ../../build/kontrol_robot/kontrol_robot.egg-info/requires.txt
+[0.777s] writing top-level names to ../../build/kontrol_robot/kontrol_robot.egg-info/top_level.txt
+[0.778s] reading manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+[0.778s] writing manifest file '../../build/kontrol_robot/kontrol_robot.egg-info/SOURCES.txt'
+[0.778s] running build
+[0.778s] running build_py
+[0.778s] running install
+[0.779s] running install_lib
+[0.780s] running install_data
+[0.780s] running install_egg_info
+[0.781s] removing '/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info' (and everything under it)
+[0.781s] Copying ../../build/kontrol_robot/kontrol_robot.egg-info to /home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages/kontrol_robot-0.0.0-py3.10.egg-info
+[0.782s] running install_scripts
+[0.794s] Installing transform_node script to /home/ulil/Bandha_ws/install/kontrol_robot/lib/kontrol_robot
+[0.794s] writing list of installed files to '/home/ulil/Bandha_ws/build/kontrol_robot/install.log'
+[0.811s] Invoked command in '/home/ulil/Bandha_ws/src/kontrol_robot' returned '0': PYTHONPATH=/home/ulil/Bandha_ws/build/kontrol_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ulil/Bandha_ws/install/kontrol_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/kontrol_robot build --build-base /home/ulil/Bandha_ws/build/kontrol_robot/build install --record /home/ulil/Bandha_ws/build/kontrol_robot/install.log --install-scripts $base/lib/kontrol_robot --single-version-externally-managed install_data
